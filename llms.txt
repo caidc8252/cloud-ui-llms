@@ -1,0 +1,169 @@
+# @cloud/ui - Documentation for LLMs
+
+> `@cloud/ui` is the shared React design-system package for Cloud applications. It provides accessible UI primitives, business-oriented recipes, page layouts, list filtering, charts, themes, localization messages, and semantic Tailwind CSS tokens for consistent operational interfaces.
+
+This index is for  AI agents writing business application UI. Consume public package exports, reuse existing components before composing new ones, and do not import `packages/ui/src/**` internals from application code.
+
+## Get Started
+
+- [Package manifest](package.json): Public export map, runtime dependencies, peer dependencies, and the package type-check command.
+- [Root exports](src/index.ts): Preferred `@cloud/ui` entry for UI components, layouts, list filters, hooks, theme helpers, sidebar state, and `cn`.
+- [UI component exports](src/components/ui/index.ts): Public `@cloud/ui/components/ui` entry for primitives and composed UI recipes.
+- [Layout exports](src/components/layout/index.ts): Public `@cloud/ui/components/layout` entry for application shell and page-layout components.
+- [Chart exports](src/components/chart/index.ts): Public `@cloud/ui/components/chart` entry for themed Recharts composition; import charts from this subpath rather than from the root barrel or `recharts`.
+- [List-filter exports](src/components/list-filter/index.ts): Public list filtering family, also re-exported from `@cloud/ui`.
+- [Global styles](docs/get-started/global-styles.md): Apply the shared CSS entries once to load Tailwind, fonts, semantic tokens, dark mode, component defaults, and base styles.
+- [Component defaults](src/components/styles/component-defaults.css): Import `@cloud/ui/component-defaults.css` before `@cloud/ui/globals.css` for shared component-level defaults.
+- [Theme provider](src/lib/theme.tsx): `ThemeProvider`, `useTheme`, and the light or dark theme contract.
+- [Class name utility](src/lib/utils.ts): Use `cn` to merge conditional Tailwind classes without conflicting utilities.
+- [Infinite-scroll hook](src/lib/use-infinite-scroll.ts): Use `useInfiniteScroll` to load incremental results from an observed sentinel.
+- [List-filter hook](src/lib/use-list-filters.ts): Use `useListFilters` to manage separate draft and applied filter state.
+- [Responsive hook](src/lib/use-is-mobile.ts): Use `useIsMobile` when behavior, rather than CSS layout alone, must respond to the mobile breakpoint.
+- [Sidebar state](src/lib/sidebar.tsx): Use `SidebarProvider` and `useSidebar` to coordinate expanded, collapsed, and mobile navigation state.
+- [Sidebar cookie](src/lib/sidebar-cookie.ts): Use `SIDEBAR_COOKIE` when server and client code must share the persisted sidebar-state key.
+- [English messages](messages/en.json): Default English strings used by localized UI components.
+- [Simplified Chinese messages](messages/zh-CN.json): Default Simplified Chinese strings used by localized UI components.
+- [Japanese messages](messages/ja.json): Default Japanese strings used by localized UI components.
+
+## Components
+
+- [Accordion](src/components/ui/primitives/accordion.tsx): Show related content in independently expandable sections.
+- [Action footer](src/components/layout/action-footer.tsx): Place persistent cancel, back, and submit actions at the bottom of a task surface.
+- [Advanced filter](src/components/list-filter/advanced-filter-sheet.tsx): Compose grouped fields in a sheet for filters that do not fit the quick filter bar.
+- [Advanced filter button](src/components/list-filter/advanced-filter-button.tsx): Open advanced filtering and indicate the number of active advanced conditions.
+- [Alert](src/components/ui/primitives/alert.tsx): Communicate inline information, success, warnings, or errors with optional actions.
+- [Alert dialog](src/components/ui/primitives/alert-dialog.tsx): Require explicit confirmation before a consequential action.
+- [App header](src/components/layout/app-header.tsx): Render the persistent application header and its navigation or action slots.
+- [Aspect ratio](src/components/ui/primitives/aspect-ratio.tsx): Keep media or embedded content at a stable width-to-height ratio.
+- [Avatar](src/components/ui/primitives/avatar.tsx): Represent a person or entity with an image, fallback, or compact group.
+- [Badge](src/components/ui/primitives/badge.tsx): Label status, severity, category, or compact metadata using semantic tones.
+- [Breadcrumb](src/components/ui/primitives/breadcrumb.tsx): Compose a low-level hierarchical navigation trail.
+- [Breadcrumbs](src/components/layout/breadcrumbs.tsx): Render application breadcrumbs from typed item data.
+- [Button](src/components/ui/primitives/button.tsx): Trigger commands with standard variants, sizes, icons, loading behavior, and danger semantics.
+- [Calendar](src/components/ui/primitives/calendar.tsx): Display a calendar grid for date selection.
+- [Card](src/components/ui/primitives/card.tsx): Group related content with standard header, content, action, footer, padding, and elevation slots.
+- [Carousel](src/components/ui/recipes/carousel.tsx): Navigate a horizontal sequence of panels or media with controls and dots.
+- [Chart bar](src/components/chart/chart-bar.tsx): Render themed Recharts bars, including stacked shapes and per-cell color resolution.
+- [Chart container](src/components/chart/chart.tsx): Provide chart configuration, responsive sizing, semantic series colors, and shared chart context.
+- [Chart legend](src/components/chart/chart-legend.tsx): Render a themed legend for chart series.
+- [Chart pie callout](src/components/chart/chart-pie-callout.tsx): Add readable labels and connector lines to pie or donut sectors.
+- [Chart sparkline](src/components/chart/chart-sparkline.tsx): Show a compact trend visualization without full chart chrome.
+- [Chart states](src/components/chart/chart-states.tsx): Render standard chart loading and empty states.
+- [Chart tooltip](src/components/chart/chart-tooltip.tsx): Display themed values and series metadata on chart interaction.
+- [Checkbox](src/components/ui/primitives/checkbox.tsx): Select one or more independent boolean options.
+- [Collapsible](src/components/ui/primitives/collapsible.tsx): Show or hide one region from a trigger without accordion grouping.
+- [Combobox](src/components/ui/recipes/combobox.tsx): Search and select an option from a larger collection.
+- [Command](src/components/ui/recipes/command.tsx): Build searchable command menus and command dialogs.
+- [Content header](src/components/layout/content-header.tsx): Head plain dashboard or settings content that does not use a resource-management page band.
+- [Context menu](src/components/ui/primitives/context-menu.tsx): Present contextual actions from a secondary-click or equivalent trigger.
+- [Date picker](src/components/ui/recipes/date-picker.tsx): Enter or select one localized date.
+- [Date range picker](src/components/ui/recipes/date-range-picker.tsx): Select a localized date interval with optional presets.
+- [Date-time picker](src/components/ui/recipes/date-time-picker.tsx): Select a date and time as one field.
+- [Drawer](src/components/ui/primitives/drawer.tsx): Present a task or supplementary content in a gesture-friendly sliding panel.
+- [Dropdown menu](src/components/ui/primitives/dropdown-menu.tsx): Group contextual commands, choices, and submenus under a trigger.
+- [Dropzone](src/components/ui/primitives/dropzone.tsx): Accept dragged or selected files and render file rows with upload status.
+- [Empty](src/components/ui/primitives/empty.tsx): Explain an empty or zero-results state and offer an optional recovery action.
+- [Field](src/components/ui/primitives/field.tsx): Associate a form control with its label, hint, required state, and validation error.
+- [Hover card](src/components/ui/primitives/hover-card.tsx): Reveal supplementary content when a trigger is hovered or focused.
+- [Input](src/components/ui/primitives/input.tsx): Capture a single line of text with standard field styling and states.
+- [Input group](src/components/ui/recipes/input-group.tsx): Combine an input or textarea with addons, text, and compact actions.
+- [Input OTP](src/components/ui/primitives/input-otp.tsx): Capture a segmented one-time password or verification code.
+- [Key value](src/components/ui/recipes/key-value.tsx): Display labeled resource properties in responsive definition grids.
+- [Label](src/components/ui/primitives/label.tsx): Provide an accessible label for a form control.
+- [Layout](src/components/layout/layout.tsx): Establish the application shell around sidebar, header, and scrollable content.
+- [List applied filters](src/components/list-filter/applied-filters.tsx): Display the currently applied filter chips and clear action.
+- [List condition band](src/components/list-filter/list-condition-band.tsx): Arrange quick filters, advanced filtering, and applied filter feedback.
+- [List filter chip](src/components/list-filter/filter-chip.tsx): Represent one removable applied filter.
+- [List search input](src/components/list-filter/search-input.tsx): Capture and submit free-text list search using shared behavior.
+- [List summary bar](src/components/list-filter/list-summary-bar.tsx): Show result counts and low-chrome list actions above a table.
+- [Load more](src/components/ui/recipes/load-more.tsx): Request another page of results in incremental-loading interfaces.
+- [Log console](src/components/ui/recipes/log-console.tsx): Present timestamped, leveled log lines in a dense operational console.
+- [Menubar](src/components/ui/primitives/menubar.tsx): Build a persistent application-style command menu bar.
+- [Modal](src/components/ui/primitives/modal.tsx): Focus the user on a bounded task while keeping the underlying page visible.
+- [Navigation menu](src/components/ui/primitives/navigation-menu.tsx): Build structured navigation with expandable content panels.
+- [Object tile](src/components/ui/primitives/object-tile.tsx): Show a selectable or actionable entity with compact supporting metadata.
+- [Page body](src/components/layout/page-body.tsx): Own page-level padding, width, and vertical spacing inside the application scroll area.
+- [Page header](src/components/layout/page-header.tsx): Head resource list and create pages with title, description, and actions.
+- [Page header band](src/components/layout/page-header-band.tsx): Head resource detail pages with navigation, metadata, actions, and optional tabs.
+- [Pagination](src/components/ui/recipes/pagination.tsx): Navigate a collection when only previous, next, and page controls are needed.
+- [Popover](src/components/ui/primitives/popover.tsx): Display contextual information or lightweight controls anchored to a trigger.
+- [Progress](src/components/ui/primitives/progress.tsx): Communicate known operation completion with semantic tone and labels.
+- [Radio group](src/components/ui/primitives/radio-group.tsx): Select exactly one option from a visible set.
+- [Resizable panels](src/components/ui/primitives/resizable.tsx): Divide a workspace into user-resizable regions.
+- [Rich pagination](src/components/ui/recipes/rich-pagination.tsx): Navigate server-paginated collections with range, page size, and total count.
+- [Scroll area](src/components/ui/primitives/scroll-area.tsx): Provide a styled overflow region with optional custom scrollbars.
+- [Select](src/components/ui/primitives/select.tsx): Choose one option from a compact dropdown list.
+- [Semantic tone](src/components/ui/_tone.ts): Share the neutral, success, warning, error, and info vocabulary across status-bearing components.
+- [Separator](src/components/ui/primitives/separator.tsx): Visually or semantically divide adjacent content.
+- [Sheet](src/components/ui/primitives/sheet.tsx): Open supplementary controls or content from an edge of the viewport.
+- [Sidebar](src/components/layout/sidebar.tsx): Render grouped, nested application navigation from typed sections.
+- [Sidebar trigger](src/components/layout/sidebar-trigger.tsx): Toggle the shared sidebar from a compact icon control.
+- [Skeleton](src/components/ui/primitives/skeleton.tsx): Reserve layout while content is loading.
+- [Slider](src/components/ui/primitives/slider.tsx): Select a numeric value or range along a track.
+- [Spinner](src/components/ui/primitives/spinner.tsx): Indicate a compact indeterminate operation in progress.
+- [Stat card](src/components/ui/recipes/stat-card.tsx): Present a key metric, trend, and supporting description.
+- [Status card](src/components/ui/recipes/status-card.tsx): Summarize the current state of a resource or process with semantic emphasis.
+- [Step indicator](src/components/ui/recipes/step-indicator.tsx): Show progress through a fixed sequence of task steps.
+- [Stepper](src/components/ui/recipes/stepper.tsx): Adjust a numeric value with increment and decrement controls.
+- [Switch](src/components/ui/primitives/switch.tsx): Toggle a setting that takes effect immediately.
+- [Table](src/components/ui/recipes/table.tsx): Render typed business data with sorting, density, selection, sticky headers, and row actions.
+- [Tabs](src/components/ui/primitives/tabs.tsx): Switch between peer content sections within the same surface.
+- [Textarea](src/components/ui/primitives/textarea.tsx): Capture multi-line plain text with standard states.
+- [Theme toggle](src/components/ui/primitives/theme-toggle.tsx): Switch among the supported visual themes.
+- [Time picker](src/components/ui/recipes/time-picker.tsx): Enter or select a localized time value.
+- [Timeline](src/components/ui/recipes/timeline.tsx): Present events, actors, times, and statuses in chronological order.
+- [Toast](src/components/ui/primitives/sonner.tsx): Announce transient operation feedback through `Toaster` and `toast`.
+- [Toggle](src/components/ui/primitives/toggle.tsx): Represent one pressed or selected control with standard button behavior.
+- [Toggle controls](src/components/ui/recipes/toggles.tsx): Render checkbox, radio, and switch choices as richer selectable rows.
+- [Toggle group](src/components/ui/primitives/toggle-group.tsx): Select one or more values from a compact group of toggles.
+- [Tooltip](src/components/ui/primitives/tooltip.tsx): Explain an unfamiliar control on hover or keyboard focus.
+- [Virtual table](src/components/ui/recipes/virtual-table.tsx): Render large typed datasets efficiently with row virtualization.
+
+## Patterns
+
+- [List page](patterns/list-page.md): Standard collection page with a page header, filter band, applied chips, summary bar, typed table, empty state, and rich pagination.
+- [Advanced filtering](patterns/advanced-filtering.md): Right-side filter sheet for fields that do not fit the quick bar, with deferred apply and applied-filter chips.
+- [Create form](patterns/create-form.md): Single-step create flow for independent fields using a page header, section cards, validation fields, and persistent actions.
+- [Create wizard](patterns/create-wizard.md): Multi-step create flow for staged, branching, review, or externally processed tasks.
+- [Detail page](patterns/detail-page.md): Resource detail page with a header band, tabs, key-value overview, related sections, metadata, and permission-aware actions.
+- [Data visualization](patterns/data-visualization.md): Chart composition through the themed `@cloud/ui/components/chart` surface, semantic token colors, and standard chart states.
+- [Action weight](patterns/action-weight.md): Button variant and action-hierarchy rules based on the slot where the action appears.
+- [Empty states](patterns/empty-states.md): Distinguish first-run empty, filtered zero-results, and no-access states with appropriate recovery actions.
+- [Errors and validation](patterns/errors-and-validation.md): Error-code protocol, validation boundaries, centralized handling, and the UI surfaces where failures appear.
+- [Interactive surfaces](patterns/interactive-surfaces.md): Hover, selected, navigational, selectable, row-action, and clickable-card interaction rules.
+- [Permission gating](patterns/permission-gating.md): Client and server access gates, typed permission codes, effective permissions, and UX behavior for unavailable actions.
+- [Side navigation](patterns/side-navigation.md): Sidebar projection from module manifests and effective permissions, including menu levels, icons, ordering, and accessibility.
+- [Timestamps](patterns/timestamps.md): Store integer seconds, choose render and input edges deliberately, and format absolute or relative times consistently.
+- [Design tokens](patterns/design-tokens.md): Token naming, semantic color roles, spacing, typography, radius, shadow, motion, dark mode, and lint constraints.
+- [Portal page rules](../../.claude/team-rule/coding-rules/ui_ui-and-pages.md): Binding page composition, density, accessibility, action hierarchy, lists, forms, details, color, and typography guidance.
+
+## Demos
+
+- [List page demo](docs/examples/list-page.tsx): Compilable style skeleton for a standard resource list.
+- [Advanced-filter list demo](docs/examples/list-page-advanced-filter.tsx): Compilable style skeleton for a resource list with advanced filters.
+- [Create form demo](docs/examples/create-form.tsx): Compilable style skeleton for a single-page create flow.
+- [Create wizard demo](docs/examples/create-wizard.tsx): Compilable style skeleton for a staged create flow.
+- [Detail page demo](docs/examples/detail-page.tsx): Compilable style skeleton for a resource detail page.
+- [Charts demo](docs/examples/charts.tsx): Compilable usage reference for the themed chart kit.
+
+## Foundations
+
+- [Design tokens](foundations/design-tokens.md): Connect CSS variables, Tailwind utilities, and component props, and select tokens by semantic intent.
+- [Colors](foundations/colors.md): Apply surface, content, line, status, category, and chart colors without hardcoded values.
+- [Spacing and sizing](foundations/spacing-and-sizing.md): Choose shared spacing, control sizes, container widths, breakpoints, and component-owned dimensions.
+- [Typography](foundations/typography.md): Use Geist, the type scale, semantic font roles, weights, and numeric alignment consistently.
+- [Elevation](foundations/elevation.md): Apply the shadow ladder, Card elevation, overlay depth, and focus treatment according to interaction depth.
+- [Theming](foundations/theming.md): Activate light or dark tokens and coordinate DOM selectors with React theme state.
+- [Motion](foundations/motion.md): Use shared durations and easing while preserving reduced-motion behavior.
+- [Responsive layout](foundations/responsive-layout.md): Choose viewport breakpoints, container-responsive composition, auto-fit grids, or behavior-only mobile detection.
+- [Accessibility](foundations/accessibility.md): Preserve labels, keyboard interaction, focus, ARIA semantics, feedback, and reduced-motion support.
+- [Page layout](foundations/page-layout.md): Compose application shells and list, create, detail, dashboard, and settings pages from shared layout primitives.
+
+## Code Snippets
+
+- [List page source](docs/examples/list-page.tsx): Copy and adapt the standard list composition.
+- [Advanced-filter list source](docs/examples/list-page-advanced-filter.tsx): Copy and adapt the advanced filtering composition.
+- [Create form source](docs/examples/create-form.tsx): Copy and adapt the single-page create composition.
+- [Create wizard source](docs/examples/create-wizard.tsx): Copy and adapt the staged create composition.
+- [Detail page source](docs/examples/detail-page.tsx): Copy and adapt the resource detail composition.
+- [Chart source](docs/examples/charts.tsx): Copy and adapt themed chart compositions without importing Recharts directly.
