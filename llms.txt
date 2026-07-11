@@ -150,7 +150,7 @@ This index is for  AI agents writing business application UI. Consume public pac
 
 - [Design tokens](foundations/design-tokens.md): Connect CSS variables, Tailwind utilities, and component props, and select tokens by semantic intent.
 - [Colors](foundations/colors.md): Apply surface, content, line, status, category, and chart colors without hardcoded values.
-- [Spacing and sizing](foundations/spacing-and-sizing.md): Choose shared spacing, control sizes, container widths, breakpoints, and component-owned dimensions.
+- [Spacing and sizing](foundations/spacing.md): Choose shared spacing, control sizes, container widths, breakpoints, and component-owned dimensions.
 - [Typography](foundations/typography.md): Use Geist, the type scale, semantic font roles, weights, and numeric alignment consistently.
 - [Elevation](foundations/elevation.md): Apply the shadow ladder, Card elevation, overlay depth, and focus treatment according to interaction depth.
 - [Theming](foundations/theming.md): Activate light or dark tokens and coordinate DOM selectors with React theme state.
