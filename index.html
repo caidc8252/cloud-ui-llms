@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Cloud UI LLM Docs</title>
+    <style>
+      :root {
+        color-scheme: light dark;
+        font-family:
+          Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
+          "Segoe UI", sans-serif;
+        line-height: 1.5;
+      }
+
+      body {
+        margin: 0;
+        color: CanvasText;
+        background: Canvas;
+      }
+
+      main {
+        width: min(920px, calc(100% - 32px));
+        margin: 0 auto;
+        padding: 56px 0;
+      }
+
+      h1 {
+        margin: 0 0 8px;
+        font-size: clamp(2rem, 4vw, 3rem);
+        line-height: 1.1;
+      }
+
+      p {
+        max-width: 720px;
+        margin: 0 0 28px;
+        color: color-mix(in srgb, CanvasText 72%, Canvas);
+      }
+
+      section {
+        margin-top: 32px;
+      }
+
+      h2 {
+        margin: 0 0 12px;
+        font-size: 1rem;
+      }
+
+      ul {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 8px;
+        padding: 0;
+        margin: 0;
+        list-style: none;
+      }
+
+      a {
+        display: block;
+        padding: 10px 12px;
+        color: CanvasText;
+        text-decoration: none;
+        border: 1px solid color-mix(in srgb, CanvasText 18%, Canvas);
+        border-radius: 8px;
+      }
+
+      a:hover,
+      a:focus-visible {
+        border-color: color-mix(in srgb, CanvasText 42%, Canvas);
+        background: color-mix(in srgb, CanvasText 6%, Canvas);
+        outline: none;
+      }
+
+      .primary {
+        display: inline-flex;
+        margin: 8px 0 4px;
+        font-weight: 700;
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <h1>Cloud UI LLM Docs</h1>
+      <p>
+        Documentation index for agents and developers building business
+        application UI with the Cloud design system.
+      </p>
+
+      <a class="primary" href="./llms.txt">Open llms.txt</a>
+
+      <section>
+        <h2>Core docs</h2>
+        <ul>
+          <li><a href="./index.md">Components index</a></li>
+          <li><a href="./button.md">Button</a></li>
+          <li><a href="./card.md">Card</a></li>
+        </ul>
+      </section>
+
+      <section>
+        <h2>Foundations</h2>
+        <ul>
+          <li><a href="./foundations/design-tokens.md">Design tokens</a></li>
+          <li><a href="./foundations/colors.md">Colors</a></li>
+          <li><a href="./foundations/spacing.md">Spacing</a></li>
+          <li><a href="./foundations/spacing-and-sizing.md">Spacing and sizing</a></li>
+          <li><a href="./foundations/typography.md">Typography</a></li>
+          <li><a href="./foundations/elevation.md">Elevation</a></li>
+          <li><a href="./foundations/theming.md">Theming</a></li>
+          <li><a href="./foundations/motion.md">Motion</a></li>
+          <li><a href="./foundations/responsive-layout.md">Responsive layout</a></li>
+          <li><a href="./foundations/page-layout.md">Page layout</a></li>
+          <li><a href="./foundations/layout.md">Layout</a></li>
+          <li><a href="./foundations/accessibility.md">Accessibility</a></li>
+        </ul>
+      </section>
+
+      <section>
+        <h2>Patterns</h2>
+        <ul>
+          <li><a href="./patterns/list-page.md">List page</a></li>
+          <li><a href="./patterns/advanced-filtering.md">Advanced filtering</a></li>
+          <li><a href="./patterns/create-form.md">Create form</a></li>
+          <li><a href="./patterns/create-wizard.md">Create wizard</a></li>
+          <li><a href="./patterns/detail-page.md">Detail page</a></li>
+          <li><a href="./patterns/data-visualization.md">Data visualization</a></li>
+          <li><a href="./patterns/action-weight.md">Action weight</a></li>
+          <li><a href="./patterns/empty-states.md">Empty states</a></li>
+          <li><a href="./patterns/errors-and-validation.md">Errors and validation</a></li>
+          <li><a href="./patterns/interactive-surfaces.md">Interactive surfaces</a></li>
+          <li><a href="./patterns/permission-gating.md">Permission gating</a></li>
+          <li><a href="./patterns/side-navigation.md">Side navigation</a></li>
+          <li><a href="./patterns/timestamps.md">Timestamps</a></li>
+          <li><a href="./patterns/design-tokens.md">Pattern design tokens</a></li>
+        </ul>
+      </section>
+    </main>
+  </body>
+</html>
