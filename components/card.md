@@ -40,7 +40,7 @@ To remove a slot's padding, use `flush`. A plain `className="p-0"` cannot overri
 - Don't nest a default-elevation card inside another card. Drop the inner one to `elevation={0}`.
 - Don't set `interactive` on a card that contains its own interactive elements. The hover affordance promises a click target the card does not have, and the inner controls swallow the click.
 - Don't use a card title in place of a page or section heading. If the content is the page, the title belongs in the page header.
-- Don't hardcode colors, radii, or shadows through `className`. If a card needs a value the tokens do not carry, stop and raise it. See the [`@cloud/ui` README](../README.md).
+- Don't hardcode colors, radii, or shadows through `className`. If a card needs a value the tokens do not carry, stop and raise it. See the [`@cloud/ui` README](../../README.md).
 
 ## Features
 

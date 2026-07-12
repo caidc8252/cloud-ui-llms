@@ -8,12 +8,12 @@ This index is for  AI agents writing business application UI. Consume public pac
 
 - [Package manifest](package.json): Public export map, runtime dependencies, peer dependencies, and the package type-check command.
 - [Root exports](src/index.ts): Preferred `@cloud/ui` entry for UI components, layouts, list filters, hooks, theme helpers, sidebar state, and `cn`.
-- [UI component exports](src/components/ui/index.ts): Public `@cloud/ui/components/ui` entry for primitives and composed UI recipes.
-- [Layout exports](src/components/layout/index.ts): Public `@cloud/ui/components/layout` entry for application shell and page-layout components.
-- [Chart exports](src/components/chart/index.ts): Public `@cloud/ui/components/chart` entry for themed Recharts composition; import charts from this subpath rather than from the root barrel or `recharts`.
-- [List-filter exports](src/components/list-filter/index.ts): Public list filtering family, also re-exported from `@cloud/ui`.
+- [UI component exports](https://github.com/Newland-Payment-Technology-US-Co-Ltd/cloud-next-scaffold/blob/develop/packages/ui/src/components/ui/index.ts): Public `@cloud/ui/components/ui` entry for primitives and composed UI recipes.
+- [Layout exports](https://github.com/Newland-Payment-Technology-US-Co-Ltd/cloud-next-scaffold/blob/develop/packages/ui/src/components/layout/index.ts): Public `@cloud/ui/components/layout` entry for application shell and page-layout components.
+- [Chart exports](https://github.com/Newland-Payment-Technology-US-Co-Ltd/cloud-next-scaffold/blob/develop/packages/ui/src/components/chart/index.ts): Public `@cloud/ui/components/chart` entry for themed Recharts composition; import charts from this subpath rather than from the root barrel or `recharts`.
+- [List-filter exports](https://github.com/Newland-Payment-Technology-US-Co-Ltd/cloud-next-scaffold/blob/develop/packages/ui/src/components/list-filter/index.ts): Public list filtering family, also re-exported from `@cloud/ui`.
 - [Global styles](docs/get-started/global-styles.md): Apply the shared CSS entries once to load Tailwind, fonts, semantic tokens, dark mode, component defaults, and base styles.
-- [Component defaults](src/components/styles/component-defaults.css): Import `@cloud/ui/component-defaults.css` before `@cloud/ui/globals.css` for shared component-level defaults.
+- [Component defaults](https://github.com/Newland-Payment-Technology-US-Co-Ltd/cloud-next-scaffold/blob/develop/packages/ui/src/components/styles/component-defaults.css): Import `@cloud/ui/component-defaults.css` before `@cloud/ui/globals.css` for shared component-level defaults.
 - [Theme provider](src/lib/theme.tsx): `ThemeProvider`, `useTheme`, and the light or dark theme contract.
 - [Class name utility](src/lib/utils.ts): Use `cn` to merge conditional Tailwind classes without conflicting utilities.
 - [Infinite-scroll hook](src/lib/use-infinite-scroll.ts): Use `useInfiniteScroll` to load incremental results from an observed sentinel.
@@ -27,97 +27,97 @@ This index is for  AI agents writing business application UI. Consume public pac
 
 ## Components
 
-- [Accordion](src/components/ui/primitives/accordion.tsx): Show related content in independently expandable sections.
-- [Action footer](src/components/layout/action-footer.tsx): Place persistent cancel, back, and submit actions at the bottom of a task surface.
-- [Advanced filter](src/components/list-filter/advanced-filter-sheet.tsx): Compose grouped fields in a sheet for filters that do not fit the quick filter bar.
-- [Advanced filter button](src/components/list-filter/advanced-filter-button.tsx): Open advanced filtering and indicate the number of active advanced conditions.
-- [Alert](src/components/ui/primitives/alert.tsx): Communicate inline information, success, warnings, or errors with optional actions.
-- [Alert dialog](src/components/ui/primitives/alert-dialog.tsx): Require explicit confirmation before a consequential action.
-- [App header](src/components/layout/app-header.tsx): Render the persistent application header and its navigation or action slots.
-- [Aspect ratio](src/components/ui/primitives/aspect-ratio.tsx): Keep media or embedded content at a stable width-to-height ratio.
-- [Avatar](src/components/ui/primitives/avatar.tsx): Represent a person or entity with an image, fallback, or compact group.
-- [Badge](src/components/ui/primitives/badge.tsx): Label status, severity, category, or compact metadata using semantic tones.
-- [Breadcrumb](src/components/ui/primitives/breadcrumb.tsx): Compose a low-level hierarchical navigation trail.
-- [Breadcrumbs](src/components/layout/breadcrumbs.tsx): Render application breadcrumbs from typed item data.
-- [Button](src/components/ui/primitives/button.tsx): Trigger commands with standard variants, sizes, icons, loading behavior, and danger semantics.
-- [Calendar](src/components/ui/primitives/calendar.tsx): Display a calendar grid for date selection.
-- [Card](src/components/ui/primitives/card.tsx): Group related content with standard header, content, action, footer, padding, and elevation slots.
-- [Carousel](src/components/ui/recipes/carousel.tsx): Navigate a horizontal sequence of panels or media with controls and dots.
-- [Chart bar](src/components/chart/chart-bar.tsx): Render themed Recharts bars, including stacked shapes and per-cell color resolution.
-- [Chart container](src/components/chart/chart.tsx): Provide chart configuration, responsive sizing, semantic series colors, and shared chart context.
-- [Chart legend](src/components/chart/chart-legend.tsx): Render a themed legend for chart series.
-- [Chart pie callout](src/components/chart/chart-pie-callout.tsx): Add readable labels and connector lines to pie or donut sectors.
-- [Chart sparkline](src/components/chart/chart-sparkline.tsx): Show a compact trend visualization without full chart chrome.
-- [Chart states](src/components/chart/chart-states.tsx): Render standard chart loading and empty states.
-- [Chart tooltip](src/components/chart/chart-tooltip.tsx): Display themed values and series metadata on chart interaction.
-- [Checkbox](src/components/ui/primitives/checkbox.tsx): Select one or more independent boolean options.
-- [Collapsible](src/components/ui/primitives/collapsible.tsx): Show or hide one region from a trigger without accordion grouping.
-- [Combobox](src/components/ui/recipes/combobox.tsx): Search and select an option from a larger collection.
-- [Command](src/components/ui/recipes/command.tsx): Build searchable command menus and command dialogs.
-- [Content header](src/components/layout/content-header.tsx): Head plain dashboard or settings content that does not use a resource-management page band.
-- [Context menu](src/components/ui/primitives/context-menu.tsx): Present contextual actions from a secondary-click or equivalent trigger.
-- [Date picker](src/components/ui/recipes/date-picker.tsx): Enter or select one localized date.
-- [Date range picker](src/components/ui/recipes/date-range-picker.tsx): Select a localized date interval with optional presets.
-- [Date-time picker](src/components/ui/recipes/date-time-picker.tsx): Select a date and time as one field.
-- [Drawer](src/components/ui/primitives/drawer.tsx): Present a task or supplementary content in a gesture-friendly sliding panel.
-- [Dropdown menu](src/components/ui/primitives/dropdown-menu.tsx): Group contextual commands, choices, and submenus under a trigger.
-- [Dropzone](src/components/ui/primitives/dropzone.tsx): Accept dragged or selected files and render file rows with upload status.
-- [Empty](src/components/ui/primitives/empty.tsx): Explain an empty or zero-results state and offer an optional recovery action.
-- [Field](src/components/ui/primitives/field.tsx): Associate a form control with its label, hint, required state, and validation error.
-- [Hover card](src/components/ui/primitives/hover-card.tsx): Reveal supplementary content when a trigger is hovered or focused.
-- [Input](src/components/ui/primitives/input.tsx): Capture a single line of text with standard field styling and states.
-- [Input group](src/components/ui/recipes/input-group.tsx): Combine an input or textarea with addons, text, and compact actions.
-- [Input OTP](src/components/ui/primitives/input-otp.tsx): Capture a segmented one-time password or verification code.
-- [Key value](src/components/ui/recipes/key-value.tsx): Display labeled resource properties in responsive definition grids.
-- [Label](src/components/ui/primitives/label.tsx): Provide an accessible label for a form control.
-- [Layout](src/components/layout/layout.tsx): Establish the application shell around sidebar, header, and scrollable content.
-- [List applied filters](src/components/list-filter/applied-filters.tsx): Display the currently applied filter chips and clear action.
-- [List condition band](src/components/list-filter/list-condition-band.tsx): Arrange quick filters, advanced filtering, and applied filter feedback.
-- [List filter chip](src/components/list-filter/filter-chip.tsx): Represent one removable applied filter.
-- [List search input](src/components/list-filter/search-input.tsx): Capture and submit free-text list search using shared behavior.
-- [List summary bar](src/components/list-filter/list-summary-bar.tsx): Show result counts and low-chrome list actions above a table.
-- [Load more](src/components/ui/recipes/load-more.tsx): Request another page of results in incremental-loading interfaces.
-- [Log console](src/components/ui/recipes/log-console.tsx): Present timestamped, leveled log lines in a dense operational console.
-- [Menubar](src/components/ui/primitives/menubar.tsx): Build a persistent application-style command menu bar.
-- [Modal](src/components/ui/primitives/modal.tsx): Focus the user on a bounded task while keeping the underlying page visible.
-- [Navigation menu](src/components/ui/primitives/navigation-menu.tsx): Build structured navigation with expandable content panels.
-- [Object tile](src/components/ui/primitives/object-tile.tsx): Show a selectable or actionable entity with compact supporting metadata.
-- [Page body](src/components/layout/page-body.tsx): Own page-level padding, width, and vertical spacing inside the application scroll area.
-- [Page header](src/components/layout/page-header.tsx): Head resource list and create pages with title, description, and actions.
-- [Page header band](src/components/layout/page-header-band.tsx): Head resource detail pages with navigation, metadata, actions, and optional tabs.
-- [Pagination](src/components/ui/recipes/pagination.tsx): Navigate a collection when only previous, next, and page controls are needed.
-- [Popover](src/components/ui/primitives/popover.tsx): Display contextual information or lightweight controls anchored to a trigger.
-- [Progress](src/components/ui/primitives/progress.tsx): Communicate known operation completion with semantic tone and labels.
-- [Radio group](src/components/ui/primitives/radio-group.tsx): Select exactly one option from a visible set.
-- [Resizable panels](src/components/ui/primitives/resizable.tsx): Divide a workspace into user-resizable regions.
-- [Rich pagination](src/components/ui/recipes/rich-pagination.tsx): Navigate server-paginated collections with range, page size, and total count.
-- [Scroll area](src/components/ui/primitives/scroll-area.tsx): Provide a styled overflow region with optional custom scrollbars.
-- [Select](src/components/ui/primitives/select.tsx): Choose one option from a compact dropdown list.
-- [Semantic tone](src/components/ui/_tone.ts): Share the neutral, success, warning, error, and info vocabulary across status-bearing components.
-- [Separator](src/components/ui/primitives/separator.tsx): Visually or semantically divide adjacent content.
-- [Sheet](src/components/ui/primitives/sheet.tsx): Open supplementary controls or content from an edge of the viewport.
-- [Sidebar](src/components/layout/sidebar.tsx): Render grouped, nested application navigation from typed sections.
-- [Sidebar trigger](src/components/layout/sidebar-trigger.tsx): Toggle the shared sidebar from a compact icon control.
-- [Skeleton](src/components/ui/primitives/skeleton.tsx): Reserve layout while content is loading.
-- [Slider](src/components/ui/primitives/slider.tsx): Select a numeric value or range along a track.
-- [Spinner](src/components/ui/primitives/spinner.tsx): Indicate a compact indeterminate operation in progress.
-- [Stat card](src/components/ui/recipes/stat-card.tsx): Present a key metric, trend, and supporting description.
-- [Status card](src/components/ui/recipes/status-card.tsx): Summarize the current state of a resource or process with semantic emphasis.
-- [Step indicator](src/components/ui/recipes/step-indicator.tsx): Show progress through a fixed sequence of task steps.
-- [Stepper](src/components/ui/recipes/stepper.tsx): Adjust a numeric value with increment and decrement controls.
-- [Switch](src/components/ui/primitives/switch.tsx): Toggle a setting that takes effect immediately.
-- [Table](src/components/ui/recipes/table.tsx): Render typed business data with sorting, density, selection, sticky headers, and row actions.
-- [Tabs](src/components/ui/primitives/tabs.tsx): Switch between peer content sections within the same surface.
-- [Textarea](src/components/ui/primitives/textarea.tsx): Capture multi-line plain text with standard states.
-- [Theme toggle](src/components/ui/primitives/theme-toggle.tsx): Switch among the supported visual themes.
-- [Time picker](src/components/ui/recipes/time-picker.tsx): Enter or select a localized time value.
-- [Timeline](src/components/ui/recipes/timeline.tsx): Present events, actors, times, and statuses in chronological order.
-- [Toast](src/components/ui/primitives/sonner.tsx): Announce transient operation feedback through `Toaster` and `toast`.
-- [Toggle](src/components/ui/primitives/toggle.tsx): Represent one pressed or selected control with standard button behavior.
-- [Toggle controls](src/components/ui/recipes/toggles.tsx): Render checkbox, radio, and switch choices as richer selectable rows.
-- [Toggle group](src/components/ui/primitives/toggle-group.tsx): Select one or more values from a compact group of toggles.
-- [Tooltip](src/components/ui/primitives/tooltip.tsx): Explain an unfamiliar control on hover or keyboard focus.
-- [Virtual table](src/components/ui/recipes/virtual-table.tsx): Render large typed datasets efficiently with row virtualization.
+- [Accordion](https://github.com/Newland-Payment-Technology-US-Co-Ltd/cloud-next-scaffold/blob/develop/packages/ui/src/components/ui/primitives/accordion.tsx): Show related content in independently expandable sections.
+- [Action footer](https://github.com/Newland-Payment-Technology-US-Co-Ltd/cloud-next-scaffold/blob/develop/packages/ui/src/components/layout/action-footer.tsx): Place persistent cancel, back, and submit actions at the bottom of a task surface.
+- [Advanced filter](https://github.com/Newland-Payment-Technology-US-Co-Ltd/cloud-next-scaffold/blob/develop/packages/ui/src/components/list-filter/advanced-filter-sheet.tsx): Compose grouped fields in a sheet for filters that do not fit the quick filter bar.
+- [Advanced filter button](https://github.com/Newland-Payment-Technology-US-Co-Ltd/cloud-next-scaffold/blob/develop/packages/ui/src/components/list-filter/advanced-filter-button.tsx): Open advanced filtering and indicate the number of active advanced conditions.
+- [Alert](https://github.com/Newland-Payment-Technology-US-Co-Ltd/cloud-next-scaffold/blob/develop/packages/ui/src/components/ui/primitives/alert.tsx): Communicate inline information, success, warnings, or errors with optional actions.
+- [Alert dialog](https://github.com/Newland-Payment-Technology-US-Co-Ltd/cloud-next-scaffold/blob/develop/packages/ui/src/components/ui/primitives/alert-dialog.tsx): Require explicit confirmation before a consequential action.
+- [App header](https://github.com/Newland-Payment-Technology-US-Co-Ltd/cloud-next-scaffold/blob/develop/packages/ui/src/components/layout/app-header.tsx): Render the persistent application header and its navigation or action slots.
+- [Aspect ratio](https://github.com/Newland-Payment-Technology-US-Co-Ltd/cloud-next-scaffold/blob/develop/packages/ui/src/components/ui/primitives/aspect-ratio.tsx): Keep media or embedded content at a stable width-to-height ratio.
+- [Avatar](https://github.com/Newland-Payment-Technology-US-Co-Ltd/cloud-next-scaffold/blob/develop/packages/ui/src/components/ui/primitives/avatar.tsx): Represent a person or entity with an image, fallback, or compact group.
+- [Badge](https://github.com/Newland-Payment-Technology-US-Co-Ltd/cloud-next-scaffold/blob/develop/packages/ui/src/components/ui/primitives/badge.tsx): Label status, severity, category, or compact metadata using semantic tones.
+- [Breadcrumb](https://github.com/Newland-Payment-Technology-US-Co-Ltd/cloud-next-scaffold/blob/develop/packages/ui/src/components/ui/primitives/breadcrumb.tsx): Compose a low-level hierarchical navigation trail.
+- [Breadcrumbs](https://github.com/Newland-Payment-Technology-US-Co-Ltd/cloud-next-scaffold/blob/develop/packages/ui/src/components/layout/breadcrumbs.tsx): Render application breadcrumbs from typed item data.
+- [Button](https://github.com/Newland-Payment-Technology-US-Co-Ltd/cloud-next-scaffold/blob/develop/packages/ui/src/components/ui/primitives/button.tsx): Trigger commands with standard variants, sizes, icons, loading behavior, and danger semantics.
+- [Calendar](https://github.com/Newland-Payment-Technology-US-Co-Ltd/cloud-next-scaffold/blob/develop/packages/ui/src/components/ui/primitives/calendar.tsx): Display a calendar grid for date selection.
+- [Card](https://github.com/Newland-Payment-Technology-US-Co-Ltd/cloud-next-scaffold/blob/develop/packages/ui/src/components/ui/primitives/card.tsx): Group related content with standard header, content, action, footer, padding, and elevation slots.
+- [Carousel](https://github.com/Newland-Payment-Technology-US-Co-Ltd/cloud-next-scaffold/blob/develop/packages/ui/src/components/ui/recipes/carousel.tsx): Navigate a horizontal sequence of panels or media with controls and dots.
+- [Chart bar](https://github.com/Newland-Payment-Technology-US-Co-Ltd/cloud-next-scaffold/blob/develop/packages/ui/src/components/chart/chart-bar.tsx): Render themed Recharts bars, including stacked shapes and per-cell color resolution.
+- [Chart container](https://github.com/Newland-Payment-Technology-US-Co-Ltd/cloud-next-scaffold/blob/develop/packages/ui/src/components/chart/chart.tsx): Provide chart configuration, responsive sizing, semantic series colors, and shared chart context.
+- [Chart legend](https://github.com/Newland-Payment-Technology-US-Co-Ltd/cloud-next-scaffold/blob/develop/packages/ui/src/components/chart/chart-legend.tsx): Render a themed legend for chart series.
+- [Chart pie callout](https://github.com/Newland-Payment-Technology-US-Co-Ltd/cloud-next-scaffold/blob/develop/packages/ui/src/components/chart/chart-pie-callout.tsx): Add readable labels and connector lines to pie or donut sectors.
+- [Chart sparkline](https://github.com/Newland-Payment-Technology-US-Co-Ltd/cloud-next-scaffold/blob/develop/packages/ui/src/components/chart/chart-sparkline.tsx): Show a compact trend visualization without full chart chrome.
+- [Chart states](https://github.com/Newland-Payment-Technology-US-Co-Ltd/cloud-next-scaffold/blob/develop/packages/ui/src/components/chart/chart-states.tsx): Render standard chart loading and empty states.
+- [Chart tooltip](https://github.com/Newland-Payment-Technology-US-Co-Ltd/cloud-next-scaffold/blob/develop/packages/ui/src/components/chart/chart-tooltip.tsx): Display themed values and series metadata on chart interaction.
+- [Checkbox](https://github.com/Newland-Payment-Technology-US-Co-Ltd/cloud-next-scaffold/blob/develop/packages/ui/src/components/ui/primitives/checkbox.tsx): Select one or more independent boolean options.
+- [Collapsible](https://github.com/Newland-Payment-Technology-US-Co-Ltd/cloud-next-scaffold/blob/develop/packages/ui/src/components/ui/primitives/collapsible.tsx): Show or hide one region from a trigger without accordion grouping.
+- [Combobox](https://github.com/Newland-Payment-Technology-US-Co-Ltd/cloud-next-scaffold/blob/develop/packages/ui/src/components/ui/recipes/combobox.tsx): Search and select an option from a larger collection.
+- [Command](https://github.com/Newland-Payment-Technology-US-Co-Ltd/cloud-next-scaffold/blob/develop/packages/ui/src/components/ui/recipes/command.tsx): Build searchable command menus and command dialogs.
+- [Content header](https://github.com/Newland-Payment-Technology-US-Co-Ltd/cloud-next-scaffold/blob/develop/packages/ui/src/components/layout/content-header.tsx): Head plain dashboard or settings content that does not use a resource-management page band.
+- [Context menu](https://github.com/Newland-Payment-Technology-US-Co-Ltd/cloud-next-scaffold/blob/develop/packages/ui/src/components/ui/primitives/context-menu.tsx): Present contextual actions from a secondary-click or equivalent trigger.
+- [Date picker](https://github.com/Newland-Payment-Technology-US-Co-Ltd/cloud-next-scaffold/blob/develop/packages/ui/src/components/ui/recipes/date-picker.tsx): Enter or select one localized date.
+- [Date range picker](https://github.com/Newland-Payment-Technology-US-Co-Ltd/cloud-next-scaffold/blob/develop/packages/ui/src/components/ui/recipes/date-range-picker.tsx): Select a localized date interval with optional presets.
+- [Date-time picker](https://github.com/Newland-Payment-Technology-US-Co-Ltd/cloud-next-scaffold/blob/develop/packages/ui/src/components/ui/recipes/date-time-picker.tsx): Select a date and time as one field.
+- [Drawer](https://github.com/Newland-Payment-Technology-US-Co-Ltd/cloud-next-scaffold/blob/develop/packages/ui/src/components/ui/primitives/drawer.tsx): Present a task or supplementary content in a gesture-friendly sliding panel.
+- [Dropdown menu](https://github.com/Newland-Payment-Technology-US-Co-Ltd/cloud-next-scaffold/blob/develop/packages/ui/src/components/ui/primitives/dropdown-menu.tsx): Group contextual commands, choices, and submenus under a trigger.
+- [Dropzone](https://github.com/Newland-Payment-Technology-US-Co-Ltd/cloud-next-scaffold/blob/develop/packages/ui/src/components/ui/primitives/dropzone.tsx): Accept dragged or selected files and render file rows with upload status.
+- [Empty](https://github.com/Newland-Payment-Technology-US-Co-Ltd/cloud-next-scaffold/blob/develop/packages/ui/src/components/ui/primitives/empty.tsx): Explain an empty or zero-results state and offer an optional recovery action.
+- [Field](https://github.com/Newland-Payment-Technology-US-Co-Ltd/cloud-next-scaffold/blob/develop/packages/ui/src/components/ui/primitives/field.tsx): Associate a form control with its label, hint, required state, and validation error.
+- [Hover card](https://github.com/Newland-Payment-Technology-US-Co-Ltd/cloud-next-scaffold/blob/develop/packages/ui/src/components/ui/primitives/hover-card.tsx): Reveal supplementary content when a trigger is hovered or focused.
+- [Input](https://github.com/Newland-Payment-Technology-US-Co-Ltd/cloud-next-scaffold/blob/develop/packages/ui/src/components/ui/primitives/input.tsx): Capture a single line of text with standard field styling and states.
+- [Input group](https://github.com/Newland-Payment-Technology-US-Co-Ltd/cloud-next-scaffold/blob/develop/packages/ui/src/components/ui/recipes/input-group.tsx): Combine an input or textarea with addons, text, and compact actions.
+- [Input OTP](https://github.com/Newland-Payment-Technology-US-Co-Ltd/cloud-next-scaffold/blob/develop/packages/ui/src/components/ui/primitives/input-otp.tsx): Capture a segmented one-time password or verification code.
+- [Key value](https://github.com/Newland-Payment-Technology-US-Co-Ltd/cloud-next-scaffold/blob/develop/packages/ui/src/components/ui/recipes/key-value.tsx): Display labeled resource properties in responsive definition grids.
+- [Label](https://github.com/Newland-Payment-Technology-US-Co-Ltd/cloud-next-scaffold/blob/develop/packages/ui/src/components/ui/primitives/label.tsx): Provide an accessible label for a form control.
+- [Layout](https://github.com/Newland-Payment-Technology-US-Co-Ltd/cloud-next-scaffold/blob/develop/packages/ui/src/components/layout/layout.tsx): Establish the application shell around sidebar, header, and scrollable content.
+- [List applied filters](https://github.com/Newland-Payment-Technology-US-Co-Ltd/cloud-next-scaffold/blob/develop/packages/ui/src/components/list-filter/applied-filters.tsx): Display the currently applied filter chips and clear action.
+- [List condition band](https://github.com/Newland-Payment-Technology-US-Co-Ltd/cloud-next-scaffold/blob/develop/packages/ui/src/components/list-filter/list-condition-band.tsx): Arrange quick filters, advanced filtering, and applied filter feedback.
+- [List filter chip](https://github.com/Newland-Payment-Technology-US-Co-Ltd/cloud-next-scaffold/blob/develop/packages/ui/src/components/list-filter/filter-chip.tsx): Represent one removable applied filter.
+- [List search input](https://github.com/Newland-Payment-Technology-US-Co-Ltd/cloud-next-scaffold/blob/develop/packages/ui/src/components/list-filter/search-input.tsx): Capture and submit free-text list search using shared behavior.
+- [List summary bar](https://github.com/Newland-Payment-Technology-US-Co-Ltd/cloud-next-scaffold/blob/develop/packages/ui/src/components/list-filter/list-summary-bar.tsx): Show result counts and low-chrome list actions above a table.
+- [Load more](https://github.com/Newland-Payment-Technology-US-Co-Ltd/cloud-next-scaffold/blob/develop/packages/ui/src/components/ui/recipes/load-more.tsx): Request another page of results in incremental-loading interfaces.
+- [Log console](https://github.com/Newland-Payment-Technology-US-Co-Ltd/cloud-next-scaffold/blob/develop/packages/ui/src/components/ui/recipes/log-console.tsx): Present timestamped, leveled log lines in a dense operational console.
+- [Menubar](https://github.com/Newland-Payment-Technology-US-Co-Ltd/cloud-next-scaffold/blob/develop/packages/ui/src/components/ui/primitives/menubar.tsx): Build a persistent application-style command menu bar.
+- [Modal](https://github.com/Newland-Payment-Technology-US-Co-Ltd/cloud-next-scaffold/blob/develop/packages/ui/src/components/ui/primitives/modal.tsx): Focus the user on a bounded task while keeping the underlying page visible.
+- [Navigation menu](https://github.com/Newland-Payment-Technology-US-Co-Ltd/cloud-next-scaffold/blob/develop/packages/ui/src/components/ui/primitives/navigation-menu.tsx): Build structured navigation with expandable content panels.
+- [Object tile](https://github.com/Newland-Payment-Technology-US-Co-Ltd/cloud-next-scaffold/blob/develop/packages/ui/src/components/ui/primitives/object-tile.tsx): Show a selectable or actionable entity with compact supporting metadata.
+- [Page body](https://github.com/Newland-Payment-Technology-US-Co-Ltd/cloud-next-scaffold/blob/develop/packages/ui/src/components/layout/page-body.tsx): Own page-level padding, width, and vertical spacing inside the application scroll area.
+- [Page header](https://github.com/Newland-Payment-Technology-US-Co-Ltd/cloud-next-scaffold/blob/develop/packages/ui/src/components/layout/page-header.tsx): Head resource list and create pages with title, description, and actions.
+- [Page header band](https://github.com/Newland-Payment-Technology-US-Co-Ltd/cloud-next-scaffold/blob/develop/packages/ui/src/components/layout/page-header-band.tsx): Head resource detail pages with navigation, metadata, actions, and optional tabs.
+- [Pagination](https://github.com/Newland-Payment-Technology-US-Co-Ltd/cloud-next-scaffold/blob/develop/packages/ui/src/components/ui/recipes/pagination.tsx): Navigate a collection when only previous, next, and page controls are needed.
+- [Popover](https://github.com/Newland-Payment-Technology-US-Co-Ltd/cloud-next-scaffold/blob/develop/packages/ui/src/components/ui/primitives/popover.tsx): Display contextual information or lightweight controls anchored to a trigger.
+- [Progress](https://github.com/Newland-Payment-Technology-US-Co-Ltd/cloud-next-scaffold/blob/develop/packages/ui/src/components/ui/primitives/progress.tsx): Communicate known operation completion with semantic tone and labels.
+- [Radio group](https://github.com/Newland-Payment-Technology-US-Co-Ltd/cloud-next-scaffold/blob/develop/packages/ui/src/components/ui/primitives/radio-group.tsx): Select exactly one option from a visible set.
+- [Resizable panels](https://github.com/Newland-Payment-Technology-US-Co-Ltd/cloud-next-scaffold/blob/develop/packages/ui/src/components/ui/primitives/resizable.tsx): Divide a workspace into user-resizable regions.
+- [Rich pagination](https://github.com/Newland-Payment-Technology-US-Co-Ltd/cloud-next-scaffold/blob/develop/packages/ui/src/components/ui/recipes/rich-pagination.tsx): Navigate server-paginated collections with range, page size, and total count.
+- [Scroll area](https://github.com/Newland-Payment-Technology-US-Co-Ltd/cloud-next-scaffold/blob/develop/packages/ui/src/components/ui/primitives/scroll-area.tsx): Provide a styled overflow region with optional custom scrollbars.
+- [Select](https://github.com/Newland-Payment-Technology-US-Co-Ltd/cloud-next-scaffold/blob/develop/packages/ui/src/components/ui/primitives/select.tsx): Choose one option from a compact dropdown list.
+- [Semantic tone](https://github.com/Newland-Payment-Technology-US-Co-Ltd/cloud-next-scaffold/blob/develop/packages/ui/src/components/ui/_tone.ts): Share the neutral, success, warning, error, and info vocabulary across status-bearing components.
+- [Separator](https://github.com/Newland-Payment-Technology-US-Co-Ltd/cloud-next-scaffold/blob/develop/packages/ui/src/components/ui/primitives/separator.tsx): Visually or semantically divide adjacent content.
+- [Sheet](https://github.com/Newland-Payment-Technology-US-Co-Ltd/cloud-next-scaffold/blob/develop/packages/ui/src/components/ui/primitives/sheet.tsx): Open supplementary controls or content from an edge of the viewport.
+- [Sidebar](https://github.com/Newland-Payment-Technology-US-Co-Ltd/cloud-next-scaffold/blob/develop/packages/ui/src/components/layout/sidebar.tsx): Render grouped, nested application navigation from typed sections.
+- [Sidebar trigger](https://github.com/Newland-Payment-Technology-US-Co-Ltd/cloud-next-scaffold/blob/develop/packages/ui/src/components/layout/sidebar-trigger.tsx): Toggle the shared sidebar from a compact icon control.
+- [Skeleton](https://github.com/Newland-Payment-Technology-US-Co-Ltd/cloud-next-scaffold/blob/develop/packages/ui/src/components/ui/primitives/skeleton.tsx): Reserve layout while content is loading.
+- [Slider](https://github.com/Newland-Payment-Technology-US-Co-Ltd/cloud-next-scaffold/blob/develop/packages/ui/src/components/ui/primitives/slider.tsx): Select a numeric value or range along a track.
+- [Spinner](https://github.com/Newland-Payment-Technology-US-Co-Ltd/cloud-next-scaffold/blob/develop/packages/ui/src/components/ui/primitives/spinner.tsx): Indicate a compact indeterminate operation in progress.
+- [Stat card](https://github.com/Newland-Payment-Technology-US-Co-Ltd/cloud-next-scaffold/blob/develop/packages/ui/src/components/ui/recipes/stat-card.tsx): Present a key metric, trend, and supporting description.
+- [Status card](https://github.com/Newland-Payment-Technology-US-Co-Ltd/cloud-next-scaffold/blob/develop/packages/ui/src/components/ui/recipes/status-card.tsx): Summarize the current state of a resource or process with semantic emphasis.
+- [Step indicator](https://github.com/Newland-Payment-Technology-US-Co-Ltd/cloud-next-scaffold/blob/develop/packages/ui/src/components/ui/recipes/step-indicator.tsx): Show progress through a fixed sequence of task steps.
+- [Stepper](https://github.com/Newland-Payment-Technology-US-Co-Ltd/cloud-next-scaffold/blob/develop/packages/ui/src/components/ui/recipes/stepper.tsx): Adjust a numeric value with increment and decrement controls.
+- [Switch](https://github.com/Newland-Payment-Technology-US-Co-Ltd/cloud-next-scaffold/blob/develop/packages/ui/src/components/ui/primitives/switch.tsx): Toggle a setting that takes effect immediately.
+- [Table](https://github.com/Newland-Payment-Technology-US-Co-Ltd/cloud-next-scaffold/blob/develop/packages/ui/src/components/ui/recipes/table.tsx): Render typed business data with sorting, density, selection, sticky headers, and row actions.
+- [Tabs](https://github.com/Newland-Payment-Technology-US-Co-Ltd/cloud-next-scaffold/blob/develop/packages/ui/src/components/ui/primitives/tabs.tsx): Switch between peer content sections within the same surface.
+- [Textarea](https://github.com/Newland-Payment-Technology-US-Co-Ltd/cloud-next-scaffold/blob/develop/packages/ui/src/components/ui/primitives/textarea.tsx): Capture multi-line plain text with standard states.
+- [Theme toggle](https://github.com/Newland-Payment-Technology-US-Co-Ltd/cloud-next-scaffold/blob/develop/packages/ui/src/components/ui/primitives/theme-toggle.tsx): Switch among the supported visual themes.
+- [Time picker](https://github.com/Newland-Payment-Technology-US-Co-Ltd/cloud-next-scaffold/blob/develop/packages/ui/src/components/ui/recipes/time-picker.tsx): Enter or select a localized time value.
+- [Timeline](https://github.com/Newland-Payment-Technology-US-Co-Ltd/cloud-next-scaffold/blob/develop/packages/ui/src/components/ui/recipes/timeline.tsx): Present events, actors, times, and statuses in chronological order.
+- [Toast](https://github.com/Newland-Payment-Technology-US-Co-Ltd/cloud-next-scaffold/blob/develop/packages/ui/src/components/ui/primitives/sonner.tsx): Announce transient operation feedback through `Toaster` and `toast`.
+- [Toggle](https://github.com/Newland-Payment-Technology-US-Co-Ltd/cloud-next-scaffold/blob/develop/packages/ui/src/components/ui/primitives/toggle.tsx): Represent one pressed or selected control with standard button behavior.
+- [Toggle controls](https://github.com/Newland-Payment-Technology-US-Co-Ltd/cloud-next-scaffold/blob/develop/packages/ui/src/components/ui/recipes/toggles.tsx): Render checkbox, radio, and switch choices as richer selectable rows.
+- [Toggle group](https://github.com/Newland-Payment-Technology-US-Co-Ltd/cloud-next-scaffold/blob/develop/packages/ui/src/components/ui/primitives/toggle-group.tsx): Select one or more values from a compact group of toggles.
+- [Tooltip](https://github.com/Newland-Payment-Technology-US-Co-Ltd/cloud-next-scaffold/blob/develop/packages/ui/src/components/ui/primitives/tooltip.tsx): Explain an unfamiliar control on hover or keyboard focus.
+- [Virtual table](https://github.com/Newland-Payment-Technology-US-Co-Ltd/cloud-next-scaffold/blob/develop/packages/ui/src/components/ui/recipes/virtual-table.tsx): Render large typed datasets efficiently with row virtualization.
 
 ## Patterns
 

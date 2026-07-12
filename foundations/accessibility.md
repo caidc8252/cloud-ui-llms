@@ -1,6 +1,6 @@
 # Accessibility
 
-`@cloud/ui` primitives preserve common semantic controls and their visible focus treatment. This reference covers the public behavior in the [Field source](../../src/components/ui/primitives/field.tsx), [Input source](../../src/components/ui/primitives/input.tsx), [Button source](../../src/components/ui/primitives/button.tsx), and [Modal source](../../src/components/ui/primitives/modal.tsx), alongside the portal [UI and page rules](../../../../.claude/team-rule/coding-rules/ui_ui-and-pages.md).
+`@cloud/ui` primitives preserve common semantic controls and their visible focus treatment. This reference covers the public behavior in the [Field source](https://github.com/Newland-Payment-Technology-US-Co-Ltd/cloud-next-scaffold/blob/develop/packages/ui/src/components/ui/primitives/field.tsx), [Input source](https://github.com/Newland-Payment-Technology-US-Co-Ltd/cloud-next-scaffold/blob/develop/packages/ui/src/components/ui/primitives/input.tsx), [Button source](https://github.com/Newland-Payment-Technology-US-Co-Ltd/cloud-next-scaffold/blob/develop/packages/ui/src/components/ui/primitives/button.tsx), and [Modal source](https://github.com/Newland-Payment-Technology-US-Co-Ltd/cloud-next-scaffold/blob/develop/packages/ui/src/components/ui/primitives/modal.tsx), alongside the portal [UI and page rules](../../../../.claude/team-rule/coding-rules/ui_ui-and-pages.md).
 
 ## Overview
 
@@ -25,9 +25,9 @@ Start with the semantic primitive that matches the interaction, then provide a p
 
 Give every control a name before refining its visual treatment. For a single input, `Field` owns the label, hint, and error presentation; the application supplies the matching `id` and `htmlFor`. `Field required` renders the visible required indicator only, so also set the control's native `required` or `aria-required` state. For compound controls such as radio groups, omit `htmlFor` when there is no single target, as documented by `Field`.
 
-Use an icon-only button only when the action is familiar enough to scan quickly. Its `aria-label` names the action for assistive technology; a [Tooltip](../../src/components/ui/primitives/tooltip.tsx) can explain an unfamiliar symbol to sighted pointer users. Do not use the tooltip as the name.
+Use an icon-only button only when the action is familiar enough to scan quickly. Its `aria-label` names the action for assistive technology; a [Tooltip](https://github.com/Newland-Payment-Technology-US-Co-Ltd/cloud-next-scaffold/blob/develop/packages/ui/src/components/ui/primitives/tooltip.tsx) can explain an unfamiliar symbol to sighted pointer users. Do not use the tooltip as the name.
 
-For overlays, use [Modal](../../src/components/ui/primitives/modal.tsx) rather than constructing dialog behavior from a positioned `div`. `closeOnEscape` defaults to `true`; when a flow intentionally keeps it open, provide a clear, operable completion or cancel path. Use the modal's `footer` slot for dialog actions.
+For overlays, use [Modal](https://github.com/Newland-Payment-Technology-US-Co-Ltd/cloud-next-scaffold/blob/develop/packages/ui/src/components/ui/primitives/modal.tsx) rather than constructing dialog behavior from a positioned `div`. `closeOnEscape` defaults to `true`; when a flow intentionally keeps it open, provide a clear, operable completion or cancel path. Use the modal's `footer` slot for dialog actions.
 
 Keep native disabled and read-only states distinct. A disabled `Button` or `Input` cannot be used; `Input readOnly` communicates that its value is available but not editable. Preserve the primitive's keyboard focus styles and use semantic `Alert` or field error feedback rather than color alone.
 

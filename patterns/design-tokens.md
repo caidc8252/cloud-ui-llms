@@ -2,7 +2,7 @@
 
 A design token is an abstraction of a visual property, such as color, size, or motion.
 
-[Source](../src/components/styles/index.css)
+[Source](https://github.com/Newland-Payment-Technology-US-Co-Ltd/cloud-next-scaffold/blob/develop/packages/ui/src/components/styles/index.css)
 
 ## Key UX concepts
 

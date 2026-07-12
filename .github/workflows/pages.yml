@@ -32,7 +32,7 @@ jobs:
         run: |
           mkdir _site
           cp .nojekyll index.html llms.txt button.md card.md index.md _site/
-          cp -R demos foundations patterns _site/
+          cp -R components demos foundations patterns _site/
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
