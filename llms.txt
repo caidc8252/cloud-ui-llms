@@ -25,97 +25,99 @@
 
 ## Components
 
-- [Accordion](components/accordion.md): Show related content in independently expandable sections.
-- [Action footer](components/action-footer.md): Place persistent cancel, back, and submit actions at the bottom of a task surface.
-- [Advanced filter](components/advanced-filter-sheet.md): Compose grouped fields in a sheet for filters that do not fit the quick filter bar.
-- [Advanced filter button](components/advanced-filter-button.md): Open advanced filtering and indicate the number of active advanced conditions.
-- [Alert](components/alert.md): Communicate inline information, success, warnings, or errors with optional actions.
-- [Alert dialog](components/alert-dialog.md): Require explicit confirmation before a consequential action.
-- [App header](components/app-header.md): Render the persistent application header and its navigation or action slots.
-- [Aspect ratio](components/aspect-ratio.md): Keep media or embedded content at a stable width-to-height ratio.
-- [Avatar](components/avatar.md): Represent a person or entity with an image, fallback, or compact group.
-- [Badge](components/badge.md): Label status, severity, category, or compact metadata using semantic tones.
-- [Breadcrumb](components/breadcrumb.md): Compose a low-level hierarchical navigation trail.
-- [Breadcrumbs](components/breadcrumbs.md): Render application breadcrumbs from typed item data.
-- [Button](components/button.md): Trigger commands with standard variants, sizes, icons, loading behavior, and danger semantics.
-- [Calendar](components/calendar.md): Display a calendar grid for date selection.
-- [Card](components/card.md): Group related content with standard header, content, action, footer, padding, and elevation slots.
-- [Carousel](components/carousel.md): Navigate a horizontal sequence of panels or media with controls and dots.
-- [Chart bar](https://github.com/Newland-Payment-Technology-US-Co-Ltd/cloud-next-scaffold/blob/develop/packages/ui/src/components/chart/chart-bar.tsx): Render themed Recharts bars, including stacked shapes and per-cell color resolution.
-- [Chart container](https://github.com/Newland-Payment-Technology-US-Co-Ltd/cloud-next-scaffold/blob/develop/packages/ui/src/components/chart/chart.tsx): Provide chart configuration, responsive sizing, semantic series colors, and shared chart context.
-- [Chart legend](https://github.com/Newland-Payment-Technology-US-Co-Ltd/cloud-next-scaffold/blob/develop/packages/ui/src/components/chart/chart-legend.tsx): Render a themed legend for chart series.
-- [Chart pie callout](https://github.com/Newland-Payment-Technology-US-Co-Ltd/cloud-next-scaffold/blob/develop/packages/ui/src/components/chart/chart-pie-callout.tsx): Add readable labels and connector lines to pie or donut sectors.
-- [Chart sparkline](https://github.com/Newland-Payment-Technology-US-Co-Ltd/cloud-next-scaffold/blob/develop/packages/ui/src/components/chart/chart-sparkline.tsx): Show a compact trend visualization without full chart chrome.
-- [Chart states](https://github.com/Newland-Payment-Technology-US-Co-Ltd/cloud-next-scaffold/blob/develop/packages/ui/src/components/chart/chart-states.tsx): Render standard chart loading and empty states.
-- [Chart tooltip](https://github.com/Newland-Payment-Technology-US-Co-Ltd/cloud-next-scaffold/blob/develop/packages/ui/src/components/chart/chart-tooltip.tsx): Display themed values and series metadata on chart interaction.
-- [Checkbox](components/checkbox.md): Select one or more independent boolean options.
-- [Collapsible](components/collapsible.md): Show or hide one region from a trigger without accordion grouping.
-- [Combobox](components/combobox.md): Search and select an option from a larger collection.
-- [Command](components/command.md): Build searchable command menus and command dialogs.
-- [Content header](components/content-header.md): Head plain dashboard or settings content that does not use a resource-management page band.
-- [Context menu](components/context-menu.md): Present contextual actions from a secondary-click or equivalent trigger.
-- [Date picker](components/date-picker.md): Enter or select one localized date.
-- [Date range picker](components/date-range-picker.md): Select a localized date interval with optional presets.
-- [Date-time picker](components/date-time-picker.md): Select a date and time as one field.
-- [Drawer](components/drawer.md): Present a task or supplementary content in a gesture-friendly sliding panel.
-- [Dropdown menu](components/dropdown-menu.md): Group contextual commands, choices, and submenus under a trigger.
-- [Dropzone](components/dropzone.md): Accept dragged or selected files and render file rows with upload status.
-- [Empty](components/empty.md): Explain an empty or zero-results state and offer an optional recovery action.
-- [Field](components/field.md): Associate a form control with its label, hint, required state, and validation error.
-- [Hover card](components/hover-card.md): Reveal supplementary content when a trigger is hovered or focused.
-- [Input](components/input.md): Capture a single line of text with standard field styling and states.
-- [Input group](components/input-group.md): Combine an input or textarea with addons, text, and compact actions.
-- [Input OTP](components/input-otp.md): Capture a segmented one-time password or verification code.
-- [Key value](components/key-value.md): Display labeled resource properties in responsive definition grids.
-- [Label](components/label.md): Provide an accessible label for a form control.
-- [Layout](components/layout.md): Establish the application shell around sidebar, header, and scrollable content.
-- [List applied filters](components/applied-filters.md): Display the currently applied filter chips and clear action.
-- [List condition band](components/list-condition-band.md): Arrange quick filters, advanced filtering, and applied filter feedback.
-- [List filter chip](components/filter-chip.md): Represent one removable applied filter.
-- [List search input](components/search-input.md): Capture and submit free-text list search using shared behavior.
-- [List summary bar](components/list-summary-bar.md): Show result counts and low-chrome list actions above a table.
-- [Load more](components/load-more.md): Request another page of results in incremental-loading interfaces.
-- [Log console](components/log-console.md): Present timestamped, leveled log lines in a dense operational console.
-- [Menubar](components/menubar.md): Build a persistent application-style command menu bar.
-- [Modal](components/modal.md): Focus the user on a bounded task while keeping the underlying page visible.
-- [Navigation menu](components/navigation-menu.md): Build structured navigation with expandable content panels.
-- [Object tile](components/object-tile.md): Show a selectable or actionable entity with compact supporting metadata.
-- [Page body](components/page-body.md): Own page-level padding, width, and vertical spacing inside the application scroll area.
-- [Page header](components/page-header.md): Head resource list and create pages with title, description, and actions.
-- [Page header band](components/page-header-band.md): Head resource detail pages with navigation, metadata, actions, and optional tabs.
-- [Pagination](components/pagination.md): Navigate a collection when only previous, next, and page controls are needed.
-- [Popover](components/popover.md): Display contextual information or lightweight controls anchored to a trigger.
-- [Progress](components/progress.md): Communicate known operation completion with semantic tone and labels.
-- [Radio group](components/radio-group.md): Select exactly one option from a visible set.
-- [Resizable panels](components/resizable.md): Divide a workspace into user-resizable regions.
-- [Rich pagination](components/rich-pagination.md): Navigate server-paginated collections with range, page size, and total count.
-- [Scroll area](components/scroll-area.md): Provide a styled overflow region with optional custom scrollbars.
-- [Select](components/select.md): Choose one option from a compact dropdown list.
-- [Semantic tone](https://github.com/Newland-Payment-Technology-US-Co-Ltd/cloud-next-scaffold/blob/develop/packages/ui/src/components/ui/_tone.ts): Share the neutral, success, warning, error, and info vocabulary across status-bearing components.
-- [Separator](components/separator.md): Visually or semantically divide adjacent content.
-- [Sheet](components/sheet.md): Open supplementary controls or content from an edge of the viewport.
-- [Sidebar](components/sidebar.md): Render grouped, nested application navigation from typed sections.
-- [Sidebar trigger](components/sidebar-trigger.md): Toggle the shared sidebar from a compact icon control.
-- [Skeleton](components/skeleton.md): Reserve layout while content is loading.
-- [Slider](components/slider.md): Select a numeric value or range along a track.
-- [Spinner](components/spinner.md): Indicate a compact indeterminate operation in progress.
-- [Stat card](components/stat-card.md): Present a key metric, trend, and supporting description.
-- [Status card](components/status-card.md): Summarize the current state of a resource or process with semantic emphasis.
-- [Step indicator](components/step-indicator.md): Show progress through a fixed sequence of task steps.
-- [Stepper](components/stepper.md): Adjust a numeric value with increment and decrement controls.
-- [Switch](components/switch.md): Toggle a setting that takes effect immediately.
-- [Table](components/table.md): Render typed business data with sorting, density, selection, sticky headers, and row actions.
-- [Tabs](components/tabs.md): Switch between peer content sections within the same surface.
-- [Textarea](components/textarea.md): Capture multi-line plain text with standard states.
-- [Theme toggle](components/theme-toggle.md): Switch among the supported visual themes.
-- [Time picker](https://github.com/Newland-Payment-Technology-US-Co-Ltd/cloud-next-scaffold/blob/develop/packages/ui/src/components/ui/recipes/time-picker.tsx): Enter or select a localized time value.
-- [Timeline](components/timeline.md): Present events, actors, times, and statuses in chronological order.
-- [Toast](components/toaster.md): Announce transient operation feedback through `Toaster` and `toast`.
-- [Toggle](components/toggle.md): Represent one pressed or selected control with standard button behavior.
-- [Toggle controls](components/toggles.md): Render checkbox, radio, and switch choices as richer selectable rows.
-- [Toggle group](components/toggle-group.md): Select one or more values from a compact group of toggles.
-- [Tooltip](components/tooltip.md): Explain an unfamiliar control on hover or keyboard focus.
-- [Virtual table](components/virtual-table.md): Render large typed datasets efficiently with row virtualization.
+Each entry states the condition that selects it, and names the component to use instead when it does not. Pick from these lines; open a component doc for its props.
+
+- [Accordion](components/accordion.md): Several sections that expand independently, pre-styled with chevrons and dividers. For a single unstyled show-and-hide region, use `Collapsible`.
+- [Action footer](components/action-footer.md): The sticky commit band at the bottom of a form or task page. Put the Cancel/primary pair here so they stay reachable on a long form.
+- [Advanced filter](components/advanced-filter-sheet.md): The right-side sheet for filter fields that do not fit the quick bar. Deferred apply — nothing filters until the user presses Apply.
+- [Advanced filter button](components/advanced-filter-button.md): The quick bar's trigger for that sheet, badged with the number of active advanced conditions.
+- [Alert](components/alert.md): A **persistent, in-page** status message. Not a toast and not a modal: for a transient confirmation use `toast`; for a blocking forced choice use `AlertDialog`.
+- [Alert dialog](components/alert-dialog.md): The **forced-choice** dialog — no close affordance, no Esc, no backdrop dismiss, so the user must decide. Use it for a tier-3 delete. For a dismissable dialog use `Modal`.
+- [App header](components/app-header.md): The app bar's content — leading slot, breadcrumbs, search, notifications. One per shell, inside `Layout`.
+- [Aspect ratio](components/aspect-ratio.md): Pin child media to a fixed width-to-height ratio. Make the child fill it (`<Image fill>` or `size-full`); do not size the child separately.
+- [Avatar](components/avatar.md): A person or entity as an image with an initials fallback; `AvatarGroup` overlaps several. Pass `name` and let it derive the initials.
+- [Badge](components/badge.md): A status, count, or category chip. **Colour comes only from `tone`** — if no tone carries the meaning, stop and raise it rather than reaching for an arbitrary colour utility.
+- [Breadcrumb](components/breadcrumb.md): The low-level parts, for a bespoke trail you assemble by hand. For the app-shell trail, use `Breadcrumbs`.
+- [Breadcrumbs](components/breadcrumbs.md): The app-shell breadcrumb — takes typed items, renders into `AppHeader`'s slot. **This is the one you want** unless the trail is bespoke.
+- [Button](components/button.md): Every action. **The variant follows the slot, not the verb** — read [Action weight](patterns/action-weight.md) before choosing one. `loading` also disables, so no separate double-submit guard is needed.
+- [Calendar](components/calendar.md): The bare month grid. Use it alone **only when the grid is the page** — an availability view, a schedule. To enter a date in a form, use `DatePicker`.
+- [Card](components/card.md): A bordered surface grouping related content — header, content, action, and footer slots, with `elevation` for depth.
+- [Carousel](components/carousel.md): A horizontal sequence of slides, with controls and dot indicators.
+- [Chart bar](https://github.com/Newland-Payment-Technology-US-Co-Ltd/cloud-next-scaffold/blob/develop/packages/ui/src/components/chart/chart-bar.tsx): Themed bars, including stacked shapes and per-cell colour. Import charts from `@cloud/ui/components/chart` — never from `recharts` directly.
+- [Chart container](https://github.com/Newland-Payment-Technology-US-Co-Ltd/cloud-next-scaffold/blob/develop/packages/ui/src/components/chart/chart.tsx): The wrapper every chart needs — config, responsive sizing, semantic series colours, shared context.
+- [Chart legend](https://github.com/Newland-Payment-Technology-US-Co-Ltd/cloud-next-scaffold/blob/develop/packages/ui/src/components/chart/chart-legend.tsx): A themed legend for chart series.
+- [Chart pie callout](https://github.com/Newland-Payment-Technology-US-Co-Ltd/cloud-next-scaffold/blob/develop/packages/ui/src/components/chart/chart-pie-callout.tsx): Labels and connector lines on pie or donut sectors, when the slices are too thin to label inline.
+- [Chart sparkline](https://github.com/Newland-Payment-Technology-US-Co-Ltd/cloud-next-scaffold/blob/develop/packages/ui/src/components/chart/chart-sparkline.tsx): A trend with no chart chrome — for a stat tile or a table cell, where a full chart would not fit.
+- [Chart states](https://github.com/Newland-Payment-Technology-US-Co-Ltd/cloud-next-scaffold/blob/develop/packages/ui/src/components/chart/chart-states.tsx): The standard chart loading and empty states. A chart with no data is not an empty page.
+- [Chart tooltip](https://github.com/Newland-Payment-Technology-US-Co-Ltd/cloud-next-scaffold/blob/develop/packages/ui/src/components/chart/chart-tooltip.tsx): Themed values and series metadata on chart interaction.
+- [Checkbox](components/checkbox.md): Independent boolean options, with an indeterminate state for a "select all" header. **For a labelled form row, use the `ToggleCheckbox` recipe.** `size="sm"` (12px) belongs only in a data-table select column.
+- [Collapsible](components/collapsible.md): Headless show-and-hide of one region — you own all the styling. For a grouped, pre-styled set of sections, use `Accordion`.
+- [Combobox](components/combobox.md): A searchable dropdown. **Prefer it over `Select` as soon as the list is long enough that scanning it is work** — a country, a merchant, a region.
+- [Command](components/command.md): The keyboard command palette. Use `CommandDialog` for the modal form, or `Command` bare when the palette lives inside a panel or a popover.
+- [Content header](components/content-header.md): The in-content title for **dashboard and settings** pages. For a list or create page use `PageHeader`; for a detail page use `PageHeaderBand`.
+- [Context menu](components/context-menu.md): Actions from a right-click on a region. For actions from a button, use `DropdownMenu`.
+- [Date picker](components/date-picker.md): A single-date field — an input-styled trigger opening a calendar popover. The default way to enter a date.
+- [Date range picker](components/date-range-picker.md): A date interval, with optional presets beside the range calendar.
+- [Date-time picker](components/date-time-picker.md): A date and a time as one field. Use it only when both halves genuinely matter; otherwise use `DatePicker`.
+- [Drawer](components/drawer.md): The **mobile** bottom sheet, with drag-to-dismiss. For a desktop side panel use `Sheet`; for a centered task use `Modal`.
+- [Dropdown menu](components/dropdown-menu.md): Actions from a button — roving focus, type-ahead, submenus, checkbox and radio items. For a right-click menu use `ContextMenu`; for a plain floating panel use `Popover`.
+- [Dropzone](components/dropzone.md): Drag-and-drop file picking, with a row per file carrying its upload status.
+- [Empty](components/empty.md): The zero-data placeholder inside a table, list, or panel. **Which message it carries depends on why it is empty** — read [Empty states](patterns/empty-states.md) before writing the copy.
+- [Field](components/field.md): Wraps a control with its label, hint, required mark, and error. **Every form control belongs in one** — a placeholder is not a label.
+- [Hover card](components/hover-card.md): A rich preview on hover. For a short text hint use `Tooltip`; for content the user clicks to open, use `Popover`.
+- [Input](components/input.md): Single-line text, with validation tones beyond the invalid state.
+- [Input group](components/input-group.md): One unified border around an input plus addons, units, or compact buttons.
+- [Input OTP](components/input-otp.md): Segmented entry for a one-time passcode or verification code.
+- [Key value](components/key-value.md): Read-only labelled properties on detail and overview pages. An empty value renders an em dash on its own, so a missing field does not read as a broken layout.
+- [Label](components/label.md): The accessible label for a control. When it cannot be visible, keep it and hide it visually — never remove it.
+- [Layout](components/layout.md): The page shell — sidebar, sticky header, and the scroll root everything else lives in. One per app.
+- [List applied filters](components/applied-filters.md): The row of applied filter chips, with a "clear all".
+- [List condition band](components/list-condition-band.md): The list page's filter band — the quick bar over the applied-chip row. Leave `sticky` off on a standard list page; dock the summary bar and table header instead.
+- [List filter chip](components/filter-chip.md): One applied filter, with a remove button.
+- [List search input](components/search-input.md): The quick bar's search field. Enter runs the search.
+- [List summary bar](components/list-summary-bar.md): The result count and low-chrome actions between the card's top edge and the table. **Everything here is `ghost`** — see [Action weight](patterns/action-weight.md).
+- [Load more](components/load-more.md): Append-on-click pagination. **When anything sits below the list, use this rather than scroll-driven loading**, which makes the footer unreachable. For scroll loading, use `VirtualTable`'s `onReachEnd` or the `useInfiniteScroll` hook.
+- [Log console](components/log-console.md): A dense, level-coloured log viewer with a filter toolbar. For chronological business events, use `Timeline` instead.
+- [Menubar](components/menubar.md): A desktop-style application menu bar. Rare in a web console — for actions under one button, use `DropdownMenu`.
+- [Modal](components/modal.md): The centered dialog **with** a close affordance, in four widths. For a forced decision use `AlertDialog`; for a panel from an edge use `Sheet`; for a mobile draggable panel use `Drawer`.
+- [Navigation menu](components/navigation-menu.md): Horizontal navigation with rich dropdown panels. The app's own nav lives in `Sidebar`.
+- [Object tile](components/object-tile.md): The square identity mark for a company, app, or device model — a glyph, name-derived initials, or a short code.
+- [Page body](components/page-body.md): The padded content column of a page. **It owns the page padding and the block gap** — never hand-write them.
+- [Page header](components/page-header.md): The full-bleed band for **list and create** pages — title, description, actions. The screen's one primary action lives here.
+- [Page header band](components/page-header-band.md): The full-bleed band for **detail** pages — arbitrary header content with a tabs row on its bottom edge.
+- [Pagination](components/pagination.md): Bare page-number navigation. **Most list and table footers want `RichPagination` instead**, which adds rows-per-page and a "showing X–Y of Z" summary.
+- [Popover](components/popover.md): A floating panel anchored to a trigger. For a keyboard-navigable action menu use `DropdownMenu`; for a hover preview use `HoverCard`; for a short text hint use `Tooltip`.
+- [Progress](components/progress.md): Completion when you **know** the percentage. When you do not, use `Spinner` or `Skeleton` — a bar that never advances is worse than an honest spinner.
+- [Radio group](components/radio-group.md): One choice from a visible set. **For labelled radio fields, prefer the `ToggleRadioGroup` recipe.**
+- [Resizable panels](components/resizable.md): A draggable split-pane layout.
+- [Rich pagination](components/rich-pagination.md): The full list/table footer — rows-per-page, range summary, page navigation. **The default footer for a server-paginated collection.**
+- [Scroll area](components/scroll-area.md): A styled overflow region with optional custom scrollbars.
+- [Select](components/select.md): One value from a **short, closed** list. **When the user would rather type to narrow it, use `Combobox`**; for two or three options worth showing at once, use `RadioGroup` or `ToggleGroup`; for multi-select, use checkboxes.
+- [Semantic tone](https://github.com/Newland-Payment-Technology-US-Co-Ltd/cloud-next-scaffold/blob/develop/packages/ui/src/components/ui/_tone.ts): The neutral / success / warning / error / info vocabulary shared by every status-bearing component. Read it before inventing a status colour.
+- [Separator](components/separator.md): A divider line, optionally with centred label text.
+- [Sheet](components/sheet.md): The side panel from a viewport edge — filters, a preview, a supplementary form — that keeps the page context. **For a centered task use `Modal`; for a mobile draggable panel use `Drawer`; for a forced decision use `AlertDialog`.**
+- [Sidebar](components/sidebar.md): The app's left navigation, with a collapsible icon rail. Rendered from typed sections — read [Side navigation](patterns/side-navigation.md), as the menu is projected from module manifests, not hand-written.
+- [Sidebar trigger](components/sidebar-trigger.md): Collapses the rail on desktop, opens the drawer on mobile.
+- [Skeleton](components/skeleton.md): Reserve the layout while content loads. Render skeletons **inside** the real container — a `Card`, a table cell — never in place of it.
+- [Slider](components/slider.md): A numeric value or range selected along a track.
+- [Spinner](components/spinner.md): A compact indeterminate wait (`role="status"`). **Inside a button, use the button's own `loading` prop instead** — it supplies the spinner.
+- [Stat card](components/stat-card.md): One metric, with an optional trend and description. Can double as a quick filter.
+- [Status card](components/status-card.md): A header-less card for repeating status lists — media, title, badge, description, and a control footer.
+- [Step indicator](components/step-indicator.md): Progress through a fixed sequence of steps. Pairs with the [create wizard](patterns/create-wizard.md) — and if you do not have a wizard, you do not need this.
+- [Stepper](components/stepper.md): A numeric input with `−` and `+`. Use it when the value is **small, bounded, and adjusted rather than typed** — a quantity, a retry count, a page size.
+- [Switch](components/switch.md): A setting that takes effect **immediately**. For a value that only applies when the form is saved, use `Checkbox`. For a labelled form row, prefer the `ToggleSwitch` recipe.
+- [Table](components/table.md): The typed data table, driven by a `columns` config — never a hand-written `thead`/`tbody`. **For thousands of rows use `VirtualTable`.** Mark every money and count column `numeric` so the digits align.
+- [Tabs](components/tabs.md): Switch between peer panels on the same surface. **When the control sets a value rather than navigating between panels, use `ToggleGroup`.**
+- [Textarea](components/textarea.md): Multi-line text, with a character counter when `maxLength` is set.
+- [Theme toggle](components/theme-toggle.md): Switches between the light and dark themes. Its label names the **next** state, not the current one.
+- [Time picker](https://github.com/Newland-Payment-Technology-US-Co-Ltd/cloud-next-scaffold/blob/develop/packages/ui/src/components/ui/recipes/time-picker.tsx): A localized time value on its own. For a date and a time together, use `DateTimePicker`.
+- [Timeline](components/timeline.md): Chronological business events with actors, times, and statuses — device history, audit trails, ticket activity. For raw, levelled log lines, use `LogConsole`.
+- [Toast](components/toaster.md): A **transient, non-blocking** confirmation, via `Toaster` + `toast`. **It disappears, so nothing important may live only there:** for a message that must stay on the page use `Alert`, and for something the user must acknowledge use `AlertDialog`. Never report an actionable failure through `toast.error` alone.
+- [Toggle](components/toggle.md): One press-toggle button with an on/off state.
+- [Toggle controls](components/toggles.md): The inline-labelled `ToggleCheckbox`, `ToggleRadio`, and `ToggleSwitch` recipes. **Prefer these over the bare primitives for any labelled form row** — they pair the control with its label and hit area.
+- [Toggle group](components/toggle-group.md): A segmented control, a mode picker, or a set of filter chips. **When the group navigates between panels rather than setting a value, use `Tabs`.**
+- [Tooltip](components/tooltip.md): A short text hint on hover or focus. For rich content use `HoverCard`; for content the user interacts with, use `Popover`.
+- [Virtual table](components/virtual-table.md): The windowed table for large row counts, with optional scroll loading. Shares `Table`'s columns/sort/rowKey contract. For scroll loading on a list that is not a table, use `useInfiniteScroll`.
 
 ## Patterns
 
