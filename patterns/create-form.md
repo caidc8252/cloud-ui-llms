@@ -115,6 +115,8 @@ A sticky header band with a `Button variant="ghost" size="icon-sm"` carrying a `
 ## Related patterns and components
 
 - [Create wizard](create-wizard.md) — the staged alternative, and the test for when to use it.
+- [Edit resource](edit-resource.md) — this same shape, pre-filled, and the three things that differ.
+- [Unsaved changes](unsaved-changes.md) — the exit guard this page needs, and the exits it does not cover.
 - [Detail page](detail-page.md) — where a successful create lands.
 - [Errors and validation](errors-and-validation.md) — the schema, the codes, and where each error surfaces.
 - Components: `Field`, `Input`, `Textarea`, `Select`, `Combobox`, `DatePicker`, `Card`, `ActionFooter`, `PageBody`, `Button`.
