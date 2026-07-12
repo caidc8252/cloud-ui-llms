@@ -2,7 +2,7 @@
 
 Spacing is used to define paddings and margins of the elements on the interface. Consistent spacing creates predictable layouts, favors visual rhythm and helps you create a clear hierarchy.
 
-[Layout](layout.md) | [Design tokens](../design-tokens.md) | [Card](../card.md)
+[Layout](layout.md) | [Design tokens](design-tokens.md) | [Card](../components/card.md)
 
 ## Grid system
 
@@ -87,7 +87,7 @@ Padding inside a component belongs to the component:
 </Card>
 ```
 
-`Card`'s slot padding is applied through a `group-data` variant, so tailwind-merge cannot dedupe a caller's `p-0` against it and the variant rule wins. `flush` is the supported way out. See [Card](../card.md).
+`Card`'s slot padding is applied through a `group-data` variant, so tailwind-merge cannot dedupe a caller's `p-0` against it and the variant rule wins. `flush` is the supported way out. See [Card](../components/card.md).
 
 ### Gaps between components
 
@@ -103,4 +103,4 @@ Every wrapper `div` must have a job — a spacing group, a scroll container, a f
 
 ### Design tokens
 
-`--space-*` is variable-only and generates no utilities; the control tokens generate `h-control-*` and `px-cx-*`. Everything else is Tailwind's 4px scale. See [Design tokens](../design-tokens.md).
+`--space-*` is variable-only and generates no utilities; the control tokens generate `h-control-*` and `px-cx-*`. Everything else is Tailwind's 4px scale. See [Design tokens](design-tokens.md).

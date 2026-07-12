@@ -2,8 +2,6 @@
 
 Icon button that switches between the light and dark themes.
 
-[Source](https://github.com/Newland-Payment-Technology-US-Co-Ltd/cloud-next-scaffold/blob/develop/packages/ui/src/components/ui/primitives/theme-toggle.tsx) | [Public exports](https://github.com/Newland-Payment-Technology-US-Co-Ltd/cloud-next-scaffold/blob/develop/packages/ui/src/components/ui/index.ts)
-
 `ThemeToggle` is a client component. It reads and flips the current theme through the `useTheme` hook, so it must render inside a `ThemeProvider`. Import it from `@cloud/ui` or `@cloud/ui/components/ui`.
 
 ## Development guidelines

@@ -2,8 +2,6 @@
 
 Group of `Toggle` items — a segmented control, a mode picker, or a set of filter chips.
 
-[Source](https://github.com/Newland-Payment-Technology-US-Co-Ltd/cloud-next-scaffold/blob/develop/packages/ui/src/components/ui/primitives/toggle-group.tsx) | [Public exports](https://github.com/Newland-Payment-Technology-US-Co-Ltd/cloud-next-scaffold/blob/develop/packages/ui/src/components/ui/index.ts)
-
 `ToggleGroup` is a client component built on `@base-ui/react`'s `ToggleGroup`. It is one container component whose children are `Toggle`s. Import them from `@cloud/ui` or `@cloud/ui/components/ui`.
 
 ## Development guidelines

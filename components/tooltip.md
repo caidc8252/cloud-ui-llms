@@ -2,8 +2,6 @@
 
 Short text hint shown on hover or focus.
 
-[Source](https://github.com/Newland-Payment-Technology-US-Co-Ltd/cloud-next-scaffold/blob/develop/packages/ui/src/components/ui/primitives/tooltip.tsx) | [Public exports](https://github.com/Newland-Payment-Technology-US-Co-Ltd/cloud-next-scaffold/blob/develop/packages/ui/src/components/ui/index.ts)
-
 `Tooltip` is a client component built on `@base-ui/react`'s `Tooltip`. It is a set of parts — `TooltipProvider`, `Tooltip`, `TooltipTrigger`, and `TooltipContent`. Import them from `@cloud/ui` or `@cloud/ui/components/ui`.
 
 ## Development guidelines

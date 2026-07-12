@@ -2,8 +2,6 @@
 
 Vertical event log — device history, audit trails, ticket activity.
 
-[Source](https://github.com/Newland-Payment-Technology-US-Co-Ltd/cloud-next-scaffold/blob/develop/packages/ui/src/components/ui/recipes/timeline.tsx) | [Public exports](https://github.com/Newland-Payment-Technology-US-Co-Ltd/cloud-next-scaffold/blob/develop/packages/ui/src/components/ui/index.ts)
-
 `Timeline` is a set of composable parts — `Timeline`, `TimelineItem`, `TimelineMarker`, `TimelineContent`, `TimelineHeader`, `TimelineTitle`, `TimelineTime`, `TimelineTimeRow`, `TimelineDescription`, and `TimelineActor` — plus an `items` shortcut on the root. Import them, and the `TimelineEntry` / `TimelineTone` types, from `@cloud/ui` or `@cloud/ui/components/ui`.
 
 ## Development guidelines

@@ -2,8 +2,6 @@
 
 Month-view date picker for selecting a single date, several dates, or a range.
 
-[Source](https://github.com/Newland-Payment-Technology-US-Co-Ltd/cloud-next-scaffold/blob/develop/packages/ui/src/components/ui/primitives/calendar.tsx) | [Public exports](https://github.com/Newland-Payment-Technology-US-Co-Ltd/cloud-next-scaffold/blob/develop/packages/ui/src/components/ui/index.ts)
-
 `Calendar` is powered by `react-day-picker`. It exports `Calendar` and the `CalendarDayButton` it renders for each day. Import them from `@cloud/ui` or `@cloud/ui/components/ui`.
 
 ## Development guidelines

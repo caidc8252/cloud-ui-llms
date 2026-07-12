@@ -2,8 +2,6 @@
 
 Groups related content and actions on a single bordered surface.
 
-[Source](https://github.com/Newland-Payment-Technology-US-Co-Ltd/cloud-next-scaffold/blob/develop/packages/ui/src/components/ui/primitives/card.tsx) | [Public exports](https://github.com/Newland-Payment-Technology-US-Co-Ltd/cloud-next-scaffold/blob/develop/packages/ui/src/components/ui/index.ts)
-
 `Card` is a set of seven plain components: `Card`, `CardHeader`, `CardTitle`, `CardDescription`, `CardAction`, `CardContent`, and `CardFooter`. None of them carry `"use client"`, so a card renders in a server component as long as its children do. Import them from `@cloud/ui` or `@cloud/ui/components/ui`.
 
 ## Development guidelines
@@ -40,7 +38,7 @@ To remove a slot's padding, use `flush`. A plain `className="p-0"` cannot overri
 - Don't nest a default-elevation card inside another card. Drop the inner one to `elevation={0}`.
 - Don't set `interactive` on a card that contains its own interactive elements. The hover affordance promises a click target the card does not have, and the inner controls swallow the click.
 - Don't use a card title in place of a page or section heading. If the content is the page, the title belongs in the page header.
-- Don't hardcode colors, radii, or shadows through `className`. If a card needs a value the tokens do not carry, stop and raise it. See the [`@cloud/ui` README](../README.md).
+- Don't hardcode colors, radii, or shadows through `className`. If a card needs a value the tokens do not carry, stop and raise it. See the `@cloud/ui` README.
 
 ## Features
 
@@ -138,7 +136,7 @@ To remove a slot's padding, use `flush`. A plain `className="p-0"` cannot overri
 
   `interactive` is presentation only. On hover it moves the border to `line-strong`, raises the shadow, and sets `cursor-pointer`. It does not add a role, a `tabIndex`, or a key handler.
 
-  Use it only on a card that is genuinely activatable, and supply the semantics yourself. The `StatusCard` recipe does this by stretching an `<a>` over the card. See [`status-card.tsx`](https://github.com/Newland-Payment-Technology-US-Co-Ltd/cloud-next-scaffold/blob/develop/packages/ui/src/components/ui/recipes/status-card.tsx).
+  Use it only on a card that is genuinely activatable, and supply the semantics yourself. The `StatusCard` recipe does this by stretching an `<a>` over the card. See [`status-card.tsx`](components/status-card.md).
 
   ```tsx
   <Card interactive className="relative">

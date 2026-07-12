@@ -2,8 +2,6 @@
 
 The row of applied filter chips, with a "clear all" button.
 
-[Source](https://github.com/Newland-Payment-Technology-US-Co-Ltd/cloud-next-scaffold/blob/develop/packages/ui/src/components/list-filter/applied-filters.tsx) | [Public exports](https://github.com/Newland-Payment-Technology-US-Co-Ltd/cloud-next-scaffold/blob/develop/packages/ui/src/components/list-filter/index.ts)
-
 `AppliedFilters` is a client component in the list-filter family. It takes `children` (the chips) and an `onClearAll`. Import it from `@cloud/ui`.
 
 ## Development guidelines

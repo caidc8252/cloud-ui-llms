@@ -2,7 +2,7 @@
 
 A design token is an abstraction of a visual property, such as color, size, or motion.
 
-[Source](https://github.com/Newland-Payment-Technology-US-Co-Ltd/cloud-next-scaffold/blob/develop/packages/ui/src/components/styles/index.css)
+[Source](../foundations/design-tokens.md)
 
 ## Key UX concepts
 
@@ -14,7 +14,7 @@ The `@cloud/ui` token sheet, exported as `@cloud/ui/globals.css`, is the single 
 
 Dark mode is applied through the normal cascade. `[data-theme="dark"]` (and `.dark`) redefines only the values that change, so a token that is not listed in the dark block keeps its light value. Tokens defined with `var()` or `color-mix()` of other tokens follow the theme automatically and never need a dark override.
 
-Adding a token is not a routine act. See the constraints in the [`@cloud/ui` README](../README.md): the default answer is to reuse the closest existing token, and a genuinely missing token is a conversation with the operator, not a commit.
+Adding a token is not a routine act. See the constraints in the `@cloud/ui` README: the default answer is to reuse the closest existing token, and a genuinely missing token is a conversation with the operator, not a commit.
 
 ### Naming structure
 
@@ -442,7 +442,7 @@ The value behind a token is allowed to change; that is the point of the abstract
 
 ### Tip 4: A missing token is a conversation, not a commit
 
-The `@theme` block is the only source of design decisions in the system. Adding a variable to it, or changing the value of an existing one, is a system-level change with no local blast radius you can reason about. If you cannot find a token for what you need, find the closest existing one; if there genuinely isn't one, stop and raise it. See the [`@cloud/ui` README](../README.md).
+The `@theme` block is the only source of design decisions in the system. Adding a variable to it, or changing the value of an existing one, is a system-level change with no local blast radius you can reason about. If you cannot find a token for what you need, find the closest existing one; if there genuinely isn't one, stop and raise it. See the `@cloud/ui` README.
 
 ## Development guidelines
 

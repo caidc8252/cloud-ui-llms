@@ -2,8 +2,6 @@
 
 Chip for status, counts, and labels. Color is driven entirely by `tone`.
 
-[Source](https://github.com/Newland-Payment-Technology-US-Co-Ltd/cloud-next-scaffold/blob/develop/packages/ui/src/components/ui/primitives/badge.tsx) | [Public exports](https://github.com/Newland-Payment-Technology-US-Co-Ltd/cloud-next-scaffold/blob/develop/packages/ui/src/components/ui/index.ts)
-
 `Badge` is a client component built on `@base-ui/react`'s `useRender`. It renders a `<span>` by default. Import it from `@cloud/ui` or `@cloud/ui/components/ui`.
 
 ## Development guidelines

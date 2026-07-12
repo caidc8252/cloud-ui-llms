@@ -2,8 +2,6 @@
 
 Collapsible content sections. Each item expands and collapses to show or hide its content on trigger click.
 
-[Source](https://github.com/Newland-Payment-Technology-US-Co-Ltd/cloud-next-scaffold/blob/develop/packages/ui/src/components/ui/primitives/accordion.tsx) | [Public exports](https://github.com/Newland-Payment-Technology-US-Co-Ltd/cloud-next-scaffold/blob/develop/packages/ui/src/components/ui/index.ts)
-
 `Accordion` is built on `@base-ui/react`'s `Accordion`. It is a set of four components — `Accordion` (root), `AccordionItem`, `AccordionTrigger`, and `AccordionContent`. Import them from `@cloud/ui` or `@cloud/ui/components/ui`.
 
 ## Development guidelines

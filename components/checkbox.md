@@ -2,8 +2,6 @@
 
 Binary form control for independent options. Supports an indeterminate state.
 
-[Source](https://github.com/Newland-Payment-Technology-US-Co-Ltd/cloud-next-scaffold/blob/develop/packages/ui/src/components/ui/primitives/checkbox.tsx) | [Public exports](https://github.com/Newland-Payment-Technology-US-Co-Ltd/cloud-next-scaffold/blob/develop/packages/ui/src/components/ui/index.ts)
-
 `Checkbox` is a client component built on `@base-ui/react`'s `Checkbox`. Import it from `@cloud/ui` or `@cloud/ui/components/ui`.
 
 ## Development guidelines

@@ -2,8 +2,6 @@
 
 Horizontal progress indicator for a multi-step flow.
 
-[Source](https://github.com/Newland-Payment-Technology-US-Co-Ltd/cloud-next-scaffold/blob/develop/packages/ui/src/components/ui/recipes/step-indicator.tsx) | [Public exports](https://github.com/Newland-Payment-Technology-US-Co-Ltd/cloud-next-scaffold/blob/develop/packages/ui/src/components/ui/index.ts)
-
 `StepIndicator` is a client component driven by props. Import it from `@cloud/ui` or `@cloud/ui/components/ui`.
 
 **Not to be confused with `Stepper`**, which is the numeric `+` / `−` spinbutton. Similar name, different component.

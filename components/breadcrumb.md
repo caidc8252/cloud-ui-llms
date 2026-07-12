@@ -2,8 +2,6 @@
 
 Horizontal trail showing where the current page sits in the hierarchy.
 
-[Source](https://github.com/Newland-Payment-Technology-US-Co-Ltd/cloud-next-scaffold/blob/develop/packages/ui/src/components/ui/primitives/breadcrumb.tsx) | [Public exports](https://github.com/Newland-Payment-Technology-US-Co-Ltd/cloud-next-scaffold/blob/develop/packages/ui/src/components/ui/index.ts)
-
 `Breadcrumb` is a set of composable parts — `Breadcrumb`, `BreadcrumbList`, `BreadcrumbItem`, `BreadcrumbLink`, `BreadcrumbPage`, `BreadcrumbSeparator`, and `BreadcrumbEllipsis`. It is plain markup (a `<nav>` around an `<ol>`), so it works in a server component. Import the parts from `@cloud/ui` or `@cloud/ui/components/ui`.
 
 ## Development guidelines

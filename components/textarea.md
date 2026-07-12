@@ -2,8 +2,6 @@
 
 Multi-line text input, with an optional character counter when `maxLength` is set.
 
-[Source](https://github.com/Newland-Payment-Technology-US-Co-Ltd/cloud-next-scaffold/blob/develop/packages/ui/src/components/ui/primitives/textarea.tsx) | [Public exports](https://github.com/Newland-Payment-Technology-US-Co-Ltd/cloud-next-scaffold/blob/develop/packages/ui/src/components/ui/index.ts)
-
 `Textarea` is a client component (it tracks the character count with local state). Import it from `@cloud/ui` or `@cloud/ui/components/ui`.
 
 ## Development guidelines

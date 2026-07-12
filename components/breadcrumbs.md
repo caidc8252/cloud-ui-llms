@@ -2,8 +2,6 @@
 
 Renders a trail of items and separators for `AppHeader`'s `breadcrumbs` slot.
 
-[Source](https://github.com/Newland-Payment-Technology-US-Co-Ltd/cloud-next-scaffold/blob/develop/packages/ui/src/components/layout/breadcrumbs.tsx) | [Public exports](https://github.com/Newland-Payment-Technology-US-Co-Ltd/cloud-next-scaffold/blob/develop/packages/ui/src/components/layout/index.ts)
-
 `Breadcrumbs` takes an `items` array and returns the crumb elements. It exports the `BreadcrumbsItem` type alongside it. Import them from `@cloud/ui`.
 
 Note the plural. **`Breadcrumbs` (this one) is the data-driven shortcut; `Breadcrumb` (singular) is the set of primitives it is built from.**

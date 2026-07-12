@@ -2,8 +2,6 @@
 
 Square identity mark for a company, app, or device model. Renders a glyph, name-derived initials, or a short code.
 
-[Source](https://github.com/Newland-Payment-Technology-US-Co-Ltd/cloud-next-scaffold/blob/develop/packages/ui/src/components/ui/primitives/object-tile.tsx) | [Public exports](https://github.com/Newland-Payment-Technology-US-Co-Ltd/cloud-next-scaffold/blob/develop/packages/ui/src/components/ui/index.ts)
-
 `ObjectTile` is a single component with no parts. It takes `icon`, `name`, or `label` for its content, `tone` for its surface, and `size`. Import it from `@cloud/ui` or `@cloud/ui/components/ui`.
 
 ## Development guidelines

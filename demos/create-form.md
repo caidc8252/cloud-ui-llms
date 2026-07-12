@@ -2,7 +2,7 @@
 
 A single-page create or edit flow for an independent set of fields. It uses one readable form column, section cards, a persistent exit, and a persistent action footer.
 
-[View source template](https://github-company/Newland-Payment-Technology-US-Co-Ltd/cloud-next-scaffold/blob/develop/packages/ui/docs/examples/create-form.tsx) · [View pattern](../patterns/create-form.md)
+[View pattern](../patterns/create-form.md)
 
 ## On this page
 

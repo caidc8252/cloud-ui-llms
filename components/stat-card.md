@@ -2,8 +2,6 @@
 
 Single stat tile — a label, a value, and optionally a trend. Can double as a quick filter.
 
-[Source](https://github.com/Newland-Payment-Technology-US-Co-Ltd/cloud-next-scaffold/blob/develop/packages/ui/src/components/ui/recipes/stat-card.tsx) | [Public exports](https://github.com/Newland-Payment-Technology-US-Co-Ltd/cloud-next-scaffold/blob/develop/packages/ui/src/components/ui/index.ts)
-
 `StatCard` is a client component driven by props. It exports the `StatCardProps`, `StatCardTone`, and `StatCardTrend` types alongside it. Import them from `@cloud/ui` or `@cloud/ui/components/ui`.
 
 ## Development guidelines

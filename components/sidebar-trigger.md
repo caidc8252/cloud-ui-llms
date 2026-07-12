@@ -2,8 +2,6 @@
 
 Button that collapses the sidebar rail on desktop, and opens the drawer on mobile.
 
-[Source](https://github.com/Newland-Payment-Technology-US-Co-Ltd/cloud-next-scaffold/blob/develop/packages/ui/src/components/layout/sidebar-trigger.tsx) | [Public exports](https://github.com/Newland-Payment-Technology-US-Co-Ltd/cloud-next-scaffold/blob/develop/packages/ui/src/components/layout/index.ts)
-
 `SidebarTrigger` is a client component with no props but `className`. Import it from `@cloud/ui`.
 
 ## Development guidelines

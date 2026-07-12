@@ -2,8 +2,6 @@
 
 Date-range field. An input-styled trigger that opens presets beside a range calendar.
 
-[Source](https://github.com/Newland-Payment-Technology-US-Co-Ltd/cloud-next-scaffold/blob/develop/packages/ui/src/components/ui/recipes/date-range-picker.tsx) | [Public exports](https://github.com/Newland-Payment-Technology-US-Co-Ltd/cloud-next-scaffold/blob/develop/packages/ui/src/components/ui/index.ts)
-
 `DateRangePicker` is a client component, built from `Popover` and `Calendar`. It exports the component, the `DateRange` and `DateRangePreset` types, and the `DEFAULT_RANGE_PRESETS` array. Import them from `@cloud/ui` or `@cloud/ui/components/ui`.
 
 ## Development guidelines

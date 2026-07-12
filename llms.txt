@@ -4,24 +4,7 @@
 
 ## Get Started
 
-- [Package manifest](package.json): Public export map, runtime dependencies, peer dependencies, and the package type-check command.
-- [Root exports](src/index.ts): Preferred `@cloud/ui` entry for UI components, layouts, list filters, hooks, theme helpers, sidebar state, and `cn`.
-- [UI component exports](https://github.com/Newland-Payment-Technology-US-Co-Ltd/cloud-next-scaffold/blob/develop/packages/ui/src/components/ui/index.ts): Public `@cloud/ui/components/ui` entry for primitives and composed UI recipes.
-- [Layout exports](https://github.com/Newland-Payment-Technology-US-Co-Ltd/cloud-next-scaffold/blob/develop/packages/ui/src/components/layout/index.ts): Public `@cloud/ui/components/layout` entry for application shell and page-layout components.
-- [Chart exports](https://github.com/Newland-Payment-Technology-US-Co-Ltd/cloud-next-scaffold/blob/develop/packages/ui/src/components/chart/index.ts): Public `@cloud/ui/components/chart` entry for themed Recharts composition; import charts from this subpath rather than from the root barrel or `recharts`.
-- [List-filter exports](https://github.com/Newland-Payment-Technology-US-Co-Ltd/cloud-next-scaffold/blob/develop/packages/ui/src/components/list-filter/index.ts): Public list filtering family, also re-exported from `@cloud/ui`.
-- [Global styles](docs/get-started/global-styles.md): Apply the shared CSS entries once to load Tailwind, fonts, semantic tokens, dark mode, component defaults, and base styles.
-- [Component defaults](https://github.com/Newland-Payment-Technology-US-Co-Ltd/cloud-next-scaffold/blob/develop/packages/ui/src/components/styles/component-defaults.css): Import `@cloud/ui/component-defaults.css` before `@cloud/ui/globals.css` for shared component-level defaults.
-- [Theme provider](src/lib/theme.tsx): `ThemeProvider`, `useTheme`, and the light or dark theme contract.
-- [Class name utility](src/lib/utils.ts): Use `cn` to merge conditional Tailwind classes without conflicting utilities.
-- [Infinite-scroll hook](src/lib/use-infinite-scroll.ts): Use `useInfiniteScroll` to load incremental results from an observed sentinel.
-- [List-filter hook](src/lib/use-list-filters.ts): Use `useListFilters` to manage separate draft and applied filter state.
-- [Responsive hook](src/lib/use-is-mobile.ts): Use `useIsMobile` when behavior, rather than CSS layout alone, must respond to the mobile breakpoint.
-- [Sidebar state](src/lib/sidebar.tsx): Use `SidebarProvider` and `useSidebar` to coordinate expanded, collapsed, and mobile navigation state.
-- [Sidebar cookie](src/lib/sidebar-cookie.ts): Use `SIDEBAR_COOKIE` when server and client code must share the persisted sidebar-state key.
-- [English messages](messages/en.json): Default English strings used by localized UI components.
-- [Simplified Chinese messages](messages/zh-CN.json): Default Simplified Chinese strings used by localized UI components.
-- [Japanese messages](messages/ja.json): Default Japanese strings used by localized UI components.
+- [API surface](api-surface.md): **Every importable name and the entry point it comes from** — plus the CSS import order, and the hooks, theme helpers, and utilities (`cn`, `useTheme`, `useIsMobile`, `useInfiniteScroll`, `useListFilters`, `SidebarProvider`) that have no component doc of their own. Charts are a deliberate exception: they live only at `@cloud/ui/components/chart`, never the root barrel and never `recharts`.
 
 ## Components
 
@@ -163,9 +146,9 @@ Each entry states the condition that selects it. Read the conditions here and pi
 
 ## Code Snippets
 
-- [List page source](docs/examples/list-page.tsx): Copy and adapt the standard list composition.
-- [Advanced-filter list source](docs/examples/list-page-advanced-filter.tsx): Copy and adapt the advanced filtering composition.
-- [Create form source](docs/examples/create-form.tsx): Copy and adapt the single-page create composition.
-- [Create wizard source](docs/examples/create-wizard.tsx): Copy and adapt the staged create composition.
-- [Detail page source](docs/examples/detail-page.tsx): Copy and adapt the resource detail composition.
-- [Chart source](docs/examples/charts.tsx): Copy and adapt themed chart compositions without importing Recharts directly.
+- [List page source](demos/list-page.md): Copy and adapt the standard list composition.
+- [Advanced-filter list source](demos/advanced-filter-list.md): Copy and adapt the advanced filtering composition.
+- [Create form source](demos/create-form.md): Copy and adapt the single-page create composition.
+- [Create wizard source](demos/create-wizard.md): Copy and adapt the staged create composition.
+- [Detail page source](demos/detail-page.md): Copy and adapt the resource detail composition.
+- [Chart source](demos/charts.md): Copy and adapt themed chart compositions without importing Recharts directly.

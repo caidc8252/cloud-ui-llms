@@ -2,8 +2,6 @@
 
 Full-bleed action band pinned to the bottom of the page — the commit cluster.
 
-[Source](https://github.com/Newland-Payment-Technology-US-Co-Ltd/cloud-next-scaffold/blob/develop/packages/ui/src/components/layout/action-footer.tsx) | [Public exports](https://github.com/Newland-Payment-Technology-US-Co-Ltd/cloud-next-scaffold/blob/develop/packages/ui/src/components/layout/index.ts)
-
 `ActionFooter` takes `children` and renders them as a right-aligned cluster. Import it, and the `ActionFooterProps` type, from `@cloud/ui`.
 
 ## Development guidelines

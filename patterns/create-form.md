@@ -2,7 +2,7 @@
 
 A single-page form for creating or editing a resource. The default create shape — use it unless the flow genuinely has stages.
 
-[Style template](../examples/create-form.tsx) | [Binding rules](../../../../.claude/team-rule/coding-rules/ui_ui-and-pages.md)
+[Style template](../demos/create-form.md) | [Binding rules](../../../../.claude/team-rule/coding-rules/ui_ui-and-pages.md)
 
 ## Key UX concepts
 

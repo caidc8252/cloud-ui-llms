@@ -2,8 +2,6 @@
 
 Windowed data table for large row counts, with optional scroll loading.
 
-[Source](https://github.com/Newland-Payment-Technology-US-Co-Ltd/cloud-next-scaffold/blob/develop/packages/ui/src/components/ui/recipes/virtual-table.tsx) | [Public exports](https://github.com/Newland-Payment-Technology-US-Co-Ltd/cloud-next-scaffold/blob/develop/packages/ui/src/components/ui/index.ts)
-
 `VirtualTable` is a generic component: `VirtualTable<R>`. It shares the `columns` / `rows` / `rowKey` / `sort` contract with `Table`, so the same `TableColumn<R>[]` drives both. Import it from `@cloud/ui` or `@cloud/ui/components/ui`.
 
 ## Development guidelines

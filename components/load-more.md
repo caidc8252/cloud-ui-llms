@@ -2,8 +2,6 @@
 
 Append-on-click pagination footer — a summary line, a load-more button, and an optional progress bar.
 
-[Source](https://github.com/Newland-Payment-Technology-US-Co-Ltd/cloud-next-scaffold/blob/develop/packages/ui/src/components/ui/recipes/load-more.tsx) | [Public exports](https://github.com/Newland-Payment-Technology-US-Co-Ltd/cloud-next-scaffold/blob/develop/packages/ui/src/components/ui/index.ts)
-
 `LoadMore` is a client component driven by props. Import it, and the `LoadMoreProps` type, from `@cloud/ui` or `@cloud/ui/components/ui`.
 
 ## Development guidelines

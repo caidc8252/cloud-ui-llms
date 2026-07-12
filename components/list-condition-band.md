@@ -2,8 +2,6 @@
 
 The list page's filter band — a quick-bar toolbar over the applied-chip row.
 
-[Source](https://github.com/Newland-Payment-Technology-US-Co-Ltd/cloud-next-scaffold/blob/develop/packages/ui/src/components/list-filter/list-condition-band.tsx) | [Public exports](https://github.com/Newland-Payment-Technology-US-Co-Ltd/cloud-next-scaffold/blob/develop/packages/ui/src/components/list-filter/index.ts)
-
 `ListConditionBand` is a client component in the list-filter family. It fills two slots — `toolbar` and `applied` — and takes a `sticky` flag. Import it from `@cloud/ui`.
 
 ## Development guidelines

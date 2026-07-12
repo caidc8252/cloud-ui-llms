@@ -2,7 +2,7 @@
 
 A reference for composing themed operational charts from the public `@cloud/ui/components/chart` entry. It covers common chart shapes, shared series configuration, legends, tooltips, and standard chart states.
 
-[View source template](https://github-company/Newland-Payment-Technology-US-Co-Ltd/cloud-next-scaffold/blob/develop/packages/ui/docs/examples/charts.tsx) · [View pattern](../patterns/data-visualization.md)
+[View pattern](../patterns/data-visualization.md)
 
 ## On this page
 

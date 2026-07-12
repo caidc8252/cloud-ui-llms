@@ -2,8 +2,6 @@
 
 A single applied filter, with a remove button.
 
-[Source](https://github.com/Newland-Payment-Technology-US-Co-Ltd/cloud-next-scaffold/blob/develop/packages/ui/src/components/list-filter/filter-chip.tsx) | [Public exports](https://github.com/Newland-Payment-Technology-US-Co-Ltd/cloud-next-scaffold/blob/develop/packages/ui/src/components/list-filter/index.ts)
-
 `FilterChip` is a client component in the list-filter family. It takes a `label` and an `onRemove`. Import it from `@cloud/ui`.
 
 ## Development guidelines

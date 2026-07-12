@@ -2,8 +2,6 @@
 
 Structured logcat viewer — a filter toolbar over a dense, level-colored row list.
 
-[Source](https://github.com/Newland-Payment-Technology-US-Co-Ltd/cloud-next-scaffold/blob/develop/packages/ui/src/components/ui/recipes/log-console.tsx) | [Public exports](https://github.com/Newland-Payment-Technology-US-Co-Ltd/cloud-next-scaffold/blob/develop/packages/ui/src/components/ui/index.ts)
-
 `LogConsole` is a client component driven by props. It exports the `LogConsoleProps`, `LogLine`, and `LogLevel` types alongside it. Import them from `@cloud/ui` or `@cloud/ui/components/ui`.
 
 ## Development guidelines

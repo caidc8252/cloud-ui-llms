@@ -2,8 +2,6 @@
 
 Result-count and actions strip between the list card's top edge and the table.
 
-[Source](https://github.com/Newland-Payment-Technology-US-Co-Ltd/cloud-next-scaffold/blob/develop/packages/ui/src/components/list-filter/list-summary-bar.tsx) | [Public exports](https://github.com/Newland-Payment-Technology-US-Co-Ltd/cloud-next-scaffold/blob/develop/packages/ui/src/components/list-filter/index.ts)
-
 `ListSummaryBar` is a client component in the list-filter family. It exports the `LIST_SUMMARY_BAR_HEIGHT` constant alongside it. Import them from `@cloud/ui`.
 
 ## Development guidelines

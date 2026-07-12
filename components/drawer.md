@@ -2,8 +2,6 @@
 
 Bottom-sheet style panel. Use it for mobile-friendly side panels and overlays.
 
-[Source](https://github.com/Newland-Payment-Technology-US-Co-Ltd/cloud-next-scaffold/blob/develop/packages/ui/src/components/ui/primitives/drawer.tsx) | [Public exports](https://github.com/Newland-Payment-Technology-US-Co-Ltd/cloud-next-scaffold/blob/develop/packages/ui/src/components/ui/index.ts)
-
 `Drawer` is a client component powered by `vaul`. It is a set of composable parts — `Drawer`, `DrawerTrigger`, `DrawerClose`, `DrawerContent`, `DrawerHeader`, `DrawerFooter`, `DrawerTitle`, and `DrawerDescription`, plus `DrawerPortal` and `DrawerOverlay`. Import them from `@cloud/ui` or `@cloud/ui/components/ui`.
 
 ## Development guidelines

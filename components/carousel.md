@@ -2,8 +2,6 @@
 
 Scrollable slide container with navigation buttons and dot indicators.
 
-[Source](https://github.com/Newland-Payment-Technology-US-Co-Ltd/cloud-next-scaffold/blob/develop/packages/ui/src/components/ui/recipes/carousel.tsx) | [Public exports](https://github.com/Newland-Payment-Technology-US-Co-Ltd/cloud-next-scaffold/blob/develop/packages/ui/src/components/ui/index.ts)
-
 `Carousel` is a client component powered by `embla-carousel-react`. It is a set of composable parts — `Carousel`, `CarouselContent`, `CarouselItem`, `CarouselPrevious`, `CarouselNext`, and `CarouselDots` — plus the `useCarousel` hook and the `CarouselApi` type. Import them from `@cloud/ui` or `@cloud/ui/components/ui`.
 
 ## Development guidelines

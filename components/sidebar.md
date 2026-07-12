@@ -2,8 +2,6 @@
 
 The app's left navigation panel, with a collapsible icon rail.
 
-[Source](https://github.com/Newland-Payment-Technology-US-Co-Ltd/cloud-next-scaffold/blob/develop/packages/ui/src/components/layout/sidebar.tsx) | [Public exports](https://github.com/Newland-Payment-Technology-US-Co-Ltd/cloud-next-scaffold/blob/develop/packages/ui/src/components/layout/index.ts)
-
 `Sidebar` is a client component driven by props. It exports the `SidebarProps`, `SidebarBrand`, `SidebarSection`, `SidebarNavItem`, and `SidebarSubItem` types. The `SidebarTrigger` button, the `SidebarProvider` / `useSidebar` context, and the `SIDEBAR_COOKIE` constant come from the same package. Import them from `@cloud/ui`.
 
 ## Development guidelines

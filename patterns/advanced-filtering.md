@@ -2,7 +2,7 @@
 
 A right-side sheet holding the filters that don't fit in the quick bar, with a deferred apply and a chip row that reflects what is actually in effect.
 
-[Style template](../examples/list-page-advanced-filter.tsx) | [Binding rules](../../../../.claude/team-rule/coding-rules/ui_ui-and-pages.md)
+[Style template](../demos/advanced-filter-list.md) | [Binding rules](../../../../.claude/team-rule/coding-rules/ui_ui-and-pages.md)
 
 ## Key UX concepts
 
