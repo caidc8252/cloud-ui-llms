@@ -74,7 +74,7 @@ export function AccountFacts() {
 
 ## Related foundations
 
-- [Spacing and sizing](./spacing-and-sizing.md) covers the same content maximum and breakpoint values in the broader size scale.
+- [Spacing](./spacing.md) covers the same breakpoints and content maximum in the broader spacing and sizing scale.
 - [Design tokens](./design-tokens.md) explains how breakpoint and container tokens become utilities.
 - [Motion](./motion.md) covers reduced-motion adaptation for responsive interface changes.
 - [Global styles](../api-surface.md) explains how applications load the shared responsive utilities.

@@ -64,6 +64,6 @@ For complete page shapes, start from the maintained [list](../demos/list-page.md
 ## Related foundations
 
 - [Responsive layout](./responsive-layout.md) covers the shared `md` breakpoint and CSS-responsive composition used by the shell.
-- [Spacing and sizing](./spacing-and-sizing.md) explains shared page spacing and content constraints.
+- [Spacing](./spacing.md) explains shared page spacing and content constraints.
 - [Accessibility](./accessibility.md) covers focus, named icon actions, dialog behavior, and feedback semantics.
 - [Design tokens](./design-tokens.md) covers the semantic utilities used by page primitives.

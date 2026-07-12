@@ -135,7 +135,7 @@ Each entry states the condition that selects it. Read the conditions here and pi
 
 - [Design tokens](foundations/design-tokens.md): Connect CSS variables, Tailwind utilities, and component props, and select tokens by semantic intent.
 - [Colors](foundations/colors.md): Apply surface, content, line, status, category, and chart colors without hardcoded values.
-- [Spacing and sizing](foundations/spacing.md): Choose shared spacing, control sizes, container widths, breakpoints, and component-owned dimensions.
+- [Spacing](foundations/spacing.md): Read before writing any gap or padding. **Every step says where it is used** — and the half steps (`gap-1.5`, `gap-2.5`) carry meaning: they say two things are one thing. Also the control heights, the breakpoints, the content maximum, and `Card`/`PageBody`'s owned padding.
 - [Typography](foundations/typography.md): Use Geist, the type scale, semantic font roles, weights, and numeric alignment consistently.
 - [Elevation](foundations/elevation.md): Apply the shadow ladder, Card elevation, overlay depth, and focus treatment according to interaction depth.
 - [Theming](foundations/theming.md): Activate light or dark tokens and coordinate DOM selectors with React theme state.
