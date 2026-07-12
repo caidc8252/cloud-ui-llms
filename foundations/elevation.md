@@ -63,5 +63,5 @@ export function ReviewPanel() {
 ## Related foundations
 
 - [Design tokens](./design-tokens.md) explains the shared shadow token family.
-- [Spacing and sizing](./spacing-and-sizing.md) covers the dimensions of the surfaces that use elevation.
+- [Spacing](./spacing.md) covers the dimensions of the surfaces that use elevation.
 - [Colors](./colors.md) covers surface and line tokens used alongside elevation.

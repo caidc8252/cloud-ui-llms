@@ -11,7 +11,7 @@ There is no grid component. Tailwind's `grid` and `flex` utilities are the grid,
 - **`KvGrid`** (the `grid-auto-fit-kv` utility) — key-value grids whose columns auto-fit the **container's** width rather than a viewport breakpoint. Hand-writing `grid-cols-[repeat(auto-fit,minmax(...))]` is blocked by the arbitrary-value lint, and hand-written versions routinely drop the `min(22rem, 100%)` that stops a column overflowing a phone-width container.
 - **`StatGrid`** — the `StatCard` row.
 
-The content column is capped at `--container-content` (1280px) with 24px gutters.
+The content column sits inside `PageBody`'s 24px gutters. A shared maximum width exists — `max-w-content`, 1280px — but **nothing applies it today**, so the column is uncapped in practice. See [Sizing](#sizing).
 
 ### Laying content
 
@@ -96,6 +96,51 @@ Pair the height and the inset from the same size — `h-control-md` with `px-cx-
 | `--space-5` | 20px  |     | `--space-20` | 80px  |
 
 Arbitrary values (`gap-[13px]`, `p-[7px]`) are banned by lint. Snap to the nearest step — and if no step fits, the layout is asking for a different structure, not a new number.
+
+## Sizing
+
+Spacing separates blocks; sizing bounds them. Both come from shared scales, and neither is a place to invent a number.
+
+### Page padding
+
+`PageBody` owns the page's padding and its block rhythm in one class — `gap-6 px-6 pt-6 pb-8`. The `Layout` scroll area has **no** padding of its own, so a page that does not render a `PageBody` has no padding at all.
+
+`PAGE_BODY_PADDING_CLASS_NAME` (`px-6 pt-6 pb-8` — the padding without the gap) is exported for the one case where the padding must live on a different surface. A detail page's `TabsContent` is that case: the tabs sit above the body, so each panel carries the page padding itself. Reach for it only when the padding genuinely cannot sit on a `PageBody`.
+
+### Content width
+
+| Utility         | Value  | Where                                                                     |
+| --------------- | ------ | ------------------------------------------------------------------------- |
+| `max-w-content` | 1280px | The shared maximum width of a content region, from `--container-content`. |
+
+> **It is not applied anywhere today.** Nothing in `@cloud/ui` or the application currently uses `max-w-content`, so the content column is in practice **uncapped** — it grows with the viewport, inside `PageBody`'s 24px gutters. If a region should stop at 1280px, apply the utility deliberately; do not assume something upstream already did.
+
+### Breakpoints
+
+| Token              | Value  | Variant |
+| ------------------ | ------ | ------- |
+| `--breakpoint-xs`  | 480px  | `xs:`   |
+| `--breakpoint-sm`  | 640px  | `sm:`   |
+| `--breakpoint-md`  | 768px  | `md:`   |
+| `--breakpoint-lg`  | 1024px | `lg:`   |
+| `--breakpoint-xl`  | 1280px | `xl:`   |
+| `--breakpoint-2xl` | 1536px | `2xl:`  |
+
+Change composition at a shared breakpoint — `md:grid-cols-2` — and never introduce a page-local media threshold. A layout that needs a threshold nobody else has is usually a layout that should be reaching for a container query instead: `KvGrid` auto-fits to its **container**, not to the viewport, which is why a detail card in a narrow column reflows on its own. See [Responsive layout](responsive-layout.md).
+
+`useIsMobile` exists for the cases where **behaviour**, not layout, must change at the mobile breakpoint. Prefer CSS whenever CSS can do it.
+
+### Card slots
+
+`Card`'s padding follows its `size` — and it is the card's, not yours.
+
+| Size | Slot padding                                       | Radius |
+| ---- | -------------------------------------------------- | ------ |
+| `sm` | 12px                                               | 8px    |
+| `md` | 20px (14px vertical in `CardHeader`/`CardContent`) | 12px   |
+| `lg` | 24px                                               | 16px   |
+
+Use `flush` for full-bleed content — a `Table` that should meet the card's edge. A plain `p-0` cannot override it: the padding is applied through a `group-data` variant, so tailwind-merge has nothing to dedupe it against and the variant wins. See [Card](../components/card.md).
 
 ## Key concepts
 
