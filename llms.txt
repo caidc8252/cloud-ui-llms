@@ -2,8 +2,6 @@
 
 > `@cloud/ui` is the shared React design-system package for Cloud applications. It provides accessible UI primitives, business-oriented recipes, page layouts, list filtering, charts, themes, localization messages, and semantic Tailwind CSS tokens for consistent operational interfaces.
 
-This index is for  AI agents writing business application UI. Consume public package exports, reuse existing components before composing new ones, and do not import `packages/ui/src/**` internals from application code.
-
 ## Get Started
 
 - [Package manifest](package.json): Public export map, runtime dependencies, peer dependencies, and the package type-check command.
