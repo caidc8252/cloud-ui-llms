@@ -141,6 +141,7 @@ Each entry states the condition that selects it. Read the conditions here and pi
 - [Theming](foundations/theming.md): Activate light or dark tokens and coordinate DOM selectors with React theme state.
 - [Motion](foundations/motion.md): Use shared durations and easing while preserving reduced-motion behavior.
 - [Responsive layout](foundations/responsive-layout.md): Choose viewport breakpoints, container-responsive composition, auto-fit grids, or behavior-only mobile detection.
+- [Iconography](foundations/iconography.md): Read before rendering any icon. The set is **lucide**, one set only. **Inside a control you write no size** — `component-defaults.css` makes every unsized `svg` 14px across 24 interactive slots, which is why it must load *before* `globals.css`. Standalone icons are `size-4`. A status icon's colour is owned by the `tone`, never by you. Every icon-only button needs an `aria-label` naming the record — nothing lints it.
 - [Accessibility](foundations/accessibility.md): Preserve labels, keyboard interaction, focus, ARIA semantics, feedback, and reduced-motion support.
 - [Page layout](foundations/page-layout.md): Compose application shells and list, create, detail, dashboard, and settings pages from shared layout primitives.
 
