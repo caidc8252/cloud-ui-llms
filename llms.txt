@@ -142,7 +142,7 @@ Each entry states the condition that selects it. Read the conditions here and pi
 - [Motion](foundations/motion.md): Use shared durations and easing while preserving reduced-motion behavior.
 - [Responsive layout](foundations/responsive-layout.md): Choose viewport breakpoints, container-responsive composition, auto-fit grids, or behavior-only mobile detection.
 - [Accessibility](foundations/accessibility.md): Preserve labels, keyboard interaction, focus, ARIA semantics, feedback, and reduced-motion support.
-- [Page layout](foundations/page-layout.md): Compose application shells and list, create, detail, dashboard, and settings pages from shared layout primitives.
+- [Layout](foundations/layout.md): **Read before composing any page.** The page type picks the shell — a table maps list / create / wizard / detail / dashboard to its header, its body, and the demo to start from. `PageBody` owns the page padding and the block gap, so you almost never write either; `ActionFooter` is its **sibling**, never its child. The sidebar is one tree — `Layout` already renders it in a `Sheet` on mobile.
 
 ## Code Snippets
 
