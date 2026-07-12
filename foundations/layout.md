@@ -14,33 +14,47 @@ The consequence worth stating up front: **you almost never write page-level padd
 
 ### Application layout
 
-`Layout` is the outermost shell: a fixed-height viewport holding an optional `Sidebar` and a sticky `AppHeader` (`h-14`). The scroll area inside it **carries no padding of its own** — that is deliberate, so that a full-bleed band (a page header, an action footer) can reach the edges while the content column does not.
+`Layout` is the outermost shell: a fixed-height viewport (`h-screen overflow-hidden`) holding an optional `Sidebar` and a sticky header slot. The scroll area inside it **carries no padding of its own** — that is deliberate, so that a full-bleed band (a page header, an action footer) can reach the edges while the content column does not.
 
 - `Sidebar` — the projected navigation rail. See [Side navigation](../patterns/side-navigation.md).
 - `SidebarTrigger` — collapses the rail to an icon column; the state persists in `SIDEBAR_COOKIE`.
-- `AppHeader` — the sticky top bar, with slots for breadcrumbs, actions, and the account menu.
+- `AppHeader` — what you put **in** the header slot: breadcrumbs, search, actions, the account menu. The **56px height (`h-14`) belongs to `Layout`'s header wrapper, not to `AppHeader`** — do not try to set the height on `AppHeader` itself.
+
+**The sidebar is one tree, not two.** `Layout` renders it as a desktop `aside` from `md` upward and renders the _same_ sidebar inside a left `Sheet` below it. Do not build a separate mobile navigation; trigger the drawer that already exists.
 
 ### Content layout
 
 Inside the shell, a page is a stack of full-bleed bands and one padded body.
 
-- **`PageHeader`** — the full-bleed band for list and create pages: title, description, and an `actions` slot.
+- **`PageHeader`** — the full-bleed band for list and create pages: title, description, and an `actions` slot. Its `sticky` prop docks it to the scrollport, which is what a long form wants.
 - **`PageHeaderBand`** — the full-bleed band for detail pages. Its `tabs` slot renders a line-variant `TabsList` flush against the band's bottom edge.
 - **`ContentHeader`** — the title section for plain content pages (dashboard, settings) that are not resource management.
 - **`PageBody`** — the padded content region. It owns the page-level padding _and_ the gap between blocks. If padding must live somewhere else for a structural reason, reuse `PAGE_BODY_PADDING_CLASS_NAME` rather than retyping the value — that is what a tabbed detail page does, because its panels sit below the tab strip.
-- **`ActionFooter`** — the full-bleed band pinned to the bottom of the scroll root, holding the escape and the commit for a form.
+- **`ActionFooter`** — the full-bleed band pinned to the bottom of the scroll root, holding the escape and the commit for a form. It is a **sibling** of `PageBody`, never a child of it, and it never goes inside a `Modal` — a dialog's actions belong to `Modal`'s own `footer`.
 
 Picking between the three header components is a decision about what kind of page it is, not about how the header looks. Resource-management pages take the `PageHeader` / `PageHeaderBand` family; everything else takes `ContentHeader`.
 
+### Which shell for which page
+
+The page type picks the shell. This is the table to read before composing anything.
+
+| Page type                      | Header                                                                                | Body                                                                                                                                                         | Start from                                                                                   |
+| ------------------------------ | ------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------ | -------------------------------------------------------------------------------------------- |
+| **Resource list**              | `PageHeader` — title, and the screen's one primary create action.                     | `PageBody` holding the list family: condition band, results `Card`, summary bar, `Table`, `RichPagination`.                                                  | [List page](../demos/list-page.md), [advanced-filter list](../demos/advanced-filter-list.md) |
+| **Single-step create or edit** | `PageHeader`, `sticky`, so the title survives a long scroll.                          | `PageBody` with one column of section cards, then a sibling `ActionFooter` owning Cancel and the commit.                                                     | [Create form](../demos/create-form.md)                                                       |
+| **Wizard**                     | `PageHeaderBand`, sticky, carrying the flow's exit and title.                         | `PageBody` with `StepIndicator` and the current step, then a persistent `ActionFooter`. **Stages only** — see [Create wizard](../patterns/create-wizard.md). | [Create wizard](../demos/create-wizard.md)                                                   |
+| **Detail**                     | `PageHeaderBand`, with `TabsList` in its `tabs` slot when there are sibling sections. | `PageBody` — or `PAGE_BODY_PADDING_CLASS_NAME` on each `TabsContent`, since the tabs sit above the body.                                                     | [Detail page](../demos/detail-page.md)                                                       |
+| **Dashboard or settings**      | `ContentHeader`, **inside** `PageBody`. Not a full-bleed band.                        | Cards, settings groups, or dashboard blocks, arranged for scanning.                                                                                          | No maintained template — compose from `ContentHeader` + `PageBody`.                          |
+
 ### Column layout and grid
 
-There is no general grid component, and that is on purpose — Tailwind's `grid` and `flex` utilities are the grid. What the system does supply is the two cases where hand-writing the grid goes wrong:
+There is no general grid component, and that is on purpose — Tailwind's `grid` and `flex` utilities are the grid. What the system does supply is the cases where hand-writing the grid goes wrong:
 
 - **`KvGrid`** (the `grid-auto-fit-kv` utility) — key-value grids on detail pages. Columns auto-fit to the **container's** width, not to viewport breakpoints, so a card in a narrow column reflows on its own. Hand-writing `grid-cols-[repeat(auto-fit,minmax(...))]` is banned by the arbitrary-value lint, and the hand-written version usually omits the `min(22rem, 100%)` that keeps a column from overflowing a phone-width container.
 - **`StatGrid`** — the row of `StatCard`s.
-- **`Resizable`** — a user-draggable split pane, for the rare layout the user gets to control.
+- **`ResizablePanelGroup` / `ResizablePanel` / `ResizableHandle`** — a user-draggable split pane, for the rare layout the user gets to control. There is no bare `Resizable` export; you compose the three.
 
-The content column is capped at `--container-content` (1280px) with 24px gutters.
+The content column sits inside `PageBody`'s 24px gutters. A shared maximum width exists — `max-w-content`, 1280px, from `--container-content` — but **nothing applies it today**, so the column is uncapped in practice and grows with the viewport. If a region should stop at 1280px, apply the utility deliberately; do not assume the shell already did. See [Spacing](spacing.md#sizing).
 
 ## Layout principles
 
@@ -66,7 +80,7 @@ When content outgrows its space, **change the content, not the spacing**: split 
 - Let `PageBody` own the page padding and the gap between blocks.
 - Use the gap scale between blocks: `gap-5` for side-by-side block cards, `gap-3.5` for a tightly coupled parent and child card, `gap-4` (sticky) or `gap-6` (short) between the condition band and the list card, `gap-3` for a stat-card grid.
 - Give every wrapper `div` a job — a spacing group, a scroll container, a flex width. A wrapper with one child whose classes could merge into that child is noise; delete it.
-- Cap long-form content at `--container-content`.
+- Apply `max-w-content` deliberately when a region should stop at 1280px. Nothing upstream does it for you.
 - Use `KvGrid` for key-value grids and let it fit the container.
 
 ### Don't
@@ -75,7 +89,8 @@ When content outgrows its space, **change the content, not the spacing**: split 
 - Don't use arbitrary values for structure (`max-w-[459px]`, `h-[52px]`). Snap to a token, a scale step, or a component prop — a 459px modal is `Modal size="md"`.
 - Don't tighten spacing to fit more content. Split the content.
 - Don't reach for a viewport breakpoint when the thing that varies is the container's width.
-- Don't put a full-bleed band inside `PageBody`. Bands are siblings of the body, not children of it.
+- Don't put a full-bleed band inside `PageBody`. Bands are siblings of the body, not children of it — and an `ActionFooter` never goes inside a `Modal`; a dialog's actions belong to `Modal`'s own `footer`.
+- Don't build a second, mobile-only sidebar. `Layout` already renders the same tree in a `Sheet` below `md`.
 
 ## Related pages
 
@@ -93,4 +108,4 @@ The three assembled skeletons this foundation exists to produce. See [patterns](
 
 ### Components
 
-`Layout`, `Sidebar`, `AppHeader`, `PageHeader`, `PageHeaderBand`, `ContentHeader`, `PageBody`, `ActionFooter`, `KvGrid`, `StatGrid`, `Resizable`, `Separator`.
+`Layout`, `Sidebar`, `SidebarTrigger`, `AppHeader`, `PageHeader`, `PageHeaderBand`, `ContentHeader`, `PageBody`, `ActionFooter`, `KvGrid`, `StatGrid`, `ResizablePanelGroup`, `Separator`.

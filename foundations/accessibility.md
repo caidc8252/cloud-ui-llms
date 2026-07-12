@@ -81,5 +81,5 @@ export function RemoveMemberButton() {
 
 - [Motion](./motion.md) documents the shared reduced-motion behavior and the requirement for application-specific fallbacks.
 - [Colors](./colors.md) explains semantic status colors, which must not be the only feedback channel.
-- [Page layout](./page-layout.md) covers accessible application-shell and overlay composition.
+- [Layout](./layout.md) covers accessible application-shell and overlay composition.
 - [Responsive layout](./responsive-layout.md) covers CSS-responsive composition without a client-rendered mobile tree.
