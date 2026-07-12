@@ -126,6 +126,8 @@ Page-level actions in the band's action slot; block-level actions in each `Card`
 
 - [List page](list-page.md) — where the user came from.
 - [Create form](create-form.md) — where a create lands after success.
+- [Edit resource](edit-resource.md) — where the page's _Edit_ action goes, and where a save returns.
+- [Delete patterns](delete-patterns.md) — the tier the page's delete action takes, computed from the record.
 - [Timestamps](timestamps.md) — how the created/updated values in the meta line are stored and rendered.
 - [Permission gating](permission-gating.md) — hiding a block or an action the session can't use.
 - Components: `PageHeaderBand`, `Tabs`, `KvGrid`, `KeyValue`, `StatCard`, `Card`, `Badge`, `Modal`.

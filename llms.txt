@@ -119,19 +119,27 @@
 
 ## Patterns
 
-- [List page](patterns/list-page.md): Standard collection page with a page header, filter band, applied chips, summary bar, typed table, empty state, and rich pagination.
-- [Advanced filtering](patterns/advanced-filtering.md): Right-side filter sheet for fields that do not fit the quick bar, with deferred apply and applied-filter chips.
-- [Create form](patterns/create-form.md): Single-step create flow for independent fields using a page header, section cards, validation fields, and persistent actions.
-- [Create wizard](patterns/create-wizard.md): Multi-step create flow for staged, branching, review, or externally processed tasks.
-- [Detail page](patterns/detail-page.md): Resource detail page with a header band, tabs, key-value overview, related sections, metadata, and permission-aware actions.
-- [Data visualization](patterns/data-visualization.md): Chart composition through the themed `@cloud/ui/components/chart` surface, semantic token colors, and standard chart states.
-- [Action weight](patterns/action-weight.md): Button variant and action-hierarchy rules based on the slot where the action appears.
-- [Empty states](patterns/empty-states.md): Distinguish first-run empty, filtered zero-results, and no-access states with appropriate recovery actions.
-- [Errors and validation](patterns/errors-and-validation.md): Error-code protocol, validation boundaries, centralized handling, and the UI surfaces where failures appear.
-- [Interactive surfaces](patterns/interactive-surfaces.md): Hover, selected, navigational, selectable, row-action, and clickable-card interaction rules.
-- [Permission gating](patterns/permission-gating.md): Client and server access gates, typed permission codes, effective permissions, and UX behavior for unavailable actions.
-- [Side navigation](patterns/side-navigation.md): Sidebar projection from module manifests and effective permissions, including menu levels, icons, ordering, and accessibility.
-- [Timestamps](patterns/timestamps.md): Store integer seconds, choose render and input edges deliberately, and format absolute or relative times consistently.
+Each entry states the condition that selects it. Read the conditions here and pick the branch before opening a pattern.
+
+- [List page](patterns/list-page.md): Use when the page's job is to find, compare, and act on many records. The default collection shape — page header, filter band, applied chips, summary bar, typed table, empty state, and rich pagination.
+- [Advanced filtering](patterns/advanced-filtering.md): Use when the fields do not fit the quick filter bar — grouped, rare, or numerous conditions. Adds a right-side sheet with deferred apply; the quick bar alone stays in the list page.
+- [Create form](patterns/create-form.md): Use for a single-page create or edit. **The default create shape.** Many fields is not a reason to leave it — numerous but independent fields stay on one page, split into section cards.
+- [Create wizard](patterns/create-wizard.md): Use **only** when the flow is genuinely staged: a later step depends on an earlier answer, the flow branches, there is a review gate, or an external process runs between steps. Otherwise use the create form.
+- [Edit resource](patterns/edit-resource.md): Use for **any** edit of an existing record — a dedicated page carrying the create form's shape, pre-filled and dirty-tracked. **The only sanctioned edit shape:** there is no inline edit (no primitive exists) and the legacy split-board edit must not be copied. State transitions — lock, reset password, delete — are actions, never form fields.
+- [Unsaved changes](patterns/unsaved-changes.md): **Required on every create and edit page.** Guard the dirty form on exit. The guard is partial by design — `onNavigate` catches `<Link>` clicks, `beforeunload` catches tab close, and **nothing** catches `router.push()` or the back button. Read before writing a form.
+- [Detail page](patterns/detail-page.md): Use when a single record is the subject of the page. Header band, tabs, key-value overview, related sections, metadata, and permission-aware actions.
+- [Delete patterns](patterns/delete-patterns.md): **Start here before building any delete.** The tier follows the blast radius, computed per record at render time — not per resource type. The same button is a different tier on a different row.
+- [One-click delete](patterns/one-click-delete.md): No dialog; _Undo_ in the toast. Use **only** when both hold: the blast radius is the record alone, **and** the server soft-deletes. A hard delete disqualifies it — take the confirmation instead.
+- [Delete with confirmation](patterns/delete-with-confirmation.md): One dismissable `ConfirmModal`. **The default delete tier** — the record cannot be recreated with a click, but destroying it changes nothing outside itself. A role nobody holds; a pending invitation.
+- [Delete with additional confirmation](patterns/delete-with-additional-confirmation.md): The user types the record's name to unlock the confirm, in an `AlertDialog` with no escape hatch. Use when the delete reaches **past** the record — other rows cascade, or other people lose permissions. A role eleven users hold.
+- [Data visualization](patterns/data-visualization.md): Use when the page must show quantity, trend, or proportion. Chart composition through the themed `@cloud/ui/components/chart` surface, semantic token colors, and standard chart states.
+- [Action weight](patterns/action-weight.md): Read before placing any button. Which variant an action takes — **the variant follows the slot, not the verb.** The same _Export_ is `secondary` in a page header and `ghost` in a summary bar.
+- [Empty states](patterns/empty-states.md): Read when a collection renders zero rows. Three different states with three different recoveries — first-run empty, filtered zero-results, and no-access. Picking the wrong one strands the user.
+- [Errors and validation](patterns/errors-and-validation.md): Read when anything can fail. Error-code protocol, validation boundaries, centralized handling, and which surface each failure appears on.
+- [Interactive surfaces](patterns/interactive-surfaces.md): Read when a surface responds to the pointer. Hover, selected, navigational, selectable, row-action, and clickable-card rules.
+- [Permission gating](patterns/permission-gating.md): Read when an action or a route is not available to everyone. Client and server gates, typed permission codes, effective permissions, and what to render instead of a forbidden action.
+- [Side navigation](patterns/side-navigation.md): Read when a module adds a menu entry. Sidebar projection from module manifests and effective permissions — menu levels, icons, ordering, accessibility.
+- [Timestamps](patterns/timestamps.md): Read when a time is stored, rendered, or entered. Integer seconds in storage; absolute or relative at the render edge, chosen deliberately.
 - [Portal page rules](../../.claude/team-rule/coding-rules/ui_ui-and-pages.md): Binding page composition, density, accessibility, action hierarchy, lists, forms, details, color, and typography guidance.
 
 ## Demos
