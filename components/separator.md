@@ -2,8 +2,6 @@
 
 Horizontal or vertical divider line, with optional centered label text.
 
-[Source](https://github.com/Newland-Payment-Technology-US-Co-Ltd/cloud-next-scaffold/blob/develop/packages/ui/src/components/ui/primitives/separator.tsx) | [Public exports](https://github.com/Newland-Payment-Technology-US-Co-Ltd/cloud-next-scaffold/blob/develop/packages/ui/src/components/ui/index.ts)
-
 `Separator` is a client component built on `@base-ui/react`'s `Separator`. Import it from `@cloud/ui` or `@cloud/ui/components/ui`.
 
 ## Development guidelines

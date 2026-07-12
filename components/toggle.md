@@ -2,8 +2,6 @@
 
 Press-toggle button with an on/off state.
 
-[Source](https://github.com/Newland-Payment-Technology-US-Co-Ltd/cloud-next-scaffold/blob/develop/packages/ui/src/components/ui/primitives/toggle.tsx) | [Public exports](https://github.com/Newland-Payment-Technology-US-Co-Ltd/cloud-next-scaffold/blob/develop/packages/ui/src/components/ui/index.ts)
-
 `Toggle` is a client component built on `@base-ui/react`'s `Toggle`. It is one component, plus the `toggleVariants` helper for styling a custom element like a toggle. Import them from `@cloud/ui` or `@cloud/ui/components/ui`.
 
 ## Development guidelines

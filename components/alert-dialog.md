@@ -2,8 +2,6 @@
 
 Centered, forced-action dialog. Unlike `Modal` it has no close affordance, so the user must choose an action.
 
-[Source](https://github.com/Newland-Payment-Technology-US-Co-Ltd/cloud-next-scaffold/blob/develop/packages/ui/src/components/ui/primitives/alert-dialog.tsx) | [Public exports](https://github.com/Newland-Payment-Technology-US-Co-Ltd/cloud-next-scaffold/blob/develop/packages/ui/src/components/ui/index.ts)
-
 `AlertDialog` is a client component built on `@base-ui/react`'s `AlertDialog`. It is a set of composable parts — `AlertDialog`, `AlertDialogTrigger`, `AlertDialogContent`, `AlertDialogHeader`, `AlertDialogFooter`, `AlertDialogTitle`, `AlertDialogDescription`, `AlertDialogAction`, `AlertDialogCancel`, plus `AlertDialogPortal` and `AlertDialogOverlay`. Import them from `@cloud/ui` or `@cloud/ui/components/ui`.
 
 ## Development guidelines

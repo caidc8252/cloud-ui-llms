@@ -2,7 +2,7 @@
 
 Everything known about a single resource, on one page, with tabs when there is more than one sibling block of information.
 
-[Style template](../examples/detail-page.tsx) | [Binding rules](../../../../.claude/team-rule/coding-rules/ui_ui-and-pages.md)
+[Style template](../demos/detail-page.md) | [Binding rules](../../../../.claude/team-rule/coding-rules/ui_ui-and-pages.md)
 
 ## Key UX concepts
 

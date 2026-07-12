@@ -2,8 +2,6 @@
 
 Draggable track and thumb for selecting a numeric value or range.
 
-[Source](https://github.com/Newland-Payment-Technology-US-Co-Ltd/cloud-next-scaffold/blob/develop/packages/ui/src/components/ui/primitives/slider.tsx) | [Public exports](https://github.com/Newland-Payment-Technology-US-Co-Ltd/cloud-next-scaffold/blob/develop/packages/ui/src/components/ui/index.ts)
-
 `Slider` is a client component built on `@base-ui/react`'s `Slider`. Import it from `@cloud/ui` or `@cloud/ui/components/ui`.
 
 ## Development guidelines

@@ -2,7 +2,7 @@
 
 A resource collection that combines a compact quick-filter band with a sheet for secondary conditions. Use it when filtering needs exceed the space and frequency of a standard list toolbar.
 
-[View source template](https://github-company/Newland-Payment-Technology-US-Co-Ltd/cloud-next-scaffold/blob/develop/packages/ui/docs/examples/list-page-advanced-filter.tsx) · [View pattern](../patterns/advanced-filtering.md)
+[View pattern](../patterns/advanced-filtering.md)
 
 ## On this page
 

@@ -2,8 +2,6 @@
 
 The quick bar's trigger for the advanced-filter sheet, with an applied-count badge.
 
-[Source](https://github.com/Newland-Payment-Technology-US-Co-Ltd/cloud-next-scaffold/blob/develop/packages/ui/src/components/list-filter/advanced-filter-button.tsx) | [Public exports](https://github.com/Newland-Payment-Technology-US-Co-Ltd/cloud-next-scaffold/blob/develop/packages/ui/src/components/list-filter/index.ts)
-
 `AdvancedFilterButton` is a client component in the list-filter family. It takes `open`, `onToggle`, and `count`. Import it from `@cloud/ui`.
 
 ## Development guidelines

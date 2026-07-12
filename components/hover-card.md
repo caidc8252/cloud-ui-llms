@@ -2,8 +2,6 @@
 
 Rich popover that opens on hover. Use it for preview cards and detail popovers.
 
-[Source](https://github.com/Newland-Payment-Technology-US-Co-Ltd/cloud-next-scaffold/blob/develop/packages/ui/src/components/ui/primitives/hover-card.tsx) | [Public exports](https://github.com/Newland-Payment-Technology-US-Co-Ltd/cloud-next-scaffold/blob/develop/packages/ui/src/components/ui/index.ts)
-
 `HoverCard` is a client component built on `@base-ui/react`'s `PreviewCard`. It is a set of three parts — `HoverCard`, `HoverCardTrigger`, and `HoverCardContent`. Import them from `@cloud/ui` or `@cloud/ui/components/ui`.
 
 ## Development guidelines

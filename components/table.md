@@ -2,8 +2,6 @@
 
 Typed data table driven by a columns config. No hand-written `thead` / `tbody`.
 
-[Source](https://github.com/Newland-Payment-Technology-US-Co-Ltd/cloud-next-scaffold/blob/develop/packages/ui/src/components/ui/recipes/table.tsx) | [Public exports](https://github.com/Newland-Payment-Technology-US-Co-Ltd/cloud-next-scaffold/blob/develop/packages/ui/src/components/ui/index.ts)
-
 `Table` is a generic component: `Table<R>` takes your row type. It exports the `TableColumn`, `TableProps`, `TableRowState`, `TableDensity`, and `SortDir` types alongside it. Import them from `@cloud/ui` or `@cloud/ui/components/ui`.
 
 ## Development guidelines

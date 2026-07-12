@@ -1,6 +1,6 @@
 # Elevation
 
-Elevation uses the shared shadow ladder to show surface depth, interaction, and focus without page-local shadow values. The definitions are in the [global stylesheet source](https://github.com/Newland-Payment-Technology-US-Co-Ltd/cloud-next-scaffold/blob/develop/packages/ui/src/components/styles/index.css); the public Card mapping is in [Card](https://github.com/Newland-Payment-Technology-US-Co-Ltd/cloud-next-scaffold/blob/develop/packages/ui/src/components/ui/primitives/card.tsx), and application constraints are in the [portal page-style rule](../../../../.claude/team-rule/coding-rules/ui_ui-and-pages.md).
+Elevation uses the shared shadow ladder to show surface depth, interaction, and focus without page-local shadow values. The definitions are in the [global stylesheet](design-tokens.md); the public Card mapping is in [Card](../components/card.md), and application constraints are in the [portal page-style rule](../../../../.claude/team-rule/coding-rules/ui_ui-and-pages.md).
 
 ## Overview
 
@@ -27,7 +27,7 @@ For Cards, use the public mapping exactly: `elevation={0}` maps to `shadow-none`
 
 Overlay primitives own individually defined shadows: `Modal` uses `shadow-1`, while `AlertDialogContent` uses `shadow-4`. Do not treat either as a generic overlay depth or add page-local arbitrary shadow values; use a public component or the named shadow utility already associated with the intended mechanism. Keep `shadow-focus`, `shadow-row-selected`, and `shadow-sticky-col` attached to their respective interaction or table behaviors.
 
-Keep `shadow-cta` inside the components that define primary, danger, active, or selected emphasis, such as [Button](https://github.com/Newland-Payment-Technology-US-Co-Ltd/cloud-next-scaffold/blob/develop/packages/ui/src/components/ui/primitives/button.tsx), [Switch](https://github.com/Newland-Payment-Technology-US-Co-Ltd/cloud-next-scaffold/blob/develop/packages/ui/src/components/ui/primitives/switch.tsx), and [StepIndicator](https://github.com/Newland-Payment-Technology-US-Co-Ltd/cloud-next-scaffold/blob/develop/packages/ui/src/components/ui/recipes/step-indicator.tsx).
+Keep `shadow-cta` inside the components that define primary, danger, active, or selected emphasis, such as [Button](../components/button.md), [Switch](../components/switch.md), and [StepIndicator](../components/step-indicator.md).
 
 ## Examples
 

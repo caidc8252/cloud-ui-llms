@@ -2,8 +2,6 @@
 
 Single-line text input, with validation tones beyond the invalid state.
 
-[Source](https://github.com/Newland-Payment-Technology-US-Co-Ltd/cloud-next-scaffold/blob/develop/packages/ui/src/components/ui/primitives/input.tsx) | [Public exports](https://github.com/Newland-Payment-Technology-US-Co-Ltd/cloud-next-scaffold/blob/develop/packages/ui/src/components/ui/index.ts)
-
 `Input` is a client component built on `@base-ui/react`'s `Input`. Import it from `@cloud/ui` or `@cloud/ui/components/ui`.
 
 ## Development guidelines

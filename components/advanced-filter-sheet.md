@@ -2,8 +2,6 @@
 
 Right-side sheet holding the advanced filters, with Reset and Apply in the footer.
 
-[Source](https://github.com/Newland-Payment-Technology-US-Co-Ltd/cloud-next-scaffold/blob/develop/packages/ui/src/components/list-filter/advanced-filter-sheet.tsx) | [Public exports](https://github.com/Newland-Payment-Technology-US-Co-Ltd/cloud-next-scaffold/blob/develop/packages/ui/src/components/list-filter/index.ts)
-
 `AdvancedFilterSheet` is a client component in the list-filter family. It exports three parts — `AdvancedFilterSheet`, `AdvancedFilterGroup`, and `AdvancedFilterField`. Import them from `@cloud/ui`.
 
 ## Development guidelines

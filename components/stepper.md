@@ -2,8 +2,6 @@
 
 Numeric input with `−` and `+` buttons.
 
-[Source](https://github.com/Newland-Payment-Technology-US-Co-Ltd/cloud-next-scaffold/blob/develop/packages/ui/src/components/ui/recipes/stepper.tsx) | [Public exports](https://github.com/Newland-Payment-Technology-US-Co-Ltd/cloud-next-scaffold/blob/develop/packages/ui/src/components/ui/index.ts)
-
 `Stepper` is a client component driven by props. Import it, and the `StepperProps` type, from `@cloud/ui` or `@cloud/ui/components/ui`.
 
 **Not to be confused with `StepIndicator`**, which is the wizard progress bar. Similar name, different component.

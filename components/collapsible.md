@@ -2,8 +2,6 @@
 
 Headless show and hide behavior. Callers own all of the visual styling.
 
-[Source](https://github.com/Newland-Payment-Technology-US-Co-Ltd/cloud-next-scaffold/blob/develop/packages/ui/src/components/ui/primitives/collapsible.tsx) | [Public exports](https://github.com/Newland-Payment-Technology-US-Co-Ltd/cloud-next-scaffold/blob/develop/packages/ui/src/components/ui/index.ts)
-
 `Collapsible` is a client component built on `@base-ui/react`'s `Collapsible`. It is a set of three components — `Collapsible` (root), `CollapsibleTrigger`, and `CollapsibleContent`. Import them from `@cloud/ui` or `@cloud/ui/components/ui`.
 
 ## Development guidelines

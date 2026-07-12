@@ -2,8 +2,6 @@
 
 Overflow container with scrollbars styled to match the design system.
 
-[Source](https://github.com/Newland-Payment-Technology-US-Co-Ltd/cloud-next-scaffold/blob/develop/packages/ui/src/components/ui/primitives/scroll-area.tsx) | [Public exports](https://github.com/Newland-Payment-Technology-US-Co-Ltd/cloud-next-scaffold/blob/develop/packages/ui/src/components/ui/index.ts)
-
 `ScrollArea` is a client component built on `@base-ui/react`'s `ScrollArea`. The root renders its own viewport, scrollbar, and corner, so `ScrollArea` alone is usually enough; `ScrollBar` is exported for the case where you need a second, horizontal bar. Import them from `@cloud/ui` or `@cloud/ui/components/ui`.
 
 ## Development guidelines

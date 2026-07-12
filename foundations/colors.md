@@ -10,7 +10,7 @@ Use semantic utilities or public component props in application code. Light valu
 
 The tables list the resolved value for every color token currently declared by @cloud/ui. Alias tokens are resolved to their underlying mode-specific value. Derived `color-mix()` tokens remain expressions, with their referenced token values expanded for each mode. Each **Description** explains what the token is for, gives a concrete example or two of where it appears, and — where the token is easy to misuse — notes where not to reach for it.
 
-The canonical source is [index.css](../../cloud-scaffold.worktrees/develop/packages/ui/src/components/styles/index.css). These values are reference data, not an invitation to copy OKLCH literals into business UI.
+The canonical source is the shared stylesheet. These values are reference data, not an invitation to copy OKLCH literals into business UI.
 
 ## System color palette
 

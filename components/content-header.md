@@ -2,8 +2,6 @@
 
 In-content page title — a heading, optional subtext, and a flush-right action cluster.
 
-[Source](https://github.com/Newland-Payment-Technology-US-Co-Ltd/cloud-next-scaffold/blob/develop/packages/ui/src/components/layout/content-header.tsx) | [Public exports](https://github.com/Newland-Payment-Technology-US-Co-Ltd/cloud-next-scaffold/blob/develop/packages/ui/src/components/layout/index.ts)
-
 `ContentHeader` is driven by props. Import it from `@cloud/ui`.
 
 ## Development guidelines

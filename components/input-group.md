@@ -2,8 +2,6 @@
 
 Composite input container with one unified border — for addons, buttons, and units around a field.
 
-[Source](https://github.com/Newland-Payment-Technology-US-Co-Ltd/cloud-next-scaffold/blob/develop/packages/ui/src/components/ui/recipes/input-group.tsx) | [Public exports](https://github.com/Newland-Payment-Technology-US-Co-Ltd/cloud-next-scaffold/blob/develop/packages/ui/src/components/ui/index.ts)
-
 `InputGroup` is a client component. It is a set of composable parts — `InputGroup`, `InputGroupAddon`, `InputGroupButton`, `InputGroupText`, `InputGroupInput`, and `InputGroupTextarea`. Import them from `@cloud/ui` or `@cloud/ui/components/ui`.
 
 ## Development guidelines

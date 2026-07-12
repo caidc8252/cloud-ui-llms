@@ -2,7 +2,7 @@
 
 Theming allows for the customization of specific visual attributes across the product interface.
 
-[Design tokens](../design-tokens.md) | [Motion](motion.md) | [`@cloud/ui` README](../../README.md)
+[Design tokens](design-tokens.md) | [Motion](motion.md)
 
 ## Key UX concepts
 
@@ -24,7 +24,7 @@ Everything in the `@theme` block is fair game _as a value_.
 
 **Not supported**, and deliberately:
 
-- **Adding a token.** New `--color-*`, `--spacing-*`, `--radius-*` entries are refused by default. A missing token is a conversation with the operator, not a commit — see the [`@cloud/ui` README](../../README.md).
+- **Adding a token.** New `--color-*`, `--spacing-*`, `--radius-*` entries are refused by default. A missing token is a conversation with the operator, not a commit — see the `@cloud/ui` README.
 - **Changing a token's meaning.** Repointing `--color-error-500` at a green would theme the system into incoherence, because a hundred call sites have already decided that token means _error_.
 - **Per-component overrides.** There is no theme slot for "the Button in this app". A component's look comes from tokens; if two apps need different buttons, they need a different token value, not a component fork.
 - **Structure.** Theming changes values, not layout, not spacing rules, not which component you use.

@@ -2,7 +2,7 @@
 
 A collection of resources in a tabular format, with a filter band above it and pagination below. The default view for any resource-management module.
 
-[Style template](../examples/list-page.tsx) | [Binding rules](../../../../.claude/team-rule/coding-rules/ui_ui-and-pages.md)
+[Style template](../demos/list-page.md) | [Binding rules](../../../../.claude/team-rule/coding-rules/ui_ui-and-pages.md)
 
 ## Key UX concepts
 

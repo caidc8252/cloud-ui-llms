@@ -2,8 +2,6 @@
 
 Full-bleed page-header band for detail pages — arbitrary header content with a tabs row on its bottom edge.
 
-[Source](https://github.com/Newland-Payment-Technology-US-Co-Ltd/cloud-next-scaffold/blob/develop/packages/ui/src/components/layout/page-header-band.tsx) | [Public exports](https://github.com/Newland-Payment-Technology-US-Co-Ltd/cloud-next-scaffold/blob/develop/packages/ui/src/components/layout/index.ts)
-
 `PageHeaderBand` is driven by props. Import it from `@cloud/ui`.
 
 ## Development guidelines

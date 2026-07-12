@@ -2,8 +2,6 @@
 
 Inline-labelled checkbox, radio group, and switch — the one-prop form of the primitives.
 
-[Source](https://github.com/Newland-Payment-Technology-US-Co-Ltd/cloud-next-scaffold/blob/develop/packages/ui/src/components/ui/recipes/toggles.tsx) | [Public exports](https://github.com/Newland-Payment-Technology-US-Co-Ltd/cloud-next-scaffold/blob/develop/packages/ui/src/components/ui/index.ts)
-
 `Toggles` is the module that exports `ToggleCheckbox`, `ToggleRadioGroup`, `ToggleRadio`, and `ToggleSwitch`, along with their prop types. Import them from `@cloud/ui` or `@cloud/ui/components/ui`.
 
 ## Development guidelines

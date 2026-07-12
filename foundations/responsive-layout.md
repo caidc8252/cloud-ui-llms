@@ -1,6 +1,6 @@
 # Responsive layout
 
-`@cloud/ui` uses shared viewport breakpoints, CSS responsive utilities, and component-width adaptation to keep layouts usable across viewports and containers. The canonical breakpoints and grid utility are in the [global stylesheet source](https://github.com/Newland-Payment-Technology-US-Co-Ltd/cloud-next-scaffold/blob/develop/packages/ui/src/components/styles/index.css); behavior-only mobile detection is in the [mobile hook source](../../src/lib/use-is-mobile.ts).
+`@cloud/ui` uses shared viewport breakpoints, CSS responsive utilities, and component-width adaptation to keep layouts usable across viewports and containers. The canonical breakpoints and grid utility are in the [global stylesheet](design-tokens.md); behavior-only mobile detection is in the [mobile hook](../api-surface.md).
 
 ## Overview
 
@@ -77,4 +77,4 @@ export function AccountFacts() {
 - [Spacing and sizing](./spacing-and-sizing.md) covers the same content maximum and breakpoint values in the broader size scale.
 - [Design tokens](./design-tokens.md) explains how breakpoint and container tokens become utilities.
 - [Motion](./motion.md) covers reduced-motion adaptation for responsive interface changes.
-- [Global styles](../get-started/global-styles.md) explains how applications load the shared responsive utilities.
+- [Global styles](../api-surface.md) explains how applications load the shared responsive utilities.

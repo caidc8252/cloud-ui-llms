@@ -2,8 +2,6 @@
 
 Draggable split-pane layout.
 
-[Source](https://github.com/Newland-Payment-Technology-US-Co-Ltd/cloud-next-scaffold/blob/develop/packages/ui/src/components/ui/primitives/resizable.tsx) | [Public exports](https://github.com/Newland-Payment-Technology-US-Co-Ltd/cloud-next-scaffold/blob/develop/packages/ui/src/components/ui/index.ts)
-
 `Resizable` is powered by `react-resizable-panels`. It is a set of three parts — `ResizablePanelGroup`, `ResizablePanel`, and `ResizableHandle`. Import them from `@cloud/ui` or `@cloud/ui/components/ui`.
 
 ## Development guidelines

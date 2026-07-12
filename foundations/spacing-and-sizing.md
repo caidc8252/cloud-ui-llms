@@ -1,6 +1,6 @@
 # Spacing and sizing
 
-Use the shared spacing, control, container, and breakpoint scales to keep application layouts measurable and compatible with `@cloud/ui` primitives. The canonical values are defined in the [global stylesheet source](https://github.com/Newland-Payment-Technology-US-Co-Ltd/cloud-next-scaffold/blob/develop/packages/ui/src/components/styles/index.css), while page and Card ownership is defined by [PageBody](https://github.com/Newland-Payment-Technology-US-Co-Ltd/cloud-next-scaffold/blob/develop/packages/ui/src/components/layout/page-body.tsx), [Card](https://github.com/Newland-Payment-Technology-US-Co-Ltd/cloud-next-scaffold/blob/develop/packages/ui/src/components/ui/primitives/card.tsx), and the [portal page-style rule](../../../../.claude/team-rule/coding-rules/ui_ui-and-pages.md).
+Use the shared spacing, control, container, and breakpoint scales to keep application layouts measurable and compatible with `@cloud/ui` primitives. The canonical values are defined in the [global stylesheet](design-tokens.md), while page and Card ownership is defined by [PageBody](../components/page-body.md), [Card](../components/card.md), and the [portal page-style rule](../../../../.claude/team-rule/coding-rules/ui_ui-and-pages.md).
 
 ## Overview
 

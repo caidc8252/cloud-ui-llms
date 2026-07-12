@@ -8,7 +8,7 @@
 
 下列表格列出了 @cloud/ui 当前声明的每个颜色令牌的解析值。别名令牌已解析为其底层对应模式的值；派生的 `color-mix()` 令牌保留为表达式，并按各模式展开其引用的令牌值。每条 **说明** 会解释该令牌的用途、给出一两个具体使用场景，并在容易误用的令牌上标注不应在何处使用。
 
-权威来源为 [index.css](../../cloud-scaffold.worktrees/develop/packages/ui/src/components/styles/index.css)。这些值仅作参考数据，并非鼓励你把 OKLCH 字面量复制进业务 UI。
+权威来源为 the shared stylesheet。这些值仅作参考数据，并非鼓励你把 OKLCH 字面量复制进业务 UI。
 
 ## 系统调色板
 

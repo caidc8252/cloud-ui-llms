@@ -2,8 +2,6 @@
 
 Searchable dropdown for choosing one option — or several — from a long list.
 
-[Source](https://github.com/Newland-Payment-Technology-US-Co-Ltd/cloud-next-scaffold/blob/develop/packages/ui/src/components/ui/recipes/combobox.tsx) | [Public exports](https://github.com/Newland-Payment-Technology-US-Co-Ltd/cloud-next-scaffold/blob/develop/packages/ui/src/components/ui/index.ts)
-
 `Combobox` is a client component built on `@base-ui/react`'s `Combobox`. It is a single component driven by props, not a set of parts. Import it, and the `ComboboxOption` type, from `@cloud/ui` or `@cloud/ui/components/ui`.
 
 ## Development guidelines

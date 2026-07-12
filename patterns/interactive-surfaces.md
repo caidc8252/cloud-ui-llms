@@ -53,7 +53,7 @@ Every clickable element carries `cursor-pointer`. This is a MUST in the style sp
 
 #### E. Interactive card
 
-`Card interactive` — hover moves the border to `line-strong` and lifts the shadow. It is presentation only; the card still needs a real interactive element inside it (see [Card](../card.md)).
+`Card interactive` — hover moves the border to `line-strong` and lifts the shadow. It is presentation only; the card still needs a real interactive element inside it (see [Card](../components/card.md)).
 
 #### F. Toggleable control
 
@@ -114,5 +114,5 @@ Every clickable element carries `cursor-pointer`. This is a MUST in the style sp
 
 - [List page](list-page.md) — rows, row actions, and row navigation.
 - [Action weight](action-weight.md) — the variant a row action takes.
-- [Card](../card.md) — the `interactive` prop and what it does and does not give you.
+- [Card](../components/card.md) — the `interactive` prop and what it does and does not give you.
 - Components: `Toggle`, `ToggleGroup`, `Button`, `Card`, `Table`, `ObjectTile`.

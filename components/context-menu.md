@@ -2,8 +2,6 @@
 
 Menu of actions opened by right-clicking a target region.
 
-[Source](https://github.com/Newland-Payment-Technology-US-Co-Ltd/cloud-next-scaffold/blob/develop/packages/ui/src/components/ui/primitives/context-menu.tsx) | [Public exports](https://github.com/Newland-Payment-Technology-US-Co-Ltd/cloud-next-scaffold/blob/develop/packages/ui/src/components/ui/index.ts)
-
 `ContextMenu` is a client component built on `@base-ui/react`'s `ContextMenu`. It mirrors `DropdownMenu` part for part — `ContextMenu`, `ContextMenuTrigger`, `ContextMenuContent`, `ContextMenuItem`, `ContextMenuGroup`, `ContextMenuLabel`, `ContextMenuSeparator`, `ContextMenuShortcut`, `ContextMenuCheckboxItem`, `ContextMenuRadioGroup`, `ContextMenuRadioItem`, the `ContextMenuSub` / `ContextMenuSubTrigger` / `ContextMenuSubContent` trio, and `ContextMenuPortal`. Import them from `@cloud/ui` or `@cloud/ui/components/ui`.
 
 ## Development guidelines

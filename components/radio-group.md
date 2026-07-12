@@ -2,8 +2,6 @@
 
 Mutually exclusive option group. Prefer `ToggleRadioGroup` for labeled radio fields.
 
-[Source](https://github.com/Newland-Payment-Technology-US-Co-Ltd/cloud-next-scaffold/blob/develop/packages/ui/src/components/ui/primitives/radio-group.tsx) | [Public exports](https://github.com/Newland-Payment-Technology-US-Co-Ltd/cloud-next-scaffold/blob/develop/packages/ui/src/components/ui/index.ts)
-
 `RadioGroup` is a client component built on `@base-ui/react`'s `RadioGroup` and `Radio`. It is a pair of components — `RadioGroup` (the group) and `RadioGroupItem` (each option). Import them from `@cloud/ui` or `@cloud/ui/components/ui`.
 
 ## Development guidelines

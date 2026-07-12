@@ -2,8 +2,6 @@
 
 The padded content column of a page.
 
-[Source](https://github.com/Newland-Payment-Technology-US-Co-Ltd/cloud-next-scaffold/blob/develop/packages/ui/src/components/layout/page-body.tsx) | [Public exports](https://github.com/Newland-Payment-Technology-US-Co-Ltd/cloud-next-scaffold/blob/develop/packages/ui/src/components/layout/index.ts)
-
 `PageBody` is a plain `<div>` with the page's standard padding and vertical rhythm. It also exports `PAGE_BODY_CLASS_NAME` and `PAGE_BODY_PADDING_CLASS_NAME`. Import them from `@cloud/ui`.
 
 ## Development guidelines

@@ -2,7 +2,7 @@
 
 A page for viewing one resource and its related information. The demo keeps related sections in tabs while the resource identity, status, and actions remain in the page header.
 
-[View source template](https://github-company/Newland-Payment-Technology-US-Co-Ltd/cloud-next-scaffold/blob/develop/packages/ui/docs/examples/detail-page.tsx) · [View pattern](../patterns/detail-page.md)
+[View pattern](../patterns/detail-page.md)
 
 ## On this page
 

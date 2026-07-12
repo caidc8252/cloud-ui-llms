@@ -2,8 +2,6 @@
 
 Circular profile image with a fallback to initials. `AvatarGroup` stacks several of them into an overlapping row.
 
-[Source](https://github.com/Newland-Payment-Technology-US-Co-Ltd/cloud-next-scaffold/blob/develop/packages/ui/src/components/ui/primitives/avatar.tsx) | [Public exports](https://github.com/Newland-Payment-Technology-US-Co-Ltd/cloud-next-scaffold/blob/develop/packages/ui/src/components/ui/index.ts)
-
 `Avatar` is built on `@base-ui/react`'s `Avatar`. It is a set of four components — `Avatar` (root), `AvatarImage`, `AvatarFallback`, and `AvatarGroup`. Import them from `@cloud/ui` or `@cloud/ui/components/ui`.
 
 ## Development guidelines

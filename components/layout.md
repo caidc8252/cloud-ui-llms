@@ -2,8 +2,6 @@
 
 The full-page shell — sidebar, sticky header, and the scroll root everything else lives in.
 
-[Source](https://github.com/Newland-Payment-Technology-US-Co-Ltd/cloud-next-scaffold/blob/develop/packages/ui/src/components/layout/layout.tsx) | [Public exports](https://github.com/Newland-Payment-Technology-US-Co-Ltd/cloud-next-scaffold/blob/develop/packages/ui/src/components/layout/index.ts)
-
 `Layout` is a client component. It takes a `sidebar` slot, a `header` slot, and `children`. Import it from `@cloud/ui`.
 
 ## Development guidelines

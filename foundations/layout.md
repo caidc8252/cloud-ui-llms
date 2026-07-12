@@ -2,7 +2,7 @@
 
 Layout refers to the arrangement of elements on the interface to serve a specific purpose. It's the integration of the spatial and organizational principles of the system that result in a final visual composition.
 
-[Spacing](spacing.md) | [Design tokens](../design-tokens.md)
+[Spacing](spacing.md) | [Design tokens](design-tokens.md)
 
 ## Introduction
 
@@ -85,7 +85,7 @@ The scale that the gaps above come from, and the rules for which gap means what.
 
 ### Design tokens
 
-`--container-content`, `--breakpoint-*`, and the control-sizing tokens that keep a button, an input, and a select the same height. See [Design tokens](../design-tokens.md).
+`--container-content`, `--breakpoint-*`, and the control-sizing tokens that keep a button, an input, and a select the same height. See [Design tokens](design-tokens.md).
 
 ### List page, Detail page, Create form
 

@@ -2,8 +2,6 @@
 
 Full-bleed page-header band for list and create pages — title, description, and actions.
 
-[Source](https://github.com/Newland-Payment-Technology-US-Co-Ltd/cloud-next-scaffold/blob/develop/packages/ui/src/components/layout/page-header.tsx) | [Public exports](https://github.com/Newland-Payment-Technology-US-Co-Ltd/cloud-next-scaffold/blob/develop/packages/ui/src/components/layout/index.ts)
-
 `PageHeader` is driven by props. Import it from `@cloud/ui`.
 
 ## Development guidelines

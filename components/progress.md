@@ -2,8 +2,6 @@
 
 Horizontal bar showing numeric completion, with an optional label and value.
 
-[Source](https://github.com/Newland-Payment-Technology-US-Co-Ltd/cloud-next-scaffold/blob/develop/packages/ui/src/components/ui/primitives/progress.tsx) | [Public exports](https://github.com/Newland-Payment-Technology-US-Co-Ltd/cloud-next-scaffold/blob/develop/packages/ui/src/components/ui/index.ts)
-
 `Progress` is a client component built on `@base-ui/react`'s `Progress`. The root renders its own track and indicator, so `Progress` alone is enough; `ProgressLabel` and `ProgressValue` are optional children, and `ProgressTrack` / `ProgressIndicator` are exported for the rare case you need to compose them by hand. Import them from `@cloud/ui` or `@cloud/ui/components/ui`.
 
 ## Development guidelines

@@ -2,7 +2,7 @@
 
 Charts composed from the `@cloud/ui` chart kit — themed Recharts primitives whose colours come from the design tokens and whose look comes from the stylesheet, not from per-chart props.
 
-[Usage reference](../examples/charts.tsx) | [Chart tokens](../design-tokens.md)
+[Usage reference](../demos/charts.md) | [Chart tokens](../foundations/design-tokens.md)
 
 ## Key UX concepts
 
@@ -125,6 +125,6 @@ Chart text goes through the `font-chart` semantic face, never `font-mono`. Numbe
 
 ## Related patterns and components
 
-- [Design tokens](../design-tokens.md) — the chart palettes, the ramps, and the structural chart tokens.
+- [Design tokens](../foundations/design-tokens.md) — the chart palettes, the ramps, and the structural chart tokens.
 - [Empty states](empty-states.md) — the empty case in the rest of the system.
 - Components: `ChartContainer`, `ChartStyle`, `ChartTooltip`, `ChartLegend`, `ChartBar`, `ChartSparkline`, `ChartSkeleton`, `ChartEmpty`, `StatCard`.

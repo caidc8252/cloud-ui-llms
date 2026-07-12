@@ -2,7 +2,7 @@
 
 A staged create flow for related, branching, or review-heavy input. The demo pairs a step indicator and form area with a compact summary of the in-progress record.
 
-[View source template](https://github-company/Newland-Payment-Technology-US-Co-Ltd/cloud-next-scaffold/blob/develop/packages/ui/docs/examples/create-wizard.tsx) · [View pattern](../patterns/create-wizard.md)
+[View pattern](../patterns/create-wizard.md)
 
 ## On this page
 

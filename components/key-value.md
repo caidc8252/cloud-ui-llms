@@ -2,8 +2,6 @@
 
 Read-only key-value fields for detail and overview pages.
 
-[Source](https://github.com/Newland-Payment-Technology-US-Co-Ltd/cloud-next-scaffold/blob/develop/packages/ui/src/components/ui/recipes/key-value.tsx) | [Public exports](https://github.com/Newland-Payment-Technology-US-Co-Ltd/cloud-next-scaffold/blob/develop/packages/ui/src/components/ui/index.ts)
-
 `KvGrid` is the container and `KeyValue` is the cell. Both are plain markup — a `<dl>` and its rows — so they work in a server component. Import them, and the `KvGridProps` / `KeyValueProps` types, from `@cloud/ui` or `@cloud/ui/components/ui`.
 
 ## Development guidelines

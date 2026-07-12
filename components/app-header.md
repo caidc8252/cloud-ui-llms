@@ -2,8 +2,6 @@
 
 The app bar's content — a leading slot, breadcrumbs, a search affordance, and a notification slot.
 
-[Source](https://github.com/Newland-Payment-Technology-US-Co-Ltd/cloud-next-scaffold/blob/develop/packages/ui/src/components/layout/app-header.tsx) | [Public exports](https://github.com/Newland-Payment-Technology-US-Co-Ltd/cloud-next-scaffold/blob/develop/packages/ui/src/components/layout/index.ts)
-
 `AppHeader` is a client component driven by props. Import it from `@cloud/ui`.
 
 ## Development guidelines

@@ -2,7 +2,7 @@
 
 A collection of resources in a table, with quick filters above the results and pagination below. Use this demo as the default starting point for resource-management pages.
 
-[View source template](https://github-company/Newland-Payment-Technology-US-Co-Ltd/cloud-next-scaffold/blob/develop/packages/ui/docs/examples/list-page.tsx) · [View pattern](../patterns/list-page.md)
+[View pattern](../patterns/list-page.md)
 
 ## On this page
 

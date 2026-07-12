@@ -2,7 +2,7 @@
 
 Motion helps enhance the user experience by making a user interface both easy to use and more expressive.
 
-[Design tokens](../design-tokens.md) | [Interactive surfaces](../patterns/interactive-surfaces.md)
+[Design tokens](design-tokens.md) | [Interactive surfaces](../patterns/interactive-surfaces.md)
 
 ## Why we need motion
 

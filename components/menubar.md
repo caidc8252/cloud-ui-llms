@@ -2,8 +2,6 @@
 
 Horizontal bar of menus, in the style of a desktop application menu.
 
-[Source](https://github.com/Newland-Payment-Technology-US-Co-Ltd/cloud-next-scaffold/blob/develop/packages/ui/src/components/ui/primitives/menubar.tsx) | [Public exports](https://github.com/Newland-Payment-Technology-US-Co-Ltd/cloud-next-scaffold/blob/develop/packages/ui/src/components/ui/index.ts)
-
 `Menubar` is a client component built on `@base-ui/react`'s `Menubar`. It is a set of composable parts — `Menubar`, `MenubarMenu`, `MenubarTrigger`, `MenubarContent`, `MenubarItem`, `MenubarGroup`, `MenubarLabel`, `MenubarSeparator`, `MenubarShortcut`, `MenubarCheckboxItem`, `MenubarRadioGroup`, `MenubarRadioItem`, the `MenubarSub` / `MenubarSubTrigger` / `MenubarSubContent` trio, and `MenubarPortal`. Import them from `@cloud/ui` or `@cloud/ui/components/ui`.
 
 ## Development guidelines

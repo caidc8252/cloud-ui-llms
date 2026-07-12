@@ -2,8 +2,6 @@
 
 Highlighted message box for status feedback, with an optional action button in the top-right corner.
 
-[Source](https://github.com/Newland-Payment-Technology-US-Co-Ltd/cloud-next-scaffold/blob/develop/packages/ui/src/components/ui/primitives/alert.tsx) | [Public exports](https://github.com/Newland-Payment-Technology-US-Co-Ltd/cloud-next-scaffold/blob/develop/packages/ui/src/components/ui/index.ts)
-
 `Alert` is a plain `<div>` with `role="alert"` — it carries no `"use client"`, so it renders in a server component. It is a set of four components — `Alert`, `AlertTitle`, `AlertDescription`, and `AlertAction`. Import them from `@cloud/ui` or `@cloud/ui/components/ui`.
 
 ## Development guidelines

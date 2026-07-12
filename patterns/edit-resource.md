@@ -2,7 +2,7 @@
 
 A dedicated page carrying the same shape as the create form, pre-filled and dirty-tracked. **The only sanctioned edit shape — there is no inline edit and no split-board edit.**
 
-[Create form](create-form.md) | [Style template](../examples/create-form.tsx) | [Binding rules](../../../../.claude/team-rule/coding-rules/ui_ui-and-pages.md)
+[Create form](create-form.md) | [Style template](../demos/create-form.md) | [Binding rules](../../../../.claude/team-rule/coding-rules/ui_ui-and-pages.md)
 
 ## Key UX concepts
 

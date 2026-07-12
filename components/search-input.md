@@ -2,8 +2,6 @@
 
 The quick bar's search field — a search prefix, and Enter to run the search.
 
-[Source](https://github.com/Newland-Payment-Technology-US-Co-Ltd/cloud-next-scaffold/blob/develop/packages/ui/src/components/list-filter/search-input.tsx) | [Public exports](https://github.com/Newland-Payment-Technology-US-Co-Ltd/cloud-next-scaffold/blob/develop/packages/ui/src/components/list-filter/index.ts)
-
 `SearchInput` is a client component in the list-filter family. Import it from `@cloud/ui`.
 
 ## Development guidelines
