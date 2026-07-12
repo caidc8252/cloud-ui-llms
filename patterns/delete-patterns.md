@@ -45,6 +45,7 @@ A render-time predicate on the record — `role.holderCount > 0`, `user.isLastAd
 #### C. The dialog
 
 `ConfirmModal` for tier 2, `AlertDialog` for tier 3. Tier 1 has no dialog.
+`ConfirmModal` is an application component (`@/lib/confirm-modal`), not a `@cloud/ui` export — see [Delete with confirmation](delete-with-confirmation.md).
 
 #### D. The feedback
 

@@ -131,4 +131,4 @@ The href the user tried to reach, held while the dialog is open, and navigated t
 - [Edit resource](edit-resource.md) — where the dirty flag is defined, and the commit it gates.
 - [Create form](create-form.md) — the other page that needs this guard.
 - [Delete patterns](delete-patterns.md) — the other place `ConfirmModal` carries a `danger` verb.
-- Components: `ConfirmModal`, `Button`.
+- Components: `ConfirmModal` (an application component, `@/lib/confirm-modal` — not a `@cloud/ui` export), `Button`.

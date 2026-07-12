@@ -18,6 +18,8 @@ Reach for tier 1 only when you can prove both of its conditions, and for tier 3 
 
 A hand-rolled `Modal` with two buttons reproduces none of that, and the double-submit it permits will delete twice. `AlertDialog` is the wrong tool in the other direction: it has no close affordance at all, which is correct for tier 3 and needless friction here.
 
+> **Where it lives.** `ConfirmModal` is an **application** component today — `@/lib/confirm-modal`, built on `@cloud/ui`'s `Modal`. It is not a `@cloud/ui` export yet; promoting it into the package is pending. Import it from the app, and do not reach for a `@cloud/ui` export that is not there.
+
 ### The body names the record, the title names the act
 
 The title is the verb and the type — _Delete role_. The body names the instance, in bold, and states what is lost. A user who opened the dialog from the wrong row finds out here, and only if you put the name in front of them.
