@@ -43,13 +43,13 @@ Each entry states the condition that selects it, and names the component to use 
 - [Calendar](components/calendar.md): The bare month grid. Use it alone **only when the grid is the page** — an availability view, a schedule. To enter a date in a form, use `DatePicker`.
 - [Card](components/card.md): A bordered surface grouping related content — header, content, action, and footer slots, with `elevation` for depth.
 - [Carousel](components/carousel.md): A horizontal sequence of slides, with controls and dot indicators.
-- [Chart bar](https://github.com/Newland-Payment-Technology-US-Co-Ltd/cloud-next-scaffold/blob/develop/packages/ui/src/components/chart/chart-bar.tsx): Themed bars, including stacked shapes and per-cell colour. Import charts from `@cloud/ui/components/chart` — never from `recharts` directly.
-- [Chart container](https://github.com/Newland-Payment-Technology-US-Co-Ltd/cloud-next-scaffold/blob/develop/packages/ui/src/components/chart/chart.tsx): The wrapper every chart needs — config, responsive sizing, semantic series colours, shared context.
-- [Chart legend](https://github.com/Newland-Payment-Technology-US-Co-Ltd/cloud-next-scaffold/blob/develop/packages/ui/src/components/chart/chart-legend.tsx): A themed legend for chart series.
-- [Chart pie callout](https://github.com/Newland-Payment-Technology-US-Co-Ltd/cloud-next-scaffold/blob/develop/packages/ui/src/components/chart/chart-pie-callout.tsx): Labels and connector lines on pie or donut sectors, when the slices are too thin to label inline.
-- [Chart sparkline](https://github.com/Newland-Payment-Technology-US-Co-Ltd/cloud-next-scaffold/blob/develop/packages/ui/src/components/chart/chart-sparkline.tsx): A trend with no chart chrome — for a stat tile or a table cell, where a full chart would not fit.
-- [Chart states](https://github.com/Newland-Payment-Technology-US-Co-Ltd/cloud-next-scaffold/blob/develop/packages/ui/src/components/chart/chart-states.tsx): The standard chart loading and empty states. A chart with no data is not an empty page.
-- [Chart tooltip](https://github.com/Newland-Payment-Technology-US-Co-Ltd/cloud-next-scaffold/blob/develop/packages/ui/src/components/chart/chart-tooltip.tsx): Themed values and series metadata on chart interaction.
+- [Chart bar](components/chart-bar.md): Themed bars, including stacked shapes and per-cell colour. Import charts from `@cloud/ui/components/chart` — never from `recharts` directly.
+- [Chart container](components/chart.md): The wrapper every chart needs — config, responsive sizing, semantic series colours, shared context.
+- [Chart legend](components/chart-legend.md): A themed legend for chart series.
+- [Chart pie callout](components/chart-pie-callout.md): Labels and connector lines on pie or donut sectors, when the slices are too thin to label inline.
+- [Chart sparkline](components/chart-sparkline.md): A trend with no chart chrome — for a stat tile or a table cell, where a full chart would not fit.
+- [Chart states](components/chart-states.md): The standard chart loading and empty states. A chart with no data is not an empty page.
+- [Chart tooltip](components/chart-tooltip.md): Themed values and series metadata on chart interaction.
 - [Checkbox](components/checkbox.md): Independent boolean options, with an indeterminate state for a "select all" header. **For a labelled form row, use the `ToggleCheckbox` recipe.** `size="sm"` (12px) belongs only in a data-table select column.
 - [Collapsible](components/collapsible.md): Headless show-and-hide of one region — you own all the styling. For a grouped, pre-styled set of sections, use `Accordion`.
 - [Combobox](components/combobox.md): A searchable dropdown. **Prefer it over `Select` as soon as the list is long enough that scanning it is work** — a country, a merchant, a region.
@@ -93,7 +93,7 @@ Each entry states the condition that selects it, and names the component to use 
 - [Rich pagination](components/rich-pagination.md): The full list/table footer — rows-per-page, range summary, page navigation. **The default footer for a server-paginated collection.**
 - [Scroll area](components/scroll-area.md): A styled overflow region with optional custom scrollbars.
 - [Select](components/select.md): One value from a **short, closed** list. **When the user would rather type to narrow it, use `Combobox`**; for two or three options worth showing at once, use `RadioGroup` or `ToggleGroup`; for multi-select, use checkboxes.
-- [Semantic tone](https://github.com/Newland-Payment-Technology-US-Co-Ltd/cloud-next-scaffold/blob/develop/packages/ui/src/components/ui/_tone.ts): The neutral / success / warning / error / info vocabulary shared by every status-bearing component. Read it before inventing a status colour.
+- [Semantic tone](components/semantic-tone.md): The neutral / success / warning / error / info vocabulary shared by every status-bearing component. Read it before inventing a status colour.
 - [Separator](components/separator.md): A divider line, optionally with centred label text.
 - [Sheet](components/sheet.md): The side panel from a viewport edge — filters, a preview, a supplementary form — that keeps the page context. **For a centered task use `Modal`; for a mobile draggable panel use `Drawer`; for a forced decision use `AlertDialog`.**
 - [Sidebar](components/sidebar.md): The app's left navigation, with a collapsible icon rail. Rendered from typed sections — read [Side navigation](patterns/side-navigation.md), as the menu is projected from module manifests, not hand-written.
@@ -110,7 +110,7 @@ Each entry states the condition that selects it, and names the component to use 
 - [Tabs](components/tabs.md): Switch between peer panels on the same surface. **When the control sets a value rather than navigating between panels, use `ToggleGroup`.**
 - [Textarea](components/textarea.md): Multi-line text, with a character counter when `maxLength` is set.
 - [Theme toggle](components/theme-toggle.md): Switches between the light and dark themes. Its label names the **next** state, not the current one.
-- [Time picker](https://github.com/Newland-Payment-Technology-US-Co-Ltd/cloud-next-scaffold/blob/develop/packages/ui/src/components/ui/recipes/time-picker.tsx): A localized time value on its own. For a date and a time together, use `DateTimePicker`.
+- [Time picker](components/time-picker.md): A localized time value on its own. For a date and a time together, use `DateTimePicker`.
 - [Timeline](components/timeline.md): Chronological business events with actors, times, and statuses — device history, audit trails, ticket activity. For raw, levelled log lines, use `LogConsole`.
 - [Toast](components/toaster.md): A **transient, non-blocking** confirmation, via `Toaster` + `toast`. **It disappears, so nothing important may live only there:** for a message that must stay on the page use `Alert`, and for something the user must acknowledge use `AlertDialog`. Never report an actionable failure through `toast.error` alone.
 - [Toggle](components/toggle.md): One press-toggle button with an on/off state.
