@@ -138,12 +138,7 @@ This index is for  AI agents writing business application UI. Consume public pac
 
 ## Demos
 
-- [List page demo](docs/examples/list-page.tsx): Compilable style skeleton for a standard resource list.
-- [Advanced-filter list demo](docs/examples/list-page-advanced-filter.tsx): Compilable style skeleton for a resource list with advanced filters.
-- [Create form demo](docs/examples/create-form.tsx): Compilable style skeleton for a single-page create flow.
-- [Create wizard demo](docs/examples/create-wizard.tsx): Compilable style skeleton for a staged create flow.
-- [Detail page demo](docs/examples/detail-page.tsx): Compilable style skeleton for a resource detail page.
-- [Charts demo](docs/examples/charts.tsx): Compilable usage reference for the themed chart kit.
+- [Demos](demos/index.md): Compilable `@cloud/ui` page and chart examples. Start here to select a template, then adapt it to the application module.
 
 ## Foundations
 
