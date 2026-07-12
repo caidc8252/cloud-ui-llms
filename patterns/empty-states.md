@@ -2,7 +2,7 @@
 
 A surface with nothing in it. There are three different nothings, they mean different things to the user, and they get different copy and different actions.
 
-[Empty component](../index.md)
+[Empty component](../components/empty.md)
 
 ## Key UX concepts
 

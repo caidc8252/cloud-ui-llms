@@ -2,8 +2,6 @@
 
 A design token is an abstraction of a visual property, such as color, size, or motion.
 
-[Source](design-tokens.md)
-
 ## Key UX concepts
 
 ### Overview
