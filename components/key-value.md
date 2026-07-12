@@ -6,11 +6,11 @@ Read-only key-value fields for detail and overview pages.
 
 ## Development guidelines
 
-`KvGrid` lays out `KeyValue` cells as a definition list. Each cell puts a fixed-width label column on the **left** and the value on the right.
+`KvGrid` lays out `KeyValue` cells as a definition list. Each cell puts a fixed 10rem label column on the **left** and the value on the right, and the value keeps its own minimum width so long content wraps inside the column instead of overflowing the grid.
 
-The columns are **container-responsive**, with no breakpoints: the grid auto-fits, so the column count follows the grid's _own_ width. Drop it in a narrow card, a split pane, or a full-width page and it does the right thing without a prop.
+The columns are **container-responsive**, with no breakpoints: the grid auto-fits at a 22rem minimum column, so the column count follows the grid's _own_ width and collapses to one column in anything narrower. Drop it in a narrow card, a split pane, or a full-width page and it does the right thing without a prop — neither part takes a `columns` prop, because there isn't one.
 
-`KeyValue` takes `label` and `value`. An empty value — `undefined`, `null`, or `""` — renders an em dash in tertiary text, so a missing field reads as "nothing here" rather than as a broken layout. Don't pre-substitute your own placeholder.
+`KeyValue` takes `label` and `value`, plus `wide` and `className`; that is the whole surface. An empty value — `undefined`, `null`, or `""` — renders an em dash in tertiary text, so a missing field reads as "nothing here" rather than as a broken layout. Don't pre-substitute your own placeholder. Note that `0` and `false` are values, not emptiness, and render as themselves.
 
 `wide` makes a cell span the whole grid row. Use it for long free text — an address, a note — so the value gets the full container width instead of wrapping inside a narrow column.
 

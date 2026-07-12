@@ -8,7 +8,7 @@ Collapsible content sections. Each item expands and collapses to show or hide it
 
 Compose the four parts: an `Accordion` wraps one or more `AccordionItem`s, and each item holds an `AccordionTrigger` (the clickable header) and an `AccordionContent` (the panel). The root owns the bordered, divided shell; the trigger and content own their surfaces.
 
-The root forwards Base UI `Accordion.Root` props, so single-open versus multiple-open behavior, controlled or uncontrolled `value`, and a disabled state come from the primitive. Reach for those before styling.
+The root forwards Base UI `Accordion.Root` props, so single-open versus multiple-open behavior, controlled or uncontrolled `value`, and a disabled state come from the primitive. Reach for those before styling. Note that `value` and `defaultValue` are **arrays** of item values, even in the default single-open mode.
 
 Use the component props before adding custom classes. Reach for the trigger's `showArrow`, `arrow`, `arrowPosition`, and `arrowClassName` first, then use `className` only for local adjustments.
 
@@ -21,7 +21,7 @@ For a single, unstyled show-and-hide region, use `Collapsible` instead. Accordio
 - Use an accordion to group related sections that a user reads one at a time.
 - Give every `AccordionTrigger` a short, descriptive label.
 - Keep panel content in `AccordionContent` so it inherits the open and close animation.
-- Set open behavior (single or multiple) on the root through the Base UI props.
+- Set open behavior on the root: it is single-open by default, and `multiple` opens that up.
 
 ### Don't
 
@@ -59,13 +59,33 @@ For a single, unstyled show-and-hide region, use `Collapsible` instead. Accordio
 
 - #### Open behavior
 
-  Single-open versus multiple-open, and controlled versus uncontrolled state, come from the Base UI root props such as `openMultiple`, `value`, and `defaultValue`.
+  Single-open versus multiple-open, and controlled versus uncontrolled state, come from the Base UI root props.
+  - `multiple` (default `false`) lets more than one item stay open at once.
+  - `defaultValue` sets the initially open items, uncontrolled. It takes an array.
+  - `value` plus `onValueChange` controls the open set. `value` is an array too.
+  - `disabled` on the root disables every item; `disabled` on an `AccordionItem` disables just that one.
+  - `keepMounted` and `hiddenUntilFound` keep closed panels in the DOM.
+
+  `AccordionItem`'s `value` is optional — Base UI generates one when you omit it — but supply your own whenever you control the accordion or preset an open item.
+
+  ```tsx
+  <Accordion multiple defaultValue={["overview"]}>
+    <AccordionItem value="overview">
+      <AccordionTrigger>Overview</AccordionTrigger>
+      <AccordionContent>Summary of the resource.</AccordionContent>
+    </AccordionItem>
+    <AccordionItem value="limits" disabled>
+      <AccordionTrigger>Limits</AccordionTrigger>
+      <AccordionContent>Not available on this plan.</AccordionContent>
+    </AccordionItem>
+  </Accordion>
+  ```
 
 ### States
 
 - #### Expanded
 
-  The open item sets `aria-expanded`, which rotates the arrow and reveals the animated panel.
+  The open item's trigger carries `aria-expanded`, and the panel animates open with the chevron flipped to point up.
 
 - #### Disabled
 
@@ -103,7 +123,7 @@ For a single, unstyled show-and-hide region, use `Collapsible` instead. Accordio
 #### Keyboard interaction
 
 - Tab moves focus to each trigger; enter or space toggles the panel.
-- Movement between headers follows the Base UI accordion behavior.
+- Up and down arrows move focus between triggers in a vertical accordion (left and right when `orientation="horizontal"`), and home and end jump to the first and last trigger. Focus loops by default; `loopFocus={false}` stops it at the ends.
 
 #### Headings
 

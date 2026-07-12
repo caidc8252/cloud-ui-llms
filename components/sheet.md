@@ -6,7 +6,7 @@ Side panel that slides in from an edge. It can be anchored to any of the four si
 
 ## Development guidelines
 
-`Sheet` is an edge-anchored panel built on the dialog primitive. Set `SheetContent`'s `side` to `top`, `right` (default), `bottom`, or `left`. A left or right sheet is the "drawer" form and caps at a 560px max width while staying responsive; top and bottom sheets size to their content.
+`Sheet` is an edge-anchored panel built on the dialog primitive. Set `SheetContent`'s `side` to `top`, `right` (default), `bottom`, or `left`. A left or right sheet is the "drawer" form: it stays responsive (60% of the viewport on the right, 75% on the left) but caps at a 560px max width. Top and bottom sheets span the full width and size to their content.
 
 `SheetContent` renders a close button by default; set `showCloseButton={false}` to remove it. Compose the panel with `SheetHeader`, `SheetTitle`, `SheetDescription`, and `SheetFooter`.
 
@@ -30,7 +30,7 @@ Use a sheet for secondary flows and detail views that keep the page context, suc
 
 - #### Side
 
-  `side` is `top`, `right` (default), `bottom`, or `left`. Left and right sheets cap at 560px wide.
+  `side` is `top`, `right` (default), `bottom`, or `left`. A right sheet is 60% of the viewport and a left sheet 75%, both capped at 560px. The cap is an inline `max-width`, so a `style` you pass to `SheetContent` overrides it — a `max-w-*` class will not.
 
   ```tsx
   import {
@@ -56,7 +56,7 @@ Use a sheet for secondary flows and detail views that keep the page context, suc
 
 - #### Close button
 
-  `SheetContent` shows a ghost close button in the corner by default; set `showCloseButton={false}` to remove it and provide your own dismissal.
+  `SheetContent` shows a small ghost icon button in the top-right corner by default; set `showCloseButton={false}` to remove it and provide your own dismissal — for example a `SheetClose` in the footer.
 
 ## Writing guidelines
 

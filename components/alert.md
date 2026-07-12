@@ -8,7 +8,9 @@ Highlighted message box for status feedback, with an optional action button in t
 
 `Alert` is an inline, in-page message box for status feedback — not a toast and not a modal. Compose it from `AlertTitle`, `AlertDescription`, and an optional `AlertAction` pinned in the top-right corner. A leading icon is optional: place an SVG as a direct child and the layout shifts to an icon-plus-content grid automatically.
 
-Choose the `variant` by the meaning of the message. Reach for `variant` before styling, and use `className` only for local layout.
+Choose the `variant` by the meaning of the message. Alert is one of the components whose color axis is spelled `variant` rather than `tone`, and it is the only styling prop it has — everything else is a plain `<div>` prop. Reach for `variant` before styling, and use `className` only for local layout.
+
+There is no built-in dismiss. If an alert has to be dismissable, own that state and render your own close control in `AlertAction`.
 
 For a transient confirmation, use `Toaster`/`toast` instead. For a blocking, forced choice, use `AlertDialog`.
 
@@ -18,7 +20,7 @@ For a transient confirmation, use `Toaster`/`toast` instead. For a blocking, for
 
 - Use an alert for a persistent, in-context status message.
 - Match `variant` to the meaning: `info`, `success`, `warning`, or `error`.
-- Pair the tone with a title and, where helpful, a leading icon.
+- Pair the variant with a title and, where helpful, a leading icon.
 - Use `AlertAction` for a single related action, such as retry or dismiss.
 
 ### Don't
@@ -32,7 +34,7 @@ For a transient confirmation, use `Toaster`/`toast` instead. For a blocking, for
 
 - #### Variant
 
-  There are five variants: `info` (default), `success`, `warning`, `error`, and `destructive` (an error-colored alias). Each maps to the matching status tokens.
+  There are five variants: `info` (default), `success`, `warning`, `error`, and `destructive`. Each maps to the matching status tokens. `destructive` is a compatibility alias that renders exactly like `error` — write `error` in new code.
 
   ```tsx
   import { Alert, AlertTitle, AlertDescription } from "@cloud/ui";
@@ -47,7 +49,7 @@ For a transient confirmation, use `Toaster`/`toast` instead. For a blocking, for
 
 - #### Leading icon
 
-  Placing an SVG as a direct child switches the layout to a two-column grid, with the icon spanning the title and description rows. The icon inherits the variant color.
+  Placing an SVG as a direct child switches the layout to a two-column grid, with the icon spanning the title and description rows. The alert sizes the icon for you (`size-3.5`, 14px) and it inherits the variant color, so you do not need a size class on it. The icon must be a direct child of `Alert` — wrapping it in a `<span>` defeats the `has-[>svg]` selector and the grid never engages.
 
 - #### Action
 

@@ -6,11 +6,15 @@ Inline-labelled checkbox, radio group, and switch — the one-prop form of the p
 
 ## Development guidelines
 
-These three are the _convenience_ wrappers over `Checkbox`, `RadioGroup`, and `Switch`: each takes an optional inline `label` and renders the control and its label together, correctly associated, with no `Label` to wire up yourself. They support both controlled (`checked` / `value`) and uncontrolled (`defaultChecked` / `defaultValue`) modes.
+These three are the _convenience_ wrappers over `Checkbox`, `RadioGroup`, and `Switch`: each takes an optional inline `label` and renders the control and its label together, correctly associated, with no `Label` to wire up yourself. They support both controlled (`checked` / `value`) and uncontrolled (`defaultChecked` / `defaultValue`) modes. Each generates its own `id` to bind label to control, so you only pass `id` when something outside needs to point at it.
 
 - **`ToggleCheckbox`** — a checkbox with a `label`. `indeterminate` shows the dash indicator, for a "some but not all" parent in a nested selection.
-- **`ToggleRadioGroup`** + **`ToggleRadio`** — the group manages the selected `value`; each `ToggleRadio` needs a `value` and takes an optional `label`.
-- **`ToggleSwitch`** — a switch with a `label`. `size` is `sm` (24×14px) or `default` (36×20px).
+- **`ToggleRadioGroup`** + **`ToggleRadio`** — the group manages the selected `value`; each `ToggleRadio` needs a `value` and takes an optional `label`. The group lays its options out as a wrapping **row**; give it `className="flex-col items-start"` to stack them. `disabled` on the group disables every option in it, and `disabled` on a single `ToggleRadio` disables just that one.
+- **`ToggleSwitch`** — a switch with a `label`. `size` is `sm` (24×14px) or `default` (36×20px). It is the only one of the four with a `size`.
+
+Mind where `className` lands. On `ToggleRadioGroup` it goes to the group's flex container, which is why the stacking override above works. But on `ToggleCheckbox`, `ToggleRadio`, and `ToggleSwitch` it goes to the **control itself**, not to the row that holds the control and its label — so a layout class you meant for the row will end up resizing the box instead. Wrap those in your own element when you need to lay them out.
+
+None of the four takes an `invalid` prop; validation display is `Field`'s job.
 
 Reach for these when the control is a standalone setting with a short label sitting next to it. When the control belongs to a form — with a label above, helper text, and validation — use `Field` with the underlying `Checkbox`, `RadioGroup`, or `Switch`, which is what `Field` is built to lay out.
 
@@ -29,6 +33,7 @@ Note the semantic split these inherit: a **checkbox** sets a value in a form, an
 
 - Don't use these inside a `Field` — the labels will fight. Use the plain primitives there.
 - Don't leave a checkbox or switch unlabelled; if the label truly can't be visible, pass an `aria-label` to the primitive instead.
+- Don't reach for `className` to lay out a `ToggleCheckbox`, `ToggleRadio`, or `ToggleSwitch` — it lands on the control, not on the row. Wrap it instead.
 - Don't use a switch where a checkbox belongs. A switch that only takes effect on Save is a broken promise.
 
 ## Features
@@ -60,12 +65,15 @@ Note the semantic split these inherit: a **checkbox** sets a value in a form, an
 
 - #### ToggleRadioGroup
 
+  The options sit in a wrapping row by default. `disabled` on the group covers every option; on an option it covers only that one.
+
   ```tsx
   import { ToggleRadioGroup, ToggleRadio } from "@cloud/ui";
 
-  <ToggleRadioGroup value={plan} onValueChange={setPlan}>
+  <ToggleRadioGroup value={plan} onValueChange={setPlan} className="flex-col items-start">
     <ToggleRadio value="monthly" label={t("plan.monthly")} />
     <ToggleRadio value="annual" label={t("plan.annual")} />
+    <ToggleRadio value="trial" label={t("plan.trial")} disabled />
   </ToggleRadioGroup>;
   ```
 
@@ -88,7 +96,7 @@ Note the semantic split these inherit: a **checkbox** sets a value in a form, an
 
 - **Checked / unchecked** — the standard control states.
 - **Indeterminate** — `ToggleCheckbox` only: the dash indicator.
-- **Disabled** — the control and its label are dimmed and not interactive.
+- **Disabled** — the control and its label are dimmed and not interactive. On `ToggleRadioGroup`, `disabled` applies to the whole group.
 
 ## Writing guidelines
 

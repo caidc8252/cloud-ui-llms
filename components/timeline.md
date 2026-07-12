@@ -2,7 +2,7 @@
 
 Vertical event log — device history, audit trails, ticket activity.
 
-`Timeline` is a set of composable parts — `Timeline`, `TimelineItem`, `TimelineMarker`, `TimelineContent`, `TimelineHeader`, `TimelineTitle`, `TimelineTime`, `TimelineTimeRow`, `TimelineDescription`, and `TimelineActor` — plus an `items` shortcut on the root. Import them, and the `TimelineEntry` / `TimelineTone` types, from `@cloud/ui` or `@cloud/ui/components/ui`.
+`Timeline` is a set of composable parts — `Timeline`, `TimelineItem`, `TimelineMarker`, `TimelineContent`, `TimelineHeader`, `TimelineTitle`, `TimelineTime`, `TimelineTimeRow`, `TimelineDescription`, and `TimelineActor` — plus an `items` shortcut on the root. The root is a `<ul>` and each item an `<li>`, and both take the native props of those elements. Import the parts, the `timelineMarkerVariants` CVA, and the `TimelineProps` / `TimelineEntry` / `TimelineTone` types from `@cloud/ui` or `@cloud/ui/components/ui`.
 
 ## Development guidelines
 
@@ -10,7 +10,7 @@ Vertical event log — device history, audit trails, ticket activity.
 
 There are **two usage levels**, and both render through the same slot components:
 
-- The `items` prop — a shortcut for plain event lists. Pass `TimelineEntry[]` and the component builds the slots. **`children` is ignored when `items` is set.**
+- The `items` prop — a shortcut for plain event lists. Pass `TimelineEntry[]` — `{ id?, title, time?, dateTime?, actor?, description?, tone?, icon? }`, of which only `title` is required — and the component builds the slots. `id` is the React key and falls back to the array index; give it a stable one when the list can reorder. **`children` is ignored when `items` is set.**
 - Slot children — full control. Put anything in `TimelineContent`: badges, links, code.
 
 Two root modes, combinable:

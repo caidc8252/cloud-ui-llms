@@ -1,6 +1,6 @@
-# Components (81)
+# Components (92)
 
-Components are built with React and implement the design tokens and patterns of `@cloud/ui`. They are grouped into primitives (single-purpose building blocks), recipes (composed, opinionated assemblies), layout (the page shell), and the list-filter family (the quick bar and advanced filter sheet). All of them import from `@cloud/ui`.
+Components are built with React and implement the design tokens and patterns of `@cloud/ui`. They are grouped into primitives (single-purpose building blocks), recipes (composed, opinionated assemblies), layout (the page shell), the list-filter family (the quick bar and advanced filter sheet), and charts. All of them import from `@cloud/ui` — **except the `Chart*` family, which lives only at `@cloud/ui/components/chart`** and is deliberately kept out of the root barrel, because Recharts' `Tooltip` / `Legend` would collide with the ones exported there.
 
 Headings use the exported name, so the heading is what you type in the import. The package also exports hooks (`useTheme`, `useIsMobile`, `useSidebar`, `useListFilters`, `useInfiniteScroll`, `useCarousel`), the `cn` class merger, and the `ThemeProvider` / `SidebarProvider` / `TooltipProvider` context providers, which are not listed here.
 
@@ -24,7 +24,7 @@ Trigger for the advanced filter sheet, with rest, active-count, and applied stat
 
 ### AdvancedFilterSheet
 
-Right-side sheet holding the advanced filter form, with grouped fields and apply and reset actions.
+Right-side sheet holding the advanced filter form, with grouped fields and Reset / Apply & Search actions. `AdvancedFilterField` is not a `Field`, so give every `Select` inside it `w-full`.
 
 [View Documentation](./advanced-filter-sheet.md)
 
@@ -36,7 +36,7 @@ Highlighted message box for status feedback, with an optional action button in t
 
 ### AlertDialog
 
-Centered, forced-action dialog. Unlike `Modal` it has no close affordance, so the user must choose an action.
+Centered, forced-action dialog. Unlike `Modal` it has no close affordance and ignores outside clicks, so the user has to choose an action.
 
 [View Documentation](./alert-dialog.md)
 
@@ -100,11 +100,59 @@ Groups related content and actions on a single bordered surface.
 
 [View Documentation](./card.md)
 
+### CardStrip
+
+Horizontal strip of selectable entity cards — pick a store, an account, a project. Past `toolbarThreshold` items it grows a toolbar and hoists the add button out of the row.
+
+[View Documentation](./card-strip.md)
+
 ### Carousel
 
 Horizontally scrollable slide container, with previous and next controls and optional dot indicators.
 
 [View Documentation](./carousel.md)
+
+### ChartBar
+
+Themed bars, with the stacked-corner problem already solved. Only the topmost visible segment of a stack gets rounded free ends.
+
+[View Documentation](./chart-bar.md)
+
+### ChartContainer
+
+The wrapper every chart needs — config, responsive sizing, semantic series colors, and the shared chart context. Nothing in a chart works outside it.
+
+[View Documentation](./chart.md)
+
+### ChartLegend
+
+Themed series key, optionally clickable to toggle series. Use `ChartLegend` + `ChartLegendContent`, never Recharts' `Legend`.
+
+[View Documentation](./chart-legend.md)
+
+### ChartPieCalloutLabel
+
+Labels and connector lines outside a pie or donut, for slices too thin to label inline.
+
+[View Documentation](./chart-pie-callout.md)
+
+### ChartSkeleton
+
+`ChartSkeleton` while the data loads, `ChartEmpty` when there is none. A chart with no data is not an empty page.
+
+[View Documentation](./chart-states.md)
+
+### ChartSparkline
+
+A trend with no chart chrome — no axes, grid, or legend. For a `StatCard`, a table cell, or a list row.
+
+[View Documentation](./chart-sparkline.md)
+
+### ChartTooltip
+
+The themed hover readout. Use `ChartTooltip` + `ChartTooltipContent`, never Recharts' `Tooltip` — it is unthemed and collides with `@cloud/ui`'s own `Tooltip`.
+
+[View Documentation](./chart-tooltip.md)
 
 ### Checkbox
 
@@ -132,7 +180,7 @@ Keyboard-driven command palette with fuzzy search over its items.
 
 ### ContentHeader
 
-Page-level title section placed below the `AppHeader`, with an optional description and an action slot.
+The header family's shared title block (title, description, flush-right actions), composed inside `PageHeader` / `PageHeaderBand`. Never a page header on its own.
 
 [View Documentation](./content-header.md)
 
@@ -210,7 +258,7 @@ Single-line text input, with validation tones beyond the invalid state.
 
 ### InputGroup
 
-Composite input container with one unified border. Focus, invalid, and disabled states are managed at the group level.
+Composite input container with one unified border. Focus, invalid, and disabled are owned by the group and key off the control slot, so use `InputGroupInput` / `InputGroupTextarea`, never a bare `Input`.
 
 [View Documentation](./input-group.md)
 
@@ -240,7 +288,7 @@ Full-page shell: a fixed-height viewport with an optional sidebar and a sticky h
 
 ### ListConditionBand
 
-Condition band above a list, holding the quick-filter toolbar and the applied-filter row.
+Condition band above a list, holding the quick-filter toolbar and the applied-filter row. Drive it with `useListFilters` — the toolbar writes the draft, and only the Search button or Enter applies it.
 
 [View Documentation](./list-condition-band.md)
 
@@ -252,7 +300,7 @@ Fixed-height summary bar above a list, showing the result count and bulk actions
 
 ### LoadMore
 
-Append-on-click pagination footer, with an optional summary line and a load-more button.
+Append-on-click pagination footer, with an optional summary line and a load-more button. Not the default footer — `RichPagination` is; reach for this only for feeds, unknown totals, or cursor-only backends.
 
 [View Documentation](./load-more.md)
 
@@ -270,19 +318,19 @@ Horizontal menu bar with nested dropdowns. Use it for desktop application-style 
 
 ### Modal
 
-Centered dialog with a close affordance, in four widths.
+Centered dialog with a close affordance, in four widths (sm/md/lg/xl) plus fullscreen.
 
 [View Documentation](./modal.md)
 
 ### NavigationMenu
 
-Top-level site navigation with flyout panels. Use it for primary site header navigation.
+Top-level site navigation with flyout panels. The root positions the panel for you — don't compose a second positioner.
 
 [View Documentation](./navigation-menu.md)
 
 ### ObjectTile
 
-Square, filled entity tile. Use it as the identity mark for a company, an app, or an object.
+Square, filled entity tile. `tone="auto"` content-hashes a categorical color — seed it from a stable id so the same entity keeps the same tile on its list row and its detail header.
 
 [View Documentation](./object-tile.md)
 
@@ -294,13 +342,13 @@ Scrollable body region of a page, carrying the standard content padding.
 
 ### PageHeader
 
-Full-bleed page-header band for list and create pages.
+Full-bleed header band for level-1 list and index pages: title, description, and `HeaderAction[]` actions. No back button — every other page uses `PageHeaderBand`.
 
 [View Documentation](./page-header.md)
 
 ### PageHeaderBand
 
-Full-bleed page-header band for detail pages, with a tabs slot that renders flush on the band's bottom edge.
+Full-bleed header band for every level-2/3 page, with a built-in back button. `variant="page"` for create and edit pages; the sticky `variant="detail"` identity band adds an avatar, a meta row, and tabs flush on the band's bottom edge.
 
 [View Documentation](./page-header-band.md)
 
@@ -336,7 +384,7 @@ Draggable split-pane layout. Panels are separated by a draggable handle.
 
 ### RichPagination
 
-Pagination with a page-size selector and a total-count summary alongside the page controls.
+The default footer for a result region: page-size selector, "showing X–Y of Z" summary, and the page controls in one bar.
 
 [View Documentation](./rich-pagination.md)
 
@@ -348,19 +396,19 @@ Overflow container with custom-styled scrollbars that match the design system.
 
 ### SearchInput
 
-Quick-bar search field of fixed width, for the list condition band.
+Quick-bar search field for the list condition band. Takes only `value`, `onChange`, `onSearch`, and `placeholder`; typing writes the draft, Enter applies it.
 
 [View Documentation](./search-input.md)
 
 ### Select
 
-Dropdown select with a trigger button, grouped items, labels, and separators.
+Single-choice dropdown. Pass `items` (value → label) to the root or the trigger prints the raw value; `SelectTrigger` is `w-fit`, so give it a width outside a `Field`.
 
 [View Documentation](./select.md)
 
 ### Separator
 
-Horizontal or vertical divider line, with optional centered label text.
+Horizontal or vertical divider line. Passing `label` switches to a centered-text divider that ignores `orientation`, `className`, and every other prop.
 
 [View Documentation](./separator.md)
 
@@ -376,6 +424,12 @@ Collapsible application navigation rail, with sections, nav items, sub-items, a 
 
 [View Documentation](./sidebar.md)
 
+### SidebarTrigger
+
+Icon button that collapses and expands the sidebar. Also bound to the global `[` shortcut.
+
+[View Documentation](./sidebar-trigger.md)
+
 ### Skeleton
 
 Animated pulsing placeholder that mimics the shape of content while it loads.
@@ -384,7 +438,7 @@ Animated pulsing placeholder that mimics the shape of content while it loads.
 
 ### Slider
 
-Draggable track and thumb for selecting a numeric value or range.
+Draggable track and thumb for selecting a numeric value or range. Pass `value` / `defaultValue` as an array — one element per thumb.
 
 [View Documentation](./slider.md)
 
@@ -426,7 +480,7 @@ Binary toggle switch. Prefer `ToggleSwitch` for fields that need an inline label
 
 ### Table
 
-Data table with columns, sorting, row keys, density presets, and a sticky header.
+Data table with columns, sorting, row keys, density presets, and a sticky header. `onRowClick` makes the whole row navigable and auto-appends a passive trailing chevron; `rowActions` puts inline verbs in that same tail cell.
 
 [View Documentation](./table.md)
 
@@ -454,6 +508,12 @@ Vertical event log for device history, audit trails, and ticket activity.
 
 [View Documentation](./timeline.md)
 
+### TimePicker
+
+Time-only field for a cutoff or opening hours. Its value is an `"HH:mm"` string, not a `Date`.
+
+[View Documentation](./time-picker.md)
+
 ### Toaster
 
 Toast notification container. Place it once in the root layout, then call `toast()` anywhere to show a notification.
@@ -477,6 +537,12 @@ Row of toggle buttons behaving as a single-select or multi-select control.
 Labeled form variants of the selection controls: `ToggleCheckbox`, `ToggleRadioGroup`, `ToggleRadio`, and `ToggleSwitch`. Prefer these over the bare primitives in form rows.
 
 [View Documentation](./toggles.md)
+
+### Tone
+
+The status vocabulary shared by every status-bearing component: `neutral`, `success`, `warning`, `error`, `info`. Read it before inventing a status color.
+
+[View Documentation](./semantic-tone.md)
 
 ### Tooltip
 

@@ -10,9 +10,9 @@ Header-less card for repeating status lists — media, title, badge, description
 
 `title` is required. `media` is the leading mark — an `ObjectTile` or a logo. `badge` is the status `Badge` beside the title. `trailing` is the chevron at the end; it is decorative and `aria-hidden` when the card is interactive.
 
-The whole card can be **one stretched link**. Pass `href` to navigate or `onSelect` to open a modal — **one or the other, not both**. The title becomes the link, and an `::after` overlay stretches its hit area across the card. The footer controls sit _above_ that overlay, so a switch or a button in `footerStart` / `footerEnd` stays independently clickable. Omit both props for a static card.
+The whole card can be **one stretched hit area**. Pass `href` to navigate or `onSelect` to open a modal — **one or the other, not both**. The title itself becomes the control — an `<a>` with `href`, a `<button type="button">` with `onSelect` — and an `::after` overlay stretches its hit area across the card. The footer controls sit _above_ that overlay, so a switch or a button in `footerStart` / `footerEnd` stays independently clickable. Omit both props for a static card.
 
-When the title alone isn't a good accessible name for the link — a bare id, say, or a name repeated across cards — pass `linkLabel`.
+When the title alone isn't a good accessible name for that control — a bare id, say, or a name repeated across cards — pass `linkLabel`; it lands on the `<a>` or `<button>` as its `aria-label`.
 
 `size` is `sm`, `md` (default), or `lg`, controlling the radius and slot padding. The footer keeps the card's horizontal padding but uses a tighter vertical rhythm: it is one control row, not stacked content.
 
@@ -96,7 +96,7 @@ When the title alone isn't a good accessible name for the link — a bare id, sa
 
 ### General accessibility guidelines
 
-- The stretched link is a real link on the title, so it is reachable by Tab and announced with a name — the overlay only widens the pointer hit area.
+- The stretched control is a real `<a>` (with `href`) or a real `<button>` (with `onSelect`) on the title, so it is reachable by Tab and announced with a name — the overlay only widens the pointer hit area.
 - Footer controls sit above the overlay and stay independently focusable and clickable.
 - Pass `linkLabel` when the title is not a distinguishable name on its own; a list of links all reading `View` is unusable by screen reader.
 

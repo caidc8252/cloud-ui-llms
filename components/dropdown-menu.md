@@ -42,6 +42,7 @@ Use a dropdown menu for actions. To set a form value, use `Select`. For a small 
     DropdownMenuSeparator,
     Button,
   } from "@cloud/ui";
+  import { MoreHorizontal } from "lucide-react";
 
   <DropdownMenu>
     <DropdownMenuTrigger render={<Button variant="ghost" size="icon-sm" aria-label="Actions" />}>
@@ -72,9 +73,17 @@ Use a dropdown menu for actions. To set a form value, use `Select`. For a small 
   </DropdownMenuGroup>
   ```
 
+- #### Positioning
+
+  `DropdownMenuContent` forwards `align`, `alignOffset`, `side`, and `sideOffset` to the Base UI positioner. It defaults to `side="bottom"`, `sideOffset={4}`, `align="start"`, and `alignOffset={0}`. Use `align="end"` for a menu hanging off a right-aligned trigger, such as a row's overflow button. `DropdownMenuSubContent` defaults to `side="right"` with `alignOffset={-3}` so a submenu opens beside its trigger.
+
+  The popup is at least 240px wide (a submenu, 160px) and caps its height at the available space, scrolling inside if the menu is long.
+
 - #### Checkbox and radio items
 
   `DropdownMenuCheckboxItem` toggles a setting in place; `DropdownMenuRadioGroup` holds mutually exclusive `DropdownMenuRadioItem`s. Both render their own indicator.
+
+  A plain `DropdownMenuItem` closes the menu when it is activated. Checkbox and radio items do not, so a user can toggle several without reopening. Override either default with `closeOnClick`.
 
   ```tsx
   <DropdownMenuCheckboxItem checked={dense} onCheckedChange={setDense}>

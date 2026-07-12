@@ -2,7 +2,7 @@
 
 Drag-and-drop file picker, with a list of the picked files and their upload status.
 
-`Dropzone` is a client component. It is a set of three parts — `Dropzone`, `FileList`, and `FileRow`. Import them from `@cloud/ui` or `@cloud/ui/components/ui`.
+`Dropzone` is a client component. It is a set of three parts — `Dropzone`, `FileList`, and `FileRow` — plus the `DropzoneProps`, `FileRowProps`, and `FileStatus` types. Import them from `@cloud/ui` or `@cloud/ui/components/ui`.
 
 ## Development guidelines
 
@@ -10,7 +10,9 @@ Drag-and-drop file picker, with a list of the picked files and their upload stat
 
 The zone itself is a `<label>` wrapping a visually hidden file input, so a click opens the picker and a drop fills it, and both paths go through the same `onFiles`. `accept` maps to the native input attribute, which is a **browser-side convenience filter, not validation** — validate the real type and size on the server. `multiple` allows more than one file, and `children` replaces the default upload glyph with your own prompt (pass a translated string; the component ships no copy of its own).
 
-`FileRow` renders one picked file: `name`, an optional `sizeBytes` (formatted for you as `2.0 KB`), a `status` of `pending` / `uploading` / `done` / `error`, a `progress` from 0 to 100 shown as a bar while uploading, an `error` node shown when the status is `error`, and an `onRemove` handler that renders a remove button. Give that button a translated `removeLabel`; it defaults to the untranslated `Remove`.
+`FileRow` renders one picked file: `name`, an optional `sizeBytes` (formatted for you as `2.0 KB`), a `status` of `pending` / `uploading` / `done` / `error` (`pending` by default), a `progress` from 0 to 100 shown as a bar while uploading, an `error` node shown when the status is `error`, and an `onRemove` handler that renders a remove button. Give that button a translated `removeLabel`; it defaults to the untranslated `Remove`.
+
+`FileList` is a `<ul>` and `FileRow` is an `<li>`, so rows belong inside a list. `FileList` takes the native `<ul>` props; the zone and each row take only the props above, plus `className`.
 
 ## General guidelines
 
@@ -31,8 +33,11 @@ The zone itself is a `<label>` wrapping a visually hidden file input, so a click
 
 - #### Picking files
 
+  `children` replaces the default upload glyph. Omit it and the zone renders that glyph alone.
+
   ```tsx
   import { Dropzone, FileList, FileRow } from "@cloud/ui";
+  import { UploadCloud } from "lucide-react";
 
   <Dropzone accept="image/*,.csv" multiple onFiles={handleFiles}>
     <UploadCloud className="size-6" aria-hidden />

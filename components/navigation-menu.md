@@ -8,7 +8,9 @@ Horizontal navigation with optional rich dropdown panels.
 
 `NavigationMenu` is for moving between destinations, not for running commands. Put the top-level entries in a `NavigationMenuList` as `NavigationMenuItem`s. An entry is either a direct `NavigationMenuLink` — style it with `navigationMenuTriggerStyle()` so it matches its siblings — or a `NavigationMenuTrigger` that opens a `NavigationMenuContent` panel of grouped links.
 
-`NavigationMenuIndicator` renders the arrow that points at the active trigger, and `NavigationMenuPositioner` places the open panel. Mark the current destination with `aria-current="page"` on its link.
+**You do not place the panel yourself.** `NavigationMenu` renders `NavigationMenuPositioner` — portal, positioner, popup, and viewport — internally, and every open `NavigationMenuContent` is shown there. The part is exported for advanced cases; in ordinary use, composing it a second time gives you a second, empty panel. Steer the panel from the root instead: `align` (default `start`) is forwarded to the internal positioner.
+
+`NavigationMenuTrigger` already renders its own chevron, which rotates while its panel is open — don't add one. `NavigationMenuIndicator` is not that chevron and is not an arrow tracking the open trigger: it maps to Base UI's `Icon` part, a span that lives *inside* a trigger to mark it as one that opens a menu. Standard usage does not need it. Mark the current destination with `aria-current="page"` on its link.
 
 For a list of commands, use `DropdownMenu`. For switching between panels within one page, use `Tabs`. For the app's primary left-hand navigation, use the `Sidebar` layout components.
 
@@ -25,6 +27,8 @@ For a list of commands, use `DropdownMenu`. For switching between panels within 
 
 - Don't put actions in a navigation menu. Use `DropdownMenu` or a button.
 - Don't use it to switch panels inside one page. Use `Tabs`.
+- Don't render `NavigationMenuPositioner` yourself; the root already renders one.
+- Don't add a chevron to a `NavigationMenuTrigger`; it draws its own.
 - Don't nest a panel inside a panel.
 
 ## Features
@@ -69,14 +73,22 @@ For a list of commands, use `DropdownMenu`. For switching between panels within 
   </NavigationMenu>;
   ```
 
-- #### Indicator and positioner
+- #### Panel placement and open state
 
-  `NavigationMenuIndicator` renders the arrow that tracks the open trigger, and `NavigationMenuPositioner` anchors the panel beneath the list.
+  The root owns the panel. It renders `NavigationMenuPositioner` for you and takes `align` (default `start`) to place the panel against the list. It also forwards the Base UI navigation-menu root props: `delay` and `closeDelay` (both default `50`ms) for the hover in/out timing, `orientation` (default `horizontal`), and `value` / `defaultValue` / `onValueChange` to drive which panel is open from outside.
+
+  ```tsx
+  <NavigationMenu align="center" delay={100}>
+    <NavigationMenuList>…</NavigationMenuList>
+  </NavigationMenu>
+  ```
+
+  `NavigationMenuPositioner` and `NavigationMenuIndicator` are exported for advanced composition. Neither is needed — and neither should be added — in normal use.
 
 ### States
 
 - **Open** — the active trigger is highlighted and its chevron rotates while its panel is open.
-- **Current** — set `aria-current="page"` on the link for the destination the user is on.
+- **Current** — set `aria-current="page"` on the link for the destination the user is on; `NavigationMenuLink` also paints an active background when it carries `data-active`.
 
 ## Writing guidelines
 

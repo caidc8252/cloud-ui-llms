@@ -15,7 +15,7 @@ Each entry states the condition that selects it, and names the component to use 
 - [Advanced filter](components/advanced-filter-sheet.md): The right-side sheet for filter fields that do not fit the quick bar. Deferred apply — nothing filters until the user presses Apply.
 - [Advanced filter button](components/advanced-filter-button.md): The quick bar's trigger for that sheet, badged with the number of active advanced conditions.
 - [Alert](components/alert.md): A **persistent, in-page** status message. Not a toast and not a modal: for a transient confirmation use `toast`; for a blocking forced choice use `AlertDialog`.
-- [Alert dialog](components/alert-dialog.md): The **forced-choice** dialog — no close affordance, no Esc, no backdrop dismiss, so the user must decide. Use it for a tier-3 delete. For a dismissable dialog use `Modal`.
+- [Alert dialog](components/alert-dialog.md): The **forced-choice** dialog — no close affordance and no backdrop dismiss, so the user must decide. Esc **does** still close it (Base UI passes `escapeKey` unconditionally, and that is the accessible behaviour), so treat Esc as cancel and never hang the destructive branch off the close path. Use it for a tier-3 delete. For a dismissable dialog use `Modal`.
 - [App header](components/app-header.md): The app bar's content — leading slot, breadcrumbs, search, notifications. One per shell, inside `Layout`.
 - [Aspect ratio](components/aspect-ratio.md): Pin child media to a fixed width-to-height ratio. Make the child fill it (`<Image fill>` or `size-full`); do not size the child separately.
 - [Avatar](components/avatar.md): A person or entity as an image with an initials fallback; `AvatarGroup` overlaps several. Pass `name` and let it derive the initials.
@@ -25,6 +25,7 @@ Each entry states the condition that selects it, and names the component to use 
 - [Button](components/button.md): Every action. **The variant follows the slot, not the verb** — read [Action weight](patterns/action-weight.md) before choosing one. `loading` also disables, so no separate double-submit guard is needed.
 - [Calendar](components/calendar.md): The bare month grid. Use it alone **only when the grid is the page** — an availability view, a schedule. To enter a date in a form, use `DatePicker`.
 - [Card](components/card.md): A bordered surface grouping related content — header, content, action, and footer slots, with `elevation` for depth.
+- [Card strip](components/card-strip.md): Pick **one entity** from a horizontal strip of cards — a store, an account, a project — above the view it scopes. Past `toolbarThreshold` items it grows a filter/count/arrows toolbar and hoists Add out of the row. For slides you page through rather than pick from, use `Carousel`; when the entity has no card face worth showing, use `Select` or `Combobox`.
 - [Carousel](components/carousel.md): A horizontal sequence of slides, with controls and dot indicators.
 - [Chart bar](components/chart-bar.md): Themed bars, including stacked shapes and per-cell colour. Import charts from `@cloud/ui/components/chart` — never from `recharts` directly.
 - [Chart container](components/chart.md): The wrapper every chart needs — config, responsive sizing, semantic series colours, shared context.
@@ -37,7 +38,7 @@ Each entry states the condition that selects it, and names the component to use 
 - [Collapsible](components/collapsible.md): Headless show-and-hide of one region — you own all the styling. For a grouped, pre-styled set of sections, use `Accordion`.
 - [Combobox](components/combobox.md): A searchable dropdown. **Prefer it over `Select` as soon as the list is long enough that scanning it is work** — a country, a merchant, a region.
 - [Command](components/command.md): The keyboard command palette. Use `CommandDialog` for the modal form, or `Command` bare when the palette lives inside a panel or a popover.
-- [Content header](components/content-header.md): The in-content title for **dashboard and settings** pages. For a list or create page use `PageHeader`; for a detail page use `PageHeaderBand`.
+- [Content header](components/content-header.md): The header family's **shared title block** — title, description, flush-right actions. It has no band chrome, so it is **never a page header on its own**: it is composed inside `PageHeader` / `PageHeaderBand`, or used as a section title inside `PageBody`. For a level-1 list page use `PageHeader`; for every other page use `PageHeaderBand`.
 - [Context menu](components/context-menu.md): Actions from a right-click on a region. For actions from a button, use `DropdownMenu`.
 - [Date picker](components/date-picker.md): A single-date field — an input-styled trigger opening a calendar popover. The default way to enter a date.
 - [Date range picker](components/date-range-picker.md): A date interval, with optional presets beside the range calendar.
@@ -66,8 +67,8 @@ Each entry states the condition that selects it, and names the component to use 
 - [Navigation menu](components/navigation-menu.md): Horizontal navigation with rich dropdown panels. The app's own nav lives in `Sidebar`.
 - [Object tile](components/object-tile.md): The square identity mark for a company, app, or device model — a glyph, name-derived initials, or a short code.
 - [Page body](components/page-body.md): The padded content column of a page. **It owns the page padding and the block gap** — never hand-write them.
-- [Page header](components/page-header.md): The full-bleed band for **list and create** pages — title, description, actions. The screen's one primary action lives here.
-- [Page header band](components/page-header-band.md): The full-bleed band for **detail** pages — arbitrary header content with a tabs row on its bottom edge.
+- [Page header](components/page-header.md): The full-bleed band for **level-1 list and index** pages only — title, description, `HeaderAction[]` actions, no back button. The screen's one primary action lives here. Every other page uses `PageHeaderBand`.
+- [Page header band](components/page-header-band.md): The full-bleed band for **every level-2/3 page** — create, edit, and detail. Prop-driven (not arbitrary children), with a **built-in, non-omittable back button**. `variant="page"` for create/edit; the sticky `variant="detail"` identity band adds an avatar, an inline status beside the title, a meta row, and tabs on its bottom edge.
 - [Pagination](components/pagination.md): Bare page-number navigation. **Most list and table footers want `RichPagination` instead**, which adds rows-per-page and a "showing X–Y of Z" summary.
 - [Popover](components/popover.md): A floating panel anchored to a trigger. For a keyboard-navigable action menu use `DropdownMenu`; for a hover preview use `HoverCard`; for a short text hint use `Tooltip`.
 - [Progress](components/progress.md): Completion when you **know** the percentage. When you do not, use `Spinner` or `Skeleton` — a bar that never advances is worse than an honest spinner.

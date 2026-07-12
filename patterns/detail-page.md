@@ -12,9 +12,15 @@ The default detail page is a single route with same-page `Tabs`. The `Tabs` root
 
 Split a block into its own sub-route only when it is heavy (its own list, its own pagination) or independently permissioned, and note the reason where you do it.
 
+### The band is prop-driven, and it is a different header from a page header
+
+A detail page is level-2, so it takes `PageHeaderBand` with `variant="detail"` — never `PageHeader`, and never a bare `ContentHeader`. The band is configured entirely through props, not children: `title`, `titleAdornment`, `avatar`, `meta`, `backTo` / `onBack`, `actions`, `tabs`, `variant`, `sticky`. There is no children slot to fill.
+
+`variant="detail"` is not a restyled page header — it is a purpose-built identity band. It does not compose `ContentHeader` at all: instead of title-plus-description it gives you a leading `avatar` tile, the status `Badge` inline beside the title through `titleAdornment`, and a `meta` facts row underneath. `meta` replaces `description` as the subline; passing both means only `meta` shows. It is sticky by default (`variant="page"` is not), so the identity stays put while the panels scroll.
+
 ### The band and the tabs are one object
 
-`PageHeaderBand` carries the title, the status badges, the meta line, and the actions — and its `tabs` slot renders a line-variant `TabsList` with `shadow-none`, so the underline meets the band's bottom edge instead of floating above it. Passing a default `TabsList` there produces a visible seam; that is what the `shadow-none` is for.
+The band's own bottom border **is** the tab rail, and the band zeroes the underline of any `TabsList` docked in its `tabs` slot so the two do not stack into a double rule. Pass a plain `TabsList` (the `line` variant is already the default) into `tabs` and it lands flush on the band's edge. The band owns that line; the list does not draw its own.
 
 ### Layout follows the number of blocks
 
@@ -38,19 +44,19 @@ An edit on a detail page opens a modal (or navigates to the edit form) and commi
 
 #### B. Header band
 
-`PageHeaderBand` — back button, title, status badges, meta line, actions, and the `tabs` slot.
+`PageHeaderBand variant="detail"` — `title`, `avatar`, `titleAdornment`, `meta`, `backTo`, `actions`, and `tabs`. All props; the band has no children.
 
 #### C. Back button
 
-`Button variant="ghost" size="icon-sm"` with a `ChevronLeft` and a required `aria-label`, far left, no text. It renders a real `Link`.
+There is nothing to build. The back control is **built into** `PageHeaderBand` and always renders — it cannot be omitted. `backTo` gives it a destination (it renders a real `Link`); omit `backTo` and it falls back to history, or pass `onBack` for a custom handler. It carries its own `aria-label`.
 
 #### D. Status and meta
 
-`Badge` (with `dot` for status) next to the title; a meta line of small icon-plus-text pairs beneath it — created date, reference, owner.
+`titleAdornment` takes the status node — a `Badge` (with `dot`), rendered inline beside the title rather than off in the action slot. `meta` takes the facts row beneath it: small icon-plus-text pairs for created date, reference, category, owner.
 
 #### E. Tab strip
 
-`TabsList` with `shadow-none` in the band's `tabs` slot, and a `TabsTrigger` per block. A count in a trigger rides in a small counter element, not in the label text.
+A `TabsList` in the band's `tabs` slot, with a `TabsTrigger` per block. A count in a trigger rides in a small counter element, not in the label text.
 
 #### F. Tab panels
 
@@ -62,7 +68,7 @@ An edit on a detail page opens a modal (or navigates to the edit form) and commi
 
 #### H. Actions
 
-Page-level actions in the band's action slot; block-level actions in each `Card`'s `CardAction`.
+Page-level actions in the band's `actions` prop — `HeaderAction[]` descriptors, `{label, icon, to?/onClick?, variant?, disabled?}`, with `icon` required and no `size` field. Block-level actions in each `Card`'s `CardAction`.
 
 ## General guidelines
 
@@ -70,7 +76,8 @@ Page-level actions in the band's action slot; block-level actions in each `Card`
 
 - Wrap the whole page in `Tabs` so the strip can dock to the band's edge.
 - Use `KvGrid` for the overview, and let the columns auto-fit the card.
-- Put the status where the title is — a resource's state is part of its identity, not a detail buried in the grid.
+- Put the status where the title is — a resource's state is part of its identity, not a detail buried in the grid. `titleAdornment` is the slot that does it.
+- Give every band action an icon. `HeaderAction.icon` is required, and the compiler will say so.
 - Render an unknown or absent value as `—`.
 - Give every modal and every tab panel body its own file. A tab strip with N panels is N components, not one page file.
 - Note the reason in a comment when a block becomes a sub-route.
@@ -78,7 +85,8 @@ Page-level actions in the band's action slot; block-level actions in each `Card`
 ### Don't
 
 - Don't split every tab into a route just to keep the page file small. Split the components instead.
-- Don't put a default `TabsList` in the band's `tabs` slot. It needs the line variant and `shadow-none`.
+- Don't build the back button. It is part of the band, and there is no prop that removes it.
+- Don't use `ContentHeader` as the page header, and don't force a detail page into `variant="page"`. An identity band is richer than title-plus-description, and that is the point of the variant.
 - Don't hand-write the auto-fit grid. Use `KvGrid`.
 - Don't edit fields inline on the detail page. Mutations go through a modal or the edit page, then a route handler.
 - Don't stack more than one `variant="primary"` action in the band.
@@ -118,7 +126,7 @@ Page-level actions in the band's action slot; block-level actions in each `Card`
 
 ### Component-specific guidelines
 
-- The back button is icon-only and requires an `aria-label` naming where it goes.
+- The band's built-in back button is icon-only and ships with its own `aria-label`; give it a real destination with `backTo` rather than leaving it on history.
 - Status must not be carried by badge colour alone; the badge has text, and the `dot` is an addition to it, not a replacement.
 - A tab's count must be part of the trigger's accessible name, so a screen-reader user hears _Items, 2_ rather than just _Items_.
 

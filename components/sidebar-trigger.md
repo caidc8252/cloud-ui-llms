@@ -8,7 +8,9 @@ Button that collapses the sidebar rail on desktop, and opens the drawer on mobil
 
 Drop `SidebarTrigger` into `AppHeader`'s `leading` slot. It reads `useSidebar()` and does the right thing for the context: on desktop it collapses and expands the rail; on mobile it opens and closes the drawer.
 
-The icon and the accessible name follow the state — a menu glyph and `Open navigation` on mobile, and `Collapse sidebar` / `Expand sidebar` on desktop depending on whether the rail is already collapsed. It also carries a `title` showing the `[` shortcut, which `SidebarProvider` binds globally.
+The icon and the accessible name follow the state — a menu glyph and `Open navigation` on mobile, and `Collapse sidebar` / `Expand sidebar` on desktop depending on whether the rail is already collapsed. It also carries a native `title` attribute showing the `[` shortcut, which `SidebarProvider` binds globally.
+
+It reads `useSidebar()`, so it must be rendered under a `SidebarProvider`. Outside one, the hook falls back to a no-op context and the button silently toggles nothing.
 
 Because the labels are baked in, they are **English**. If your app is localized, that's a gap worth knowing about: the trigger's `aria-label` will not follow the user's locale.
 
@@ -37,7 +39,7 @@ Because the labels are baked in, they are **English**. If your app is localized,
 
 - #### The keyboard shortcut
 
-  `SidebarProvider` binds `[` globally to the same toggle, and the button's tooltip shows it.
+  `SidebarProvider` binds `[` globally to the same toggle, and the button's native `title` advertises it. The binding stands down while the user is typing — it's ignored in an `input`, a `textarea`, or any `contenteditable` element, so a `[` in a form field types a bracket.
 
 ### States
 

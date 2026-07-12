@@ -8,7 +8,9 @@ Composite input container with one unified border — for addons, buttons, and u
 
 `InputGroup` draws **one** border around a control and everything sitting next to it, and it owns the focus, invalid, and disabled treatment for the whole group. That is the point of the component: a search input with a leading magnifier and a trailing clear button reads as a single field, not as a field with two things glued to it.
 
-The border belongs to the group, so the control inside must not draw its own. Use `InputGroupInput` and `InputGroupTextarea` — they are `Input` and `Textarea` with the border stripped. Dropping a plain `Input` in gives you two borders. (This is the same trap as `Input`'s `prefix` / `suffix` className gotcha: whichever layer owns the border, only one may draw it.)
+The border belongs to the group, so the control inside must not draw its own. Use `InputGroupInput` and `InputGroupTextarea` — they are `Input` and `Textarea` with the border, the ring, and the focus shadow stripped, and they tag themselves `data-slot="input-group-control"`. Dropping a plain `Input` in fails twice: you get two borders, **and** the group never lights up, because the group's focus rule keys off that `data-slot` on the control. (This is the same trap as `Input`'s `prefix` / `suffix` className gotcha: whichever layer owns the border, only one may draw it.)
+
+The group is a single control height (`h-control-md`, the same as a default `Input`) and is `w-full`, so the field owns its width — there is no `size` prop. It grows to fit automatically when it holds a textarea or a block addon.
 
 `InputGroupAddon` is the slot for the extra content, and `align` decides where it goes and how the group lays out:
 
@@ -16,9 +18,11 @@ The border belongs to the group, so the control inside must not draw its own. Us
 - `inline-end` — trailing, on the right.
 - `block-start` / `block-end` — above or below, which switches the group to a **column** layout and lets it grow.
 
-Inside an addon, `InputGroupText` is non-interactive content — a currency symbol, a unit suffix, an icon — and `InputGroupButton` is an action, defaulting to `size="xs"`, `variant="ghost"`, `type="button"`.
+Clicking an addon focuses the group's input, unless the click landed on a button inside it — so a leading icon behaves like part of the field rather than dead space.
 
-The invalid state keys off `aria-invalid` on the control inside, so set it on the control, not on the group. The disabled state keys off a disabled descendant the same way.
+Inside an addon, `InputGroupText` is non-interactive content — a currency symbol, a unit suffix, an icon — and `InputGroupButton` is an action, defaulting to `size="xs"`, `variant="ghost"`, `type="button"`. Its `size` set is its own: `xs` (default), `sm`, `icon-xs`, `icon-sm` — the icon sizes are the square ones for an icon-only button.
+
+**All three states live on the group, and only on the group.** Focus keys off `:focus-visible` on the `input-group-control` inside; invalid keys off `aria-invalid="true"` on that control, so set it on the control and never on the group; disabled keys off any disabled descendant. The inner control deliberately zeroes its own focus shadow, ring, and invalid ring — that is what keeps the group from painting a ring around a control that is already painting one. Re-add a `focus-visible:` or `aria-invalid:` ring on the inner control and you get the double ring straight back.
 
 ## General guidelines
 
@@ -86,9 +90,10 @@ The invalid state keys off `aria-invalid` on the control inside, so set it on th
 
 ### States
 
-- **Focused** — the group takes the focus border and ring when the control inside is focused.
-- **Invalid** — `aria-invalid` on the control gives the whole group the destructive border and ring.
+- **Focused** — the group takes the focus border and ring when the `input-group-control` inside it is `:focus-visible`. The control itself draws nothing; one ring, drawn once, by the group.
+- **Invalid** — `aria-invalid="true"` on the control gives the whole group the destructive border and ring.
 - **Disabled** — a disabled control inside dims the whole group.
+- **Inside a combobox popover** — a group rendered within `combobox-content` gives up its own border and focus ring on purpose, so the search field doesn't draw a second frame inside the popover that already has one.
 
 ## Writing guidelines
 

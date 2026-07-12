@@ -1,80 +1,144 @@
 # PageHeaderBand
 
-Full-bleed page-header band for detail pages — arbitrary header content with a tabs row on its bottom edge.
+Full-bleed page-header band for level-2/3 pages — built-in back button, title, actions, and a tabs row on its bottom edge.
 
-`PageHeaderBand` is driven by props. Import it from `@cloud/ui`.
+`PageHeaderBand` is driven by props. It also re-exports the `HeaderAction` type. Import them from `@cloud/ui`.
 
 ## Development guidelines
 
-`PageHeaderBand` is the detail-page header. Unlike `PageHeader`, it doesn't prescribe a title and actions: the whole header — a back button, the object's identity mark, the title, the actions — goes in `children`, so a detail page can compose whatever identity block it needs.
+**Page tiering is a hard rule.** A level-1 list or index page uses `PageHeader`. **Everything else** — create, edit, sub-page, entity detail — uses `PageHeaderBand`. The distinction the rule encodes is the back button: `PageHeaderBand`'s is **built in and cannot be omitted**. `backTo` gives it a destination (rendered as a `Link`), `onBack` overrides it with a handler, and with neither it goes back in history. There is no children slot: the band is fully prop-driven — `title`, `description`, `titleAdornment`, `avatar`, `meta`, `actions`, `tabs`.
 
-The `tabs` slot renders **flush on the band's bottom edge**. Pass a line-variant `TabsList` with `shadow-none`, so its underline merges into the band's border instead of drawing a second line beneath it.
+`variant` picks the title-block shape, and **the two are genuinely different headers**, not one with a size knob:
 
-`sticky` docks the band at the top of the scrollport — which is `Layout`'s `<main>`, so `top-0` lands under the `AppHeader`. **The detail header is sticky by default in the detail, create, and wizard patterns**: the object's identity and its tabs stay visible while the body scrolls. Note the prop itself defaults to `false`, so you have to pass it.
+- **`variant="page"`** (the default) — a non-detail level-2 page: new, edit, a sub-page. The title block is the shared `ContentHeader`: `title` + `description`, with `titleAdornment` and `actions` flush right. **Not sticky** by default.
+- **`variant="detail"`** — the entity **identity band**. Purpose-built, and deliberately *not* a `ContentHeader`: an optional leading `avatar` tile, the title with its status badge **inline** beside it via `titleAdornment`, a `meta` facts row beneath (created date, reference, category), `actions` on the right, and `tabs` docked on the bottom edge. **Sticky** by default.
 
-For a list or create page — a title and actions, no tabs row — use `PageHeader`.
+`avatar` and `meta` are **detail-only** and are ignored on the page variant. On detail, `meta` **replaces** `description` as the subline: pass one or the other, and `meta` wins when both are set.
+
+`sticky` has **no fixed default** — it is `sticky ?? variant === "detail"`, so it is **`true` for detail and `false` for page** unless you pass it. It docks the band at the top of the scrollport, which is `Layout`'s `<main>`, so `top-0` lands under the `AppHeader`.
+
+**The band owns the tabs track line.** Its own `border-b` *is* the rail, and the band suppresses the docked `TabsList`'s underline for you (a `line` list would otherwise draw a second rule one pixel above the band's border, giving a 2px two-tone line under the tabs). So pass a plain `TabsList` — no `shadow-none`, no variant gymnastics. The active indicator still sits on the rule. A standalone `Tabs` outside a band keeps its own underline.
+
+`actions` is **not JSX** — it is a `HeaderAction[]` of descriptors:
+
+```ts
+type HeaderAction = {
+  label: string;
+  icon: React.ReactNode; // REQUIRED — every header action carries an icon
+  to?: string; // route → renders a Link
+  onClick?: () => void; // handler → renders a <button>; ignored when `to` is set
+  variant?: "primary" | "secondary" | "ghost" | "ghost-danger" | "danger" | "link"; // default "secondary"
+  disabled?: boolean;
+  ariaLabel?: string;
+};
+```
+
+There is deliberately **no `size` field**: the slot renders `md` buttons and nothing else, which is the compile-time enforcement of the header size rule. The built-in back control is the single exception — it is an `icon` button. And `icon` is **required**, so a header action can never ship bare (Publish → `CheckCircle2`, Save → `Save`, Cancel → `X`, and a verb-appropriate glyph otherwise).
 
 ## General guidelines
 
 ### Do
 
 - Put `PageHeaderBand` outside `PageBody`, directly in the scroll root.
-- Pass a line-variant `TabsList` with `shadow-none` into `tabs`.
-- Turn on `sticky` for detail pages, so the identity and tabs stay in view.
-- Keep the identity block compact — a mark, a title, a status, the actions.
+- Use `variant="detail"` for an entity page, and let `avatar` + `titleAdornment` + `meta` build the identity — that is what the variant is for.
+- Wrap the band **and** the `TabsContent` panels in one `Tabs` root when you use `tabs`.
+- Give `backTo` a destination whenever the parent page is known; fall back to history only when it isn't.
+- Pass `actions` as `HeaderAction` descriptors, each with an `icon`.
 
 ### Don't
 
-- Don't use it for a list page with no tabs. Use `PageHeader`.
-- Don't put a shadowed or pill `TabsList` in `tabs`; the underline won't merge with the band.
-- Don't nest it inside `PageBody`; the gutters will break the full bleed.
+- Don't use it on a level-1 list page. That's `PageHeader`.
+- Don't hand-build an identity block with `ContentHeader` on a detail page; the identity band is richer than title + description, and `ContentHeader` is banned as a standalone page header.
+- Don't add `shadow-none` or a special variant to the docked `TabsList` — the band already suppresses the list's line.
+- Don't try to hide the back button; it is not optional.
+- Don't pass `avatar` or `meta` on `variant="page"`; they are ignored.
+- Don't nest the band inside `PageBody`; the gutters will break the full bleed.
 
 ## Features
 
-- #### Header content and tabs
+- #### Detail identity band with tabs
 
   ```tsx
   import {
     PageHeaderBand,
+    PageBody,
     Tabs,
     TabsList,
     TabsTrigger,
+    TabsContent,
     ObjectTile,
     Badge,
-    Button,
   } from "@cloud/ui";
+  import { CheckCircle2, Tag } from "lucide-react";
 
-  <Tabs defaultValue="overview">
+  <Tabs defaultValue="overview" className="gap-0">
     <PageHeaderBand
-      sticky
+      variant="detail"
+      title={merchant.name}
+      backTo="/merchants"
+      avatar={<ObjectTile name={merchant.name} tone="auto" colorSeed={merchant.id} size="lg" />}
+      titleAdornment={<Badge tone="success">{t("status.live")}</Badge>}
+      meta={
+        <>
+          <span className="inline-flex items-center gap-1">
+            <Tag className="size-3.5" /> {merchant.type}
+          </span>
+          <span>{merchant.reference}</span>
+        </>
+      }
+      actions={[
+        {
+          label: t("merchants.publish"),
+          onClick: publish,
+          variant: "primary",
+          disabled: blockers.length > 0,
+          icon: <CheckCircle2 size={16} />,
+        },
+      ]}
       tabs={
-        <TabsList variant="line" className="shadow-none">
+        <TabsList>
           <TabsTrigger value="overview">{t("tabs.overview")}</TabsTrigger>
           <TabsTrigger value="contracts">{t("tabs.contracts")}</TabsTrigger>
         </TabsList>
       }
-    >
-      <div className="flex items-center gap-3">
-        <BackButton />
-        <ObjectTile name={merchant.name} tone="auto" colorSeed={merchant.id} />
-        <h1 className="text-2xl font-semibold">{merchant.name}</h1>
-        <Badge tone="success">{t("status.live")}</Badge>
-        <div className="ml-auto flex gap-2">
-          <Button variant="secondary">{t("common.edit")}</Button>
-        </div>
-      </div>
-    </PageHeaderBand>
-    …
+    />
+    <TabsContent value="overview">
+      <PageBody>…</PageBody>
+    </TabsContent>
+    <TabsContent value="contracts">
+      <PageBody>…</PageBody>
+    </TabsContent>
   </Tabs>;
+  ```
+
+- #### Page variant
+
+  The default. A create, edit, or sub-page: title, description, back button, and — when the page commits from the header rather than an `ActionFooter` — actions. No tabs, no identity block, not sticky.
+
+  ```tsx
+  <PageHeaderBand
+    title={t("merchants.create")}
+    description={t("merchants.createSteps")}
+    backTo="/merchants"
+  />
+  ```
+
+- #### Back button
+
+  It is always rendered. `backTo` makes it a `Link`; `onBack` makes it a handler (useful for a wizard step that goes back a step rather than a page); with neither it calls history back.
+
+  ```tsx
+  <PageHeaderBand title={t("wizard.step2")} onBack={() => setStep(1)} />
   ```
 
 - #### Without tabs
 
-  Omit `tabs` and the band is just the header content — a detail page that doesn't need a tab row.
+  Omit `tabs` and the band is just the header row — a detail page that needs no tab strip.
 
 ### States
 
-- **Sticky** — the band, including the tab row, stays docked beneath the app header as the body scrolls.
+- **Sticky** — the band, including the tab row, stays docked beneath the app header as the body scrolls. On by default for `variant="detail"`, off for `variant="page"`; `sticky` overrides either way.
+- **Disabled action** — a descriptor with `disabled` renders a disabled `md` button (a `to` action ignores it).
 
 ## Writing guidelines
 
@@ -86,16 +150,19 @@ For a list or create page — a title and actions, no tabs row — use `PageHead
 ### Component-specific guidelines
 
 - The title is the object's name as the user knows it, and it should match the last breadcrumb.
+- `meta` is facts, not prose — short label-less values (type, category, reference, price range), each with a small leading icon.
 - Tab labels: one or two words, parallel in form, with the default tab first.
 
 ## Accessibility guidelines
 
 ### General accessibility guidelines
 
-- Put the page's `<h1>` in the header content; the band itself has no heading semantics.
+- `title` renders the page's `<h1>` in both variants, so there is exactly one page header per page.
+- The back button is a real button (or link) with an `aria-label` of `Back`, and it comes first in the reading order.
 - The tabs come from `Tabs`, so their roles and panel relationships are correct — but the `Tabs` root must wrap both the band and the panels, or the trigger has nothing to control.
-- Actions in the header are real buttons in the reading order, before the content.
+- Actions are real `Button`s in the reading order, before the content, each with an icon **and** a text label.
 
 ### Component-specific guidelines
 
-- A sticky band with a tall identity block eats the viewport and hides the field a keyboard user just focused. Keep it to one row.
+- A sticky band with a tall identity block eats the viewport and hides the field a keyboard user just focused. Keep `avatar` + title + `meta` to the one identity row the component lays out — don't stuff extra rows into `titleAdornment`.
+- Don't rely on `titleAdornment`'s color to carry status; the badge has text.

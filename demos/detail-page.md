@@ -21,7 +21,9 @@ Use one detail route for the resource and tabs for peer sections of its informat
 
 ### The header and tabs are one context
 
-The header identifies the resource and holds page-level actions. The tab strip follows it so users can switch sections without losing the resource name, status, or available actions.
+The header identifies the resource and holds page-level actions. The tab strip docks on the header band's bottom edge — the band owns that rail — so users can switch sections without losing the resource name, status, or available actions.
+
+The header is `PageHeaderBand` with `variant="detail"`, and it is configured through props rather than children: `title`, `avatar`, `titleAdornment` for the status badge, `meta` for the facts row, `backTo`, `actions`, and `tabs`. Its back button is built in and cannot be omitted, and the detail variant is sticky by default.
 
 ### Overview prioritizes scanability
 
@@ -39,11 +41,11 @@ Use `Tabs` as the page root so the header and panels share one resource context.
 
 #### B. Detail header
 
-Use a sticky header band with a back link, title, status badge, supporting metadata, and page-level actions.
+Use `PageHeaderBand` with `variant="detail"`: `backTo` for the built-in back button's destination, `title`, `avatar` for the identity tile, `titleAdornment` for the status `Badge`, `meta` for the supporting facts row, and `actions` for page-level actions. Actions are `HeaderAction` descriptors, so each one carries a required icon.
 
 #### C. Tab strip
 
-Use `TabsList` and `TabsTrigger` for peer sections such as overview, related items, and collections. Add a compact count only when it helps users judge available content.
+Use `TabsList` and `TabsTrigger` in the band's `tabs` slot for peer sections such as overview, related items, and collections. The band suppresses the list's own underline so the strip meets the band's edge cleanly. Add a compact count only when it helps users judge available content.
 
 #### D. Overview panel
 
@@ -68,7 +70,8 @@ Use `Empty` when a tab has no content and provide a recovery action only when th
 
 ### Don't
 
-- Don't use browser history as the only back destination.
+- Don't use browser history as the only back destination. Give the band's built-in back button an explicit `backTo`.
+- Don't build the back button, and don't use `ContentHeader` as the page header.
 - Don't create a tab for every small field group or duplicate header information in every panel.
 - Don't put long, filterable, or pageable related data into an overview card.
 - Don't expose actions that the current user cannot perform.

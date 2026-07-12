@@ -35,11 +35,11 @@ Use the summary rail and final confirmation to help users verify the record befo
 
 #### A. Reduced header
 
-Use a sticky header with one explicit exit destination and the task title. Keep it free of duplicate submit actions.
+Use `PageHeaderBand` with the task title and a `backTo` naming the one explicit exit destination — its back button is built in and is what leaves the flow. Keep `actions` empty.
 
 #### B. Step indicator
 
-Use `StepIndicator` with concise, task-based step labels. Keep the step list stable after the user starts the flow.
+Use `StepIndicator` with `framed` and concise, task-based step labels. The frame is part of the component; don't wrap it in a hand-written card. Keep the step list stable after the user starts the flow.
 
 #### C. Step form
 
@@ -51,7 +51,7 @@ Use a compact definition list to show important draft values and missing informa
 
 #### E. Action footer
 
-Use `ActionFooter` for back, continue, and final create actions. Show one primary action that reflects the current step.
+Use `ActionFooter`, as a sibling of `PageBody`, for back, continue, and final create actions. Show one primary action that reflects the current step. Every button carries its icon: back takes a leading `ChevronLeft` (an `X` when it is the step-one cancel), continue takes a trailing `ChevronRight`, and the final commit takes its verb's glyph.
 
 #### F. Completion state
 

@@ -56,7 +56,19 @@ A context menu is a shortcut, not a home. It is not discoverable and is awkward 
 
 - #### Inset and shortcuts
 
-  `inset` indents an item's text to line up with items that carry a leading icon or indicator. `ContextMenuShortcut` renders a right-aligned keyboard hint.
+  `inset` indents an item's text to line up with items that carry a leading icon or indicator. It is accepted on `ContextMenuItem`, `ContextMenuLabel`, `ContextMenuSubTrigger`, `ContextMenuCheckboxItem`, and `ContextMenuRadioItem`. `ContextMenuShortcut` renders a right-aligned keyboard hint.
+
+- #### Positioning
+
+  `ContextMenuContent` forwards `align`, `alignOffset`, `side`, and `sideOffset` to the Base UI positioner. It defaults to `side="right"`, `sideOffset={0}`, `align="start"`, and `alignOffset={4}`, which places the menu just off the pointer. `ContextMenuSubContent` pins `side="right"` so submenus open away from the parent.
+
+  The popup is at least 220px wide and caps its height at the available space, scrolling inside if the menu is long.
+
+  ```tsx
+  <ContextMenuContent align="center" sideOffset={8}>
+    …
+  </ContextMenuContent>
+  ```
 
 ### States
 

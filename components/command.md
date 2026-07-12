@@ -6,9 +6,11 @@ Keyboard-driven command palette with search.
 
 ## Development guidelines
 
-`Command` is a searchable list of commands. `CommandInput` filters the `CommandItem`s by their text content as the user types; `CommandEmpty` renders when nothing matches. Group related commands with `CommandGroup`, divide sections with `CommandSeparator`, and show a keyboard hint with `CommandShortcut`.
+`Command` is a searchable list of commands. `CommandInput` filters the `CommandItem`s by their text content as the user types; `CommandEmpty` renders when nothing matches. `CommandInput` already draws its own leading magnifier and its own bottom rule, so don't wrap it or add a search icon of your own. Group related commands with `CommandGroup`, divide sections with `CommandSeparator`, and show a keyboard hint with `CommandShortcut`.
 
-`CommandDialog` wraps the whole thing in a modal — that is the palette you open with a keyboard shortcut. Use `Command` bare when the palette is embedded in a panel or a popover instead.
+`CommandDialog` wraps the whole thing in a modal — that is the palette you open with a keyboard shortcut. It has no trigger part: drive it with `open` / `onOpenChange`, which it forwards to the underlying Base UI `Dialog`. Its `title` and `description` props are the dialog's **screen-reader-only** name and description; they default to the untranslated `Command Palette` and `Search for a command to run...`, so pass translated copy even though nothing renders them on screen.
+
+Use `Command` bare when the palette is embedded in a panel or a popover instead. Bare `Command` fills its parent (`size-full`) and draws its own border and shadow, so give it a container with a height.
 
 A command palette is an _accelerator_. It is not discoverable on its own, so every command it offers must also be reachable through the visible UI. Add one when a power user runs the same handful of commands often enough that hunting for the button is the slow part.
 
@@ -42,7 +44,12 @@ A command palette is an _accelerator_. It is not discoverable on its own, so eve
     CommandShortcut,
   } from "@cloud/ui";
 
-  <CommandDialog open={open} onOpenChange={setOpen}>
+  <CommandDialog
+    open={open}
+    onOpenChange={setOpen}
+    title={t("command.title")}
+    description={t("command.description")}
+  >
     <CommandInput placeholder={t("command.search")} />
     <CommandList>
       <CommandEmpty>{t("command.empty")}</CommandEmpty>
@@ -65,11 +72,25 @@ A command palette is an _accelerator_. It is not discoverable on its own, so eve
 
   `CommandGroup` takes a `heading`; `CommandSeparator` divides sections; `CommandShortcut` renders a right-aligned keyboard hint.
 
+- #### Checked items
+
+  `CommandItem` reserves a trailing check mark for palettes that pick a value rather than run an action. It shows when the item carries `data-checked="true"`, and it is suppressed when the item contains a `CommandShortcut` — an item gets a shortcut hint or a check, never both.
+
+  ```tsx
+  <CommandItem
+    data-checked={theme === "dark" ? "true" : undefined}
+    onSelect={() => setTheme("dark")}
+  >
+    Dark
+  </CommandItem>
+  ```
+
 ### States
 
 - **Highlighted** — the item under the keyboard cursor takes an active surface.
+- **Checked** — `data-checked="true"` on a `CommandItem` reveals its trailing check mark.
 - **Empty** — `CommandEmpty` renders when the search matches nothing.
-- **Disabled** — a disabled item is dimmed and not selectable.
+- **Disabled** — `disabled` on a `CommandItem` dims it and makes it unselectable.
 
 ## Writing guidelines
 

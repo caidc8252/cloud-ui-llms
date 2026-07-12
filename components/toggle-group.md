@@ -13,6 +13,8 @@ Group of `Toggle` items — a segmented control, a mode picker, or a set of filt
 
 Each child `Toggle` needs a `value`; the group matches items by it.
 
+`ToggleGroup`'s props are a closed set — `type`, `value`, `defaultValue`, `onValueChange`, `disabled`, `variant`, `className`, `children`. It does not forward arbitrary DOM or ARIA attributes to the root, so there is no `aria-label` on the group; name the set with visible text beside it and label the items individually.
+
 `variant` sets the look, and the child toggles pick it up from a `data-variant` attribute on the root — you set it once on the group, never on the items:
 
 - `outline` (default) — connected segments sharing one outer border.
@@ -94,8 +96,8 @@ Use a toggle group when the options are few and worth keeping visible. When ther
 ### General accessibility guidelines
 
 - The group and its items carry the correct roles and pressed state through the Base UI primitive.
-- Give the group an accessible name with `aria-label` — for example `View`, so a screen-reader user hears what the options set.
-- Give each icon-only item its own `aria-label`.
+- The group takes no `aria-label` prop, so name the set another way: a visible label next to it, or a `Field` / `Label` around it.
+- Give each icon-only item its own `aria-label`. With no group-level name, the item labels are what a screen-reader user hears, so they have to stand on their own.
 
 ### Component-specific guidelines
 

@@ -8,6 +8,10 @@ Scrollable slide container with navigation buttons and dot indicators.
 
 Wrap the slides in `Carousel`, put them in a `CarouselContent` as `CarouselItem`s, and add `CarouselPrevious` / `CarouselNext` for the arrows and `CarouselDots` for the indicators.
 
+A `CarouselItem` is `basis-full` by default — one slide per view. Override the basis to show several at once (`basis-1/2`, `basis-1/3`), which is what `align` and `slidesToScroll` in `opts` are then about.
+
+`CarouselPrevious` and `CarouselNext` are `Button`s (defaulting to `variant="secondary"`, `size="icon-sm"`, rounded full) and take any `Button` prop. They are positioned **outside** the content box — 3rem clear of the left and right edges in `horizontal`, above and below in `vertical` — so the carousel needs that much margin around it or the arrows will be clipped. Push them inside with `className` if there is no room.
+
 `orientation` is `horizontal` (default) or `vertical`. `opts` passes Embla options straight through — `loop`, `align`, `slidesToScroll`, and the rest — and `plugins` takes Embla plugins, such as autoplay.
 
 `setApi` hands you the Embla instance, so you can drive the carousel from outside — jump to a slide, listen for a change. Inside the tree, `useCarousel` gives you the same api plus `scrollPrev`, `scrollNext`, `canScrollPrev`, and `canScrollNext`; it throws outside a `<Carousel>`.
@@ -58,7 +62,7 @@ A carousel hides content behind an interaction, so most of it goes unseen. Use o
 
 - #### Orientation
 
-  `orientation="vertical"` stacks the slides and turns the arrows into up and down.
+  `orientation="vertical"` stacks the slides and moves the arrows above and below, rotated. Note the key handling does not follow: the left and right arrow keys drive the carousel in **both** orientations.
 
 - #### The api
 
@@ -95,9 +99,11 @@ A carousel hides content behind an interaction, so most of it goes unseen. Use o
 ### General accessibility guidelines
 
 - The arrows are real buttons and disable at the bounds, so keyboard users know when they've reached the end.
-- The carousel region is keyboard-scrollable, and the arrow keys move between slides when it has focus.
+- The root carries `role="region"` and `aria-roledescription="carousel"`, and each slide `role="group"` / `aria-roledescription="slide"`.
+- The root is **not** itself focusable — it has no `tabindex`. The left and right arrow keys move between slides only while focus is already inside the carousel, which in practice means on the arrow buttons or the dots. If a carousel has no other focusable content, keep `CarouselPrevious` / `CarouselNext` so there is something to focus.
 - Off-screen slides are still in the DOM. Make sure any interactive content in them is either reachable or not needed.
 
 ### Component-specific guidelines
 
+- `CarouselPrevious` / `CarouselNext` ship their own visually hidden names, and `CarouselDots` labels each dot `Go to slide N`. These are built-in English strings, not translated copy — if the app must be fully localised, override the button names with `aria-label`.
 - Don't autoplay. Moving content that a user cannot pause fails WCAG 2.2.2 and hurts anyone who reads slowly, uses a screen magnifier, or is distracted by motion. If you must, give it a visible pause control and honour `prefers-reduced-motion`.

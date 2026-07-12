@@ -29,6 +29,8 @@ A selectable or toggleable surface is a `Toggle` or a `Button`, not a `div` with
 
 An action button inside a navigational row has two obligations: its hover must be visually **distinct** from the row's hover, and clicking it must **not** trigger the row's navigation. This is why the row hover wash (`state-row-hover`) is deliberately weaker than the general surface hover (`surface-hover`) — it leaves room for a ghost icon button inside the row to hover _deeper_ than the row it sits in. If both used the same value, the button would disappear into its own row on hover.
 
+The second obligation is already met when the verbs go through `Table`'s `rowActions`: the component wraps them and stops the propagation for you. The obligation lands on you only when you put an interactive element into a cell by hand.
+
 ### Clickable things say so
 
 Every clickable element carries `cursor-pointer`. This is a MUST in the style spec, and it is the cheapest possible affordance.
@@ -61,7 +63,7 @@ Every clickable element carries `cursor-pointer`. This is a MUST in the style sp
 
 #### G. Row actions
 
-`ghost` or `ghost-danger` icon buttons, with `stopPropagation` on the click so the row's navigation does not also fire.
+`Table`'s `rowActions` render prop — `ghost` or `ghost-danger` verbs at `size="sm"`, sharing the trailing cell with the appended navigation chevron. The component stops their propagation, so the row's navigation does not also fire.
 
 ## General guidelines
 
@@ -72,7 +74,7 @@ Every clickable element carries `cursor-pointer`. This is a MUST in the style sp
 - Decide whether a surface navigates or selects before you style it, and give it only that behaviour's states.
 - Use `Toggle` or `Button` for anything selectable.
 - Put `cursor-pointer` on everything clickable.
-- Stop propagation on inline row actions.
+- Put inline row verbs in `Table`'s `rowActions`, which stops their propagation for you. Stop it yourself only for a control you placed in a cell by hand.
 - Let a nested ghost button hover deeper than its row.
 
 ### Don't

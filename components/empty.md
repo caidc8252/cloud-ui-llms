@@ -30,10 +30,12 @@ Distinguish an empty state from an error. Use `Empty` when there is legitimately
 ## Features
 
 - #### Content slots
-  - `title` (required) — the short headline naming what is empty.
-  - `description` (optional) — one sentence of supporting context.
-  - `icon` (optional) — a small glyph shown in a rounded chip above the title.
-  - `action` (optional) — a call-to-action element rendered below the description.
+  - `title` (required, `string`) — the short headline naming what is empty.
+  - `description` (optional, `string`) — one sentence of supporting context.
+  - `icon` (optional, `ReactNode`) — a small glyph shown in a rounded 36px chip above the title.
+  - `action` (optional, `ReactNode`) — a call-to-action element rendered below the description.
+
+  `title` and `description` are plain strings, not nodes: they render as text and cannot carry markup. Everything else on the props is native `<div>` surface, so `className`, `id`, and data attributes pass through to the panel.
 
   ```tsx
   import { Empty, Button } from "@cloud/ui";

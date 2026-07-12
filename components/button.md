@@ -2,13 +2,17 @@
 
 Allows users to initiate actions in the user interface.
 
-The `Button` component is a client component built on `@base-ui/react/button`. Import it from `@cloud/ui` or `@cloud/ui/components/ui`.
+The `Button` component is a client component built on `@base-ui/react/button`. Import it from `@cloud/ui` or `@cloud/ui/components/ui`. It defaults to `variant="primary"` and `size="default"` (identical to `md`).
 
 ## Development guidelines
 
 If you want to place multiple buttons next to each other, use layout primitives or flex utilities with a small gap, such as `gap-2`, instead of adding margins to each button.
 
 Use the component props before adding custom classes. Reach for `variant`, `size`, `loading`, `block`, `iconLeft`, and `iconRight` first, then use `className` only for local layout adjustments such as width, alignment, or wrapping.
+
+Always render the `Button` component. Never hand-roll a button by putting `buttonVariants()` on the `className` of some other element: a bare `buttonVariants()` call skips `cn()` and its tailwind-merge pass, so `secondary`'s base `border-transparent` collides with `border-line-default` and the border disappears. When a button must navigate, keep the component and swap the element with `render` — `<Button render={<Link href="/settings" />}>Settings</Button>` — using the Base UI polymorphic `render` contract.
+
+`md` is the default control height. Treat `sm`, `xs`, and `lg` as exceptions for genuinely dense or genuinely prominent surfaces, not as everyday choices.
 
 When using icons, prefer lucide icons with explicit size classes, such as `className="size-4"`. The button prevents SVGs from receiving pointer events and keeps icons from shrinking.
 
@@ -18,6 +22,8 @@ When using icons, prefer lucide icons with explicit size classes, such as `class
 
 - Use buttons for actions that perform work in the current interface.
 - Use one `variant="primary"` action per task surface whenever possible.
+- Keep `size="md"` (the `default`) unless the surface genuinely calls for a denser or larger control.
+- Pass `render` with your router's link when a button-looking control has to navigate.
 - Use `variant="secondary"` for ordinary secondary actions, such as search, edit, retry, or refresh.
 - Use `variant="danger"` for destructive confirmation actions.
 - Use `variant="ghost-danger"` for low-emphasis destructive actions, especially row-level icon buttons.
@@ -27,36 +33,38 @@ When using icons, prefer lucide icons with explicit size classes, such as `class
 
 ### Don't
 
-- Don't use buttons for navigation to another page. Use the application's navigation or link component for that.
+- Don't put `buttonVariants()` on the `className` of a raw element. It bypasses `cn()`/tailwind-merge and silently drops `secondary`'s border. Render `Button` and use `render` to change the element.
+- Don't reach for a plain anchor styled like a button when the target is a page. Use `<Button render={<Link … />}>`.
 - Don't use multiple competing primary buttons in the same page, modal, form, or workflow step.
 - Don't use `danger` for reversible or low-impact actions.
 - Don't rely on icon-only buttons for uncommon or ambiguous actions.
 - Don't remove focus-visible styles when adding custom classes.
-- Don't use `size="auto"` for plain call-to-action buttons. Prefer `sm`, `md`, or `lg` for normal actions.
+- Don't use `size="auto"` for plain call-to-action buttons. Prefer `md`, or `sm`/`lg` when the surface warrants it.
+- Don't drop to `sm` or `xs` just to make a button look tidier. Density is a decision about the surface, not a default.
 
 ## Features
 
 - #### Variant
 
-  There are six button variants:
+  There are six button variants, and `primary` is the default:
 
-  - `primary` is the main recommended action on a page, modal, form, or workflow step. It uses primary brand fill and CTA shadow.
+  - `primary` is the main recommended action on a page, modal, form, or workflow step. It uses primary brand fill and CTA shadow. It is what you get when `variant` is omitted.
   - `secondary` is for standard secondary actions such as search, edit, modify, retry, or refresh. It uses a bordered surface style and supports expanded trigger states.
   - `ghost` is for low-emphasis actions such as cancel, back, clear, duplicate, or inline utility actions. It uses hover and active surface feedback without a border by default.
   - `ghost-danger` is for low-emphasis destructive actions such as cancel invitation, remove filter, or delete row icon. It keeps destructive color without the weight of a filled danger button.
   - `danger` is for destructive confirmation actions in dialogs or irreversible workflows. It uses filled error color and should have clear label text.
-  - `link` is for tertiary text actions in compact copy or modal footers. It removes fixed height and padding. Do not use it as page navigation unless the primitive is rendered as a real link.
+  - `link` is for tertiary text actions in compact copy or modal footers. It removes the fixed height and the padding (`h-auto`, `p-0`) and underlines on hover. It is a style, not a semantic: to actually navigate, keep the variant and pass `render` with a real link.
 
 - #### Size
 
-  There are ten button sizes:
+  There are ten button sizes, and `default` — the same thing as `md` — is what you get when `size` is omitted. `md` is the house default for every button and control; `sm`, `xs`, and `lg` are deliberate exceptions.
 
-  - `default` is for default medium controls. It has the same dimensions as `md`.
-  - `xs` is for dense filter chips, compact tool rows, and secondary inline controls. It reduces text and default SVG size.
-  - `sm` is for dense application chrome, table actions, and compact dialogs. It is common for icon plus short text.
-  - `md` is for standard form, page, and modal actions. Prefer it when matching other medium controls explicitly.
-  - `lg` is for prominent form submits, load-more actions, and spacious portal flows. Use it where the surrounding layout has matching vertical rhythm.
-  - `auto` is for clickable cards, option tiles, and list rows with multiline content. Content controls height; add wrapping and text alignment classes as needed.
+  - `default` is for default medium controls. It is identical to `md` (a `36px` control height).
+  - `xs` is for dense filter chips, compact tool rows, and secondary inline controls. It is `24px` tall and reduces text and default SVG size.
+  - `sm` is for dense application chrome, table actions, and compact dialogs. It is `28px` tall and common for icon plus short text.
+  - `md` is the standard form, page, and modal action, at a `36px` control height. Prefer it, and name it explicitly when matching other medium controls.
+  - `lg` is for prominent form submits, load-more actions, and spacious portal flows, at a `44px` control height. Use it where the surrounding layout has matching vertical rhythm.
+  - `auto` is for clickable cards, option tiles, and list rows with multiline content. Padding sets the minimum and content controls the height; add wrapping and text alignment classes as needed.
   - `icon` is for standard icon-only controls. It is a square `2rem` button; include `aria-label`.
   - `icon-xs` is for very dense row or chip icon controls. It is a square `1.5rem` button, and default SVGs shrink to `size-3`.
   - `icon-sm` is for compact icon-only controls in sheets, filters, and toolbar rows. It is a square `1.75rem` button.
@@ -98,6 +106,23 @@ When using icons, prefer lucide icons with explicit size classes, such as `class
     <RefreshCw className="size-4" />
   </Button>
   ```
+
+  Mark an icon with `data-icon="inline-start"` or `data-icon="inline-end"` when you want the button to tighten the padding on that side, the same convention `Badge` uses. It is opt-in: `iconLeft` and `iconRight` render your node as given and do not add the attribute for you.
+
+- #### Polymorphic render - optional
+
+  `Button` forwards the Base UI `render` prop, so it can be any element while keeping every button style, size, and state. This is the supported way to make a button navigate — do not style a raw anchor with `buttonVariants()`.
+
+  ```tsx
+  import { Button } from "@cloud/ui"
+  import Link from "next/link"
+
+  <Button variant="primary" size="md" render={<Link href="/products/new" />}>
+    New product
+  </Button>
+  ```
+
+  `buttonVariants` is exported for the few primitives that must style a non-button element from inside the library (the alert dialog's action and cancel, the calendar's day cells), and they always pass it through `cn()`. In application code, render the component.
 
 - #### Full width buttons - optional
 

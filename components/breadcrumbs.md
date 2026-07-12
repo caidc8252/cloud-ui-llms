@@ -10,13 +10,13 @@ Note the plural. **`Breadcrumbs` (this one) is the data-driven shortcut; `Breadc
 
 `Breadcrumbs` maps `BreadcrumbsItem[]` into `BreadcrumbItem`s with separators between them. It renders **only the items** — it does not wrap them in `<Breadcrumb><BreadcrumbList>`, because `AppHeader`'s `breadcrumbs` slot already does that. Pass it straight into that slot.
 
-Each item is `{ label, href?, render? }`:
+Each item is `{ label, href?, render? }`. `label` is a `ReactNode`, so a crumb can carry more than a string.
 
-- The **last** item always renders as a `BreadcrumbPage`, regardless of whether it has an `href`. It is the page the user is on, so it is not a link.
+- The **last** item always renders as a `BreadcrumbPage`, regardless of whether it has an `href` or a `render`. It is the page the user is on, so it is not a link.
 - An item with an `href` renders as a `BreadcrumbLink`.
-- An item with neither — a non-navigable ancestor, a grouping segment — renders as plain text.
+- An item with no `href` — a non-navigable ancestor, a grouping segment — renders as plain text.
 
-Pass `render` to hand the link your router's component, for example `render={<Link href="/merchants" />}`, so client-side navigation works.
+Pass `render` to hand the link your router's component, for example `render={<Link href="/merchants" />}`, so client-side navigation works. **`render` is only honoured on an item that also has an `href`**: it is forwarded to `BreadcrumbLink`, and `href` is what decides that a link gets rendered at all. A `render` with no `href` is silently dropped and the crumb comes out as plain text — no type error, no link.
 
 When you need full control — icons in a crumb, async labels, a custom segment — skip this and compose the `Breadcrumb` primitives directly.
 
@@ -32,6 +32,7 @@ When you need full control — icons in a crumb, async labels, a custom segment 
 
 - Don't wrap it in a `Breadcrumb` yourself; the header slot does that, and you'd nest two `<nav>`s.
 - Don't give the last item an `href` expecting a link — it always renders as the current page.
+- Don't pass `render` without an `href` and expect a link; the item falls back to plain text.
 - Don't use it when a crumb needs custom content. Compose the primitives instead.
 
 ## Features
@@ -52,13 +53,13 @@ When you need full control — icons in a crumb, async labels, a custom segment 
 
 - #### Non-navigable segments
 
-  An item with no `href` and no `render` renders as plain text — for a grouping level that isn't a page.
+  An item with no `href` renders as plain text — for a grouping level that isn't a page.
 
 ### States
 
-- **Link** — an ancestor with an `href`.
+- **Link** — an ancestor with an `href` (plus a `render` for client-side routing).
 - **Current** — the last item, always a `BreadcrumbPage` with `aria-current="page"`.
-- **Plain** — an ancestor with no `href`.
+- **Plain** — an ancestor with no `href`, `render` or not.
 
 ## Writing guidelines
 

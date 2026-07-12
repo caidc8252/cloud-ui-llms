@@ -6,12 +6,21 @@ Result-count and actions strip between the list card's top edge and the table.
 
 ## Development guidelines
 
-`ListSummaryBar` is the low-chrome strip inside the results frame: the result count and its label on the left, an actions slot (Export, bulk operations) on the right. `total` and `label` are **nodes**, not strings — the count label and any "matching filters" copy carry i18n on the page side, the same way `ListConditionBand` takes its slots as nodes.
+`ListSummaryBar` is the low-chrome strip inside the results frame: the result count and its label on the left at `text-xs` (the bar _reports_ a total, it doesn't headline it), an actions slot (Export, bulk operations) on the right. Its props are `total` (required), `label`, `actions` and `sticky`. `total` and `label` are **nodes**, not strings — the count label and any "matching filters" copy carry i18n on the page side, the same way `ListConditionBand` takes its slots as nodes. That's also where `useListFilters`' `hasApplied` lands: append "matching filters" to the label when filters are applied, so the number explains itself.
+
+The bar is one member of a **fixed results-region composition**, and it only works as part of it:
+
+```
+Card overflow-clip
+  └ ListSummaryBar
+  └ Table stickyHeader stickyHeaderTop={LIST_SUMMARY_BAR_HEIGHT}
+  └ RichPagination
+```
 
 **`sticky` defaults to `true`.** The bar docks at the top of the scroll root so it stays pinned together with the table's sticky column header. That only works if the host cooperates, in two ways — get either wrong and the sticky is silently trapped and scrolls away:
 
 1. The surrounding `Card` must use **`overflow-clip`**, not its default `overflow-hidden`. Clip still rounds the corners but does not establish a scroll container, so the bar can dock to the page scroll root.
-2. The `Table` must run `stickyHeader` with **`stickyHeaderTop={LIST_SUMMARY_BAR_HEIGHT}`**, so the column header tiles flush beneath the bar. That's what the exported constant is for — don't hardcode `48`.
+2. The `Table` must run `stickyHeader` with **`stickyHeaderTop={LIST_SUMMARY_BAR_HEIGHT}`**, so the column header tiles flush beneath the bar. That's what the exported constant is for — it is `48`, matching the bar's `h-12`, and you should never type that number yourself.
 
 Pass `sticky={false}` for a short or embedded list that keeps the bar in flow.
 
@@ -31,7 +40,8 @@ The point: this is a low-chrome strip inside the results frame, so an outlined b
 
 - Use ghost buttons in `actions` on a list page.
 - Set the `Table`'s `stickyHeaderTop` to `LIST_SUMMARY_BAR_HEIGHT`, and give the host `Card` `overflow-clip`.
-- Pass `total` and `label` as translated nodes.
+- Pass `total` and `label` as translated nodes, and say "matching filters" in the label when `filters.hasApplied`.
+- Close the results `Card` with a `RichPagination` under the `Table` — numbered pagination is the list-page default.
 - Pass `sticky={false}` for a short, embedded list.
 
 ### Don't
@@ -39,18 +49,33 @@ The point: this is a low-chrome strip inside the results frame, so an outlined b
 - Don't put a primary button here on a list page; the page's commit verb lives in the `PageHeader`.
 - Don't hardcode the bar's height; import `LIST_SUMMARY_BAR_HEIGHT`.
 - Don't leave the host `Card` on `overflow-hidden` — the sticky will be trapped, and it fails silently.
+- Don't put the bar outside the results `Card`, or the filter controls inside it — the quick bar and the chip row belong to `ListConditionBand`, above the card.
 
 ## Features
 
 - #### Count and actions
 
   ```tsx
-  import { ListSummaryBar, LIST_SUMMARY_BAR_HEIGHT, Table, Card, Button } from "@cloud/ui";
+  import {
+    Button,
+    Card,
+    LIST_SUMMARY_BAR_HEIGHT,
+    ListSummaryBar,
+    RichPagination,
+    Table,
+  } from "@cloud/ui";
 
-  <Card className="overflow-clip">
+  <Card elevation={1} className="overflow-clip">
     <ListSummaryBar
       total={total}
-      label={t("merchants.matching")}
+      label={
+        <>
+          {t("merchants.unit", { count: total })}
+          {filters.hasApplied ? (
+            <span className="text-content-tertiary"> {t("common.matchingFilters")}</span>
+          ) : null}
+        </>
+      }
       actions={
         <Button variant="ghost" size="sm" onClick={exportCsv}>
           {t("common.export")}
@@ -61,8 +86,20 @@ The point: this is a low-chrome strip inside the results frame, so an outlined b
       columns={columns}
       rows={rows}
       rowKey={(row) => row.id}
+      onRowClick={(row) => navigate(`/merchants/${row.id}`)}
       stickyHeader
       stickyHeaderTop={LIST_SUMMARY_BAR_HEIGHT}
+    />
+    <RichPagination
+      page={safePage}
+      pageCount={pageCount}
+      onPageChange={setPage}
+      total={total}
+      pageSize={pageSize}
+      onPageSizeChange={(n) => {
+        setPageSize(n);
+        setPage(1);
+      }}
     />
   </Card>;
   ```

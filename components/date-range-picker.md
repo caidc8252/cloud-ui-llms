@@ -6,13 +6,15 @@ Date-range field. An input-styled trigger that opens presets beside a range cale
 
 ## Development guidelines
 
-`DateRangePicker`'s trigger is styled like an `Input`; clicking it opens a popover with the presets down the left and a `Calendar` in `range` mode on the right.
+`DateRangePicker`'s trigger is styled like an `Input`; clicking it opens a popover with the presets down the left and a `Calendar` in `range` mode — two months side by side — on the right.
 
-The value is a `DateRange` — `{ from: Date; to: Date }` — or `null`. **`onValueChange` fires only when both ends are picked.** A half-finished selection is held internally as a draft and never reaches you, so you will not see a range with a `from` and no `to`.
+The value is a `DateRange` — `{ from: Date; to: Date }` — or `null`. **`onValueChange` fires only when both ends are picked.** A half-finished selection is held internally as a draft and never reaches you, so you will not see a range with a `from` and no `to`. The two clicks are normalized, so picking the later day first still yields `from` before `to`. Once a range is set, a clear (×) button appears in the trigger and resets the value to `null`, unless the field is `required` or `disabled`.
 
-`presets` replaces the built-in list. `DEFAULT_RANGE_PRESETS` covers today, the last 7 days, the last 30 days, this month, and last month. Each preset is `{ key, label?, getValue }`, and `getValue` takes an optional reference date — pass one to pin "now" so boundaries stay deterministic in tests. The built-in presets carry a `key` but no `label`, so supply your own translated labels when you customize the list.
+`presets` replaces the built-in list, which is `DEFAULT_RANGE_PRESETS`: today, the last 7 days, the last 30 days, this month, and last month. Each preset is `{ key, label?, getValue }`, where `getValue` is `(now?: Date) => DateRange` — it takes an optional reference date, so you can pin "now" and keep boundaries deterministic in tests. The built-in presets carry only a `key`; their labels come from the `ui.datePicker.presets` translations, so they are already localized. A custom preset with an unknown key falls back to rendering the raw key string — give it a translated `label`. Passing `presets={[]}` hides the preset column entirely.
 
-Bound the calendar with `minDate`, `maxDate`, and `disabledDays`. `size` is `sm`, `md`, or `lg`; `invalid` gives the trigger the destructive border and ring plus `aria-invalid`, matching `Input` and `Select`. `formatStr` formats each end of the range in the trigger.
+Bound the calendar with `minDate`, `maxDate`, and `disabledDays`. `size` is `sm`, `md` (default), or `lg`; `invalid` gives the trigger the destructive border and ring plus `aria-invalid`, matching `Input` and `Select`. `formatStr` formats each end of the range in the trigger, defaulting to the active locale's date pattern; `placeholder` likewise falls back to the built-in translated string.
+
+There is no `name` prop and no hidden input here — unlike `DatePicker` and `DateTimePicker`, the range never posts itself. Submit it from state.
 
 ## General guidelines
 
@@ -45,23 +47,22 @@ Bound the calendar with `minDate`, `maxDate`, and `disabledDays`. `size` is `sm`
 
 - #### Presets
 
-  `DEFAULT_RANGE_PRESETS` gives today, last 7 days, last 30 days, this month, and last month. Pass your own `presets` to change the list.
+  `DEFAULT_RANGE_PRESETS` gives today, last 7 days, last 30 days, this month, and last month, already labelled from the built-in translations. Pass your own `presets` to extend or replace the list; a custom preset needs a `label` of its own.
 
   ```tsx
-  import { DateRangePicker, DEFAULT_RANGE_PRESETS } from "@cloud/ui";
+  import { DateRangePicker, DEFAULT_RANGE_PRESETS, type DateRangePreset } from "@cloud/ui";
+  import { startOfYear } from "date-fns";
 
-  <DateRangePicker
-    value={range}
-    onValueChange={setRange}
-    presets={[
-      ...DEFAULT_RANGE_PRESETS.map((p) => ({ ...p, label: t(`range.${p.key}`) })),
-      {
-        key: "ytd",
-        label: t("range.ytd"),
-        getValue: (now = new Date()) => ({ from: startOfYear(now), to: now }),
-      },
-    ]}
-  />;
+  const presets: DateRangePreset[] = [
+    ...DEFAULT_RANGE_PRESETS,
+    {
+      key: "ytd",
+      label: t("range.ytd"),
+      getValue: (now = new Date()) => ({ from: startOfYear(now), to: now }),
+    },
+  ];
+
+  <DateRangePicker value={range} onValueChange={setRange} presets={presets} />;
   ```
 
 - #### Bounds
@@ -75,6 +76,7 @@ Bound the calendar with `minDate`, `maxDate`, and `disabledDays`. `size` is `sm`
 ### States
 
 - **Empty** — the trigger shows the `placeholder`.
+- **Filled** — both ends formatted and separated by an en dash, plus a clear (×) button unless the field is `required` or `disabled`.
 - **Mid-selection** — one end picked; the popover shows the partial range and `onValueChange` has not fired.
 - **Invalid** — destructive border and ring, and `aria-invalid` on the trigger.
 - **Disabled** — the trigger is dimmed and the popover won't open.
@@ -96,8 +98,8 @@ Bound the calendar with `minDate`, `maxDate`, and `disabledDays`. `size` is `sm`
 ### General accessibility guidelines
 
 - The trigger is a real button, the presets are real buttons, and focus moves into the popover and back out on close.
-- Give the picker a visible label. Inside a `Field`, `FieldLabel` associates it through `id`.
-- `invalid` sets `aria-invalid`, but the red border is not a message — pair it with a `FieldError`.
+- Give the picker a visible label. Inside a `Field`, set `htmlFor` to the picker's `id` so the label points at it.
+- `invalid` sets `aria-invalid`, but the red border is not a message — pair it with `Field`'s `error`.
 
 ### Component-specific guidelines
 

@@ -114,12 +114,14 @@ To remove a slot's padding, use `flush`. A plain `className="p-0"` cannot overri
       <CardTitle>Members</CardTitle>
     </CardHeader>
     <CardContent flush>
-      <DataTable columns={columns} rows={rows} />
+      <Table columns={columns} rows={rows} rowKey={(row) => row.id} />
     </CardContent>
   </Card>
   ```
 
   Re-add padding through `className` when a flush slot still needs some, such as `<CardContent flush className="py-1">`.
+
+  The shell is `overflow-hidden`, which traps a sticky table header. When the flush content is a `Table` with `stickyHeader`, put `className="overflow-clip"` on the `Card` so the header can dock to the page scroll root.
 
 - #### Media - optional
 

@@ -6,17 +6,17 @@ The app's left navigation panel, with a collapsible icon rail.
 
 ## Development guidelines
 
-`Sidebar` renders the navigation from data: a `brand` block, a list of `sections`, and a pinned `footer` slot.
+`Sidebar` renders the navigation from data: a `brand` block, a list of `sections`, a pinned `footer` slot, and a `className`. Those four props are the whole surface.
 
 - `brand` is `{ logo?, title, subtitle? }`. With no `logo` you get a letter avatar built from the first character of `title`.
 - `sections` is `{ label?, items }[]`. The section `label` is the small uppercase caption above the group.
-- A `SidebarNavItem` is `{ href?, icon?, label, children? }`. **`children` is what makes an item expandable** — a parent with sub-items. An item with an `href` and no children is a leaf link; an item with neither is a plain, non-navigable row.
+- A `SidebarNavItem` is `{ href?, icon?, label, children? }`. **`children` is what makes an item expandable** — a parent with sub-items, each a `SidebarSubItem` of `{ href, label }` (no icon: sub-items are text rows). An item with an `href` and no children is a leaf link; an item with neither is a plain, non-navigable row. A parent's own `href` is **ignored** — an expandable item is a disclosure button, not a link, so give the destination to a child instead.
 
 **Active state is derived from the pathname**, not passed in. The matcher is strict about boundaries: a path matches when it equals the `href` exactly, or starts with `href + "/"`. That's deliberate — `/users` must not light up when the user is on `/users-archive`, and `/` only matches itself. A parent with an active child renders as active and opens by default.
 
 The **collapsed rail** (when `collapsed` is true and you're not on mobile, both from `useSidebar()`) turns the panel icon-only, and the labels move: a leaf's label becomes a `Tooltip`, and a parent's sub-items become a `HoverCard` flyout. **On mobile the drawer always renders expanded** — a rail inside a drawer would be pointless.
 
-Pass this component to `Layout`'s `sidebar` slot once; `Layout` renders it in the desktop rail _and_ in the mobile drawer. Toggle it with `SidebarTrigger`, which also responds to the global `[` shortcut.
+Pass this component to `Layout`'s `sidebar` slot once; `Layout` renders it in the desktop rail _and_ in the mobile drawer, and owns the widths (248px expanded, 56px collapsed). The whole thing must sit under a `SidebarProvider` — that's what `useSidebar()` reads, and what persists the collapsed state to the `SIDEBAR_COOKIE`. Wire the provider's `pathname` prop to your router, or the mobile drawer won't close on navigation. Toggle it with `SidebarTrigger`, which also responds to the global `[` shortcut.
 
 ## General guidelines
 
@@ -32,6 +32,7 @@ Pass this component to `Layout`'s `sidebar` slot once; `Layout` renders it in th
 - Don't pass an "active" flag; the component derives it from the pathname.
 - Don't put an action in the sidebar. It navigates; put actions on the page.
 - Don't nest an expandable item inside another; the component supports one level.
+- Don't give an expandable parent an `href`; it renders as a disclosure button and the `href` is dropped.
 
 ## Features
 

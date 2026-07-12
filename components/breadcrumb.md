@@ -2,7 +2,7 @@
 
 Horizontal trail showing where the current page sits in the hierarchy.
 
-`Breadcrumb` is a set of composable parts — `Breadcrumb`, `BreadcrumbList`, `BreadcrumbItem`, `BreadcrumbLink`, `BreadcrumbPage`, `BreadcrumbSeparator`, and `BreadcrumbEllipsis`. It is plain markup (a `<nav>` around an `<ol>`), so it works in a server component. Import the parts from `@cloud/ui` or `@cloud/ui/components/ui`.
+`Breadcrumb` is a set of composable parts — `Breadcrumb`, `BreadcrumbList`, `BreadcrumbItem`, `BreadcrumbLink`, `BreadcrumbPage`, `BreadcrumbSeparator`, and `BreadcrumbEllipsis`. It is plain markup — a `<nav>` around an `<ol>` — with one exception: `BreadcrumbLink` is built on Base UI's `useRender`, so it is a hook-using component and belongs inside a client boundary. Import the parts from `@cloud/ui` or `@cloud/ui/components/ui`.
 
 ## Development guidelines
 
@@ -67,7 +67,9 @@ Breadcrumbs describe _location_, not history — they show where the page sits i
 
 - #### Ellipsis
 
-  `BreadcrumbEllipsis` stands in for collapsed middle crumbs. It renders a horizontal-dots glyph and a screen-reader-only `More`.
+  `BreadcrumbEllipsis` stands in for collapsed middle crumbs. It renders a horizontal-dots glyph and takes no props of its own beyond the `<span>` props.
+
+  It is purely decorative: the whole span is `role="presentation"` and `aria-hidden`, so screen readers skip it (it does contain a visually-hidden `More` string, but the `aria-hidden` wrapper keeps that from being announced). It is not a control — if the collapsed crumbs should be reachable, wrap it in a real `DropdownMenu` trigger that exposes them.
 
   ```tsx
   <BreadcrumbItem>
@@ -78,7 +80,7 @@ Breadcrumbs describe _location_, not history — they show where the page sits i
 ### States
 
 - **Link** — a `BreadcrumbLink` is tertiary text that lifts to secondary on hover.
-- **Current** — a `BreadcrumbPage` is primary text, medium weight, and not interactive.
+- **Current** — a `BreadcrumbPage` is primary text, medium weight, and not interactive. It renders a `<span>` marked `role="link"`, `aria-disabled="true"`, and `aria-current="page"`, so it reads as the disabled, current link in the trail.
 
 ## Writing guidelines
 

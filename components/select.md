@@ -8,7 +8,43 @@ Dropdown for choosing one value from a list of options.
 
 `Select` is for picking a single value from a known, closed list. Put the current value in `SelectValue` (which renders the placeholder when nothing is chosen), and list the options as `SelectItem`s inside `SelectContent`. Each item shows a check indicator when selected, and the trigger shows a chevron.
 
+> ### Silent trap: no `items` on the root, and the trigger prints the raw value
+>
+> **The trigger's text is resolved from an `items` map (value → label) passed to the root `Select`, not from the `SelectItem` children.** Omit `items` and `SelectValue` degrades to printing the **raw value**: the filter shows `all` instead of `All contracts`, and a category filter puts `cat-mpos` in front of the user. There is **zero type error** — `tsc` and lint stay green and the UI is wrong.
+>
+> ```tsx
+> const ITEMS = { all: "All contracts", "US-ISO": "US-ISO", "US-ISV": "US-ISV" };
+>
+> <Select items={ITEMS} value={value} onValueChange={(v) => setValue(String(v))}>
+>   <SelectTrigger className="w-56">
+>     <SelectValue />
+>   </SelectTrigger>
+>   <SelectContent>
+>     {Object.entries(ITEMS).map(([value, label]) => (
+>       <SelectItem key={value} value={value}>
+>         {label}
+>       </SelectItem>
+>     ))}
+>   </SelectContent>
+> </Select>;
+> ```
+>
+> It "accidentally works" whenever a label happens to equal its value — which merely buries the bug until the first option whose label differs.
+>
+> **And you cannot find this by reading the source.** `select.tsx` defines `Select` as a one-liner re-export of the Base UI root (`const Select = SelectPrimitive.Root`), so the `items` contract lives in Base UI's `.d.ts`, not in the component file. "Just read the component" fails on `Select`, which is why it is written down here.
+
+`items` accepts a `Record<string, ReactNode>` map, an array of `{ value, label }`, or an array of groups. The alternative is to format the value yourself: `SelectValue` also takes a **function child**, `<SelectValue>{(v) => …}</SelectValue>`, which is the right tool when the trigger text is not simply the option's label — a `Status: Active` prefix, a rows-per-page number. Use one or the other. Using neither is the bug above.
+
 `SelectTrigger` takes `size` — `md` (default, matching `Button` and `Input` at the same size) or `sm`. It supports `aria-invalid`, so a select inside a `Field` picks up the error styling like any other control.
+
+> ### `SelectTrigger` is `w-fit` — the caller owns the width
+>
+> Every other form control in this system is `w-full`. `SelectTrigger` is not: it is `w-fit`, so a bare `Select` is **content-sized**, and its box grows and shrinks with whatever value is currently selected. That default is intentional — a compact select (rows-per-page, a unit picker) is a real use — but it means **an unwidthed `Select` is always a decision someone forgot to make, not a default that works**.
+>
+> - **Inside a `Field`**, the trigger fills the column automatically (`in-data-[slot=field]:w-full`); you don't have to do anything.
+> - **In a filter band**, give it an explicit `w-*` sized to the longest plausible option (`className="w-64"`). Not `min-w-*` — the band supplies its own bounds and they override the floor.
+>
+> A width that moves with the value hides exactly the errors you most need to see: mis-wire `items` as well, and the box collapses to the width of an id, so a **data** bug arrives disguised as a **layout** bug.
 
 Use `Select` when the options are few enough to scan and the user picks exactly one. When the user needs to type to narrow a long list, use `Combobox`. When there are only two or three mutually exclusive options that benefit from being visible at once, use `RadioGroup` or `ToggleGroup`. For multiple selection, use a set of `Checkbox`es or a filter component.
 
@@ -17,12 +53,17 @@ Use `Select` when the options are few enough to scan and the user picks exactly 
 ### Do
 
 - Use a select for a single choice from a closed list.
+- Pass `items` (value → label) to the root, so the trigger shows the label and not the raw value.
 - Give the trigger a placeholder through `SelectValue` so an empty state reads clearly.
+- Give a bare select an explicit width; inside a `Field` it fills the column for you.
 - Group long lists with `SelectGroup` and `SelectLabel`, and divide sections with `SelectSeparator`.
 - Match the trigger `size` to the surrounding inputs and buttons.
 
 ### Don't
 
+- Don't ship a select whose root has no `items` and whose `SelectValue` has no function child — the trigger will print the raw value.
+- Don't leave a bare select unwidthed. `SelectTrigger` is `w-fit`, so the box would resize with the chosen value.
+- Don't reach for `min-w-*` in a filter band; the band's own bounds override it. Pass a `w-*`.
 - Don't use a select for a long list the user would rather search. Use `Combobox`.
 - Don't use a select for two or three options that should stay visible. Use `RadioGroup`.
 - Don't put actions in a select. It sets a value; use `DropdownMenu` for commands.
@@ -31,30 +72,71 @@ Use `Select` when the options are few enough to scan and the user picks exactly 
 
 - #### Basic select
 
+  `items` is what makes the trigger show `Active` rather than `active`. Keep it as the single source for both the map and the rendered options.
+
   ```tsx
   import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@cloud/ui";
 
-  <Select value={status} onValueChange={setStatus}>
-    <SelectTrigger>
+  const STATUSES = { active: "Active", suspended: "Suspended", closed: "Closed" };
+
+  <Select items={STATUSES} value={status} onValueChange={(v) => setStatus(String(v))}>
+    <SelectTrigger className="w-48">
       <SelectValue placeholder="Select a status" />
     </SelectTrigger>
     <SelectContent>
-      <SelectItem value="active">Active</SelectItem>
-      <SelectItem value="suspended">Suspended</SelectItem>
-      <SelectItem value="closed">Closed</SelectItem>
+      {Object.entries(STATUSES).map(([value, label]) => (
+        <SelectItem key={value} value={value}>
+          {label}
+        </SelectItem>
+      ))}
     </SelectContent>
   </Select>;
   ```
 
+- #### Width
+
+  `SelectTrigger` is `w-fit` — the only form control in the system that is not `w-full`. Inside a `Field` it switches to full width on its own; anywhere else the caller sets it.
+
+  ```tsx
+  {/* Form: the Field makes it fill the column. */}
+  <Field label="Category" required>
+    <Select items={CATEGORIES} value={categoryId} onValueChange={selectCategory}>
+      <SelectTrigger>
+        <SelectValue placeholder="Select a leaf category…" />
+      </SelectTrigger>
+      <SelectContent>{…}</SelectContent>
+    </Select>
+  </Field>
+
+  {/* Filter band: a width, not a floor — sized to the longest option. */}
+  <SelectTrigger size="md" className="w-64">
+    <SelectValue />
+  </SelectTrigger>
+  ```
+
+- #### Formatting the trigger text
+
+  When the trigger should not simply echo the option label, give `SelectValue` a function child instead of relying on `items`.
+
+  ```tsx
+  <SelectTrigger size="sm" className="w-20" aria-label="Rows per page">
+    <SelectValue>{(v: string) => String(v)}</SelectValue>
+  </SelectTrigger>
+  ```
+
 - #### Size
 
-  `SelectTrigger` takes `size="md"` (default) or `size="sm"`. Use the same size as the inputs and buttons on the row.
+  `SelectTrigger` takes `size="md"` (default, `h-control-md`) or `size="sm"` (`h-control-sm`). Use the same size as the inputs and buttons on the row.
 
   ```tsx
   <SelectTrigger size="sm">
     <SelectValue placeholder="Any" />
   </SelectTrigger>
   ```
+
+- #### Positioning
+
+  `SelectContent` takes `side` (default `bottom`), `sideOffset` (default `4`), `align` (default `start`), `alignOffset` (default `0`), and `alignItemWithTrigger` (default `false`, which keeps the popup below the trigger instead of pulling the selected item over it). The popup takes the trigger's width (`--anchor-width`) with a `min-w-36` floor, so a wide trigger gets a wide list.
 
 - #### Groups and separators
 

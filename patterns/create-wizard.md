@@ -23,11 +23,11 @@ A wizard is justified when at least one of these is true:
 
 ### The exit and the navigation are different things
 
-The back button in the header **exits the entire flow** — it abandons the create. _Back_ in the footer moves one step earlier and keeps the draft. These are different actions and they live in different places for exactly that reason. Never merge them.
+The header's back button **exits the entire flow** — it abandons the create. It is the one built into `PageHeaderBand`, and you point it at the collection with `backTo`. _Back_ in the footer moves one step earlier and keeps the draft. These are different actions and they live in different places for exactly that reason. Never merge them.
 
 ### The footer carries the flow
 
-The sticky `ActionFooter` holds a `ghost` Back and a `primary` Continue. On the last step, Continue becomes the commit — _Create record_ — and takes `loading` while the request is in flight.
+The sticky `ActionFooter` holds a `ghost` Back and a `primary` Continue, both carrying their icon: Back takes a leading `ChevronLeft`, Continue takes a **trailing** `ChevronRight` (`iconRight`) because it points forward, and on step one, where Back has nothing to go back to, the escape is _Cancel_ with a leading `X`. On the last step, Continue becomes the commit — _Create record_, with its verb's icon — and takes `loading` while the request is in flight.
 
 ### The draft lives in the page
 
@@ -37,11 +37,11 @@ There is one form state object for the whole flow, held by the page, not per-ste
 
 #### A. Reduced header
 
-A sticky band with an icon-only ghost back button (`ChevronLeft`, `aria-label`) that exits the flow, plus the flow title. No actions.
+`PageHeaderBand` with `title`, an optional `description` naming the steps, and `backTo` pointing at the collection — the built-in back button is what exits the flow. No `actions`.
 
 #### B. Step indicator
 
-`StepIndicator` with the step list. It marks the current step, and completed steps carry a check.
+`StepIndicator` with the step list, and `framed` — a wizard's indicator wears the card frame the component already carries, so don't hand-write that border-and-surface wrapper. It marks the current step, and completed steps carry a check. `current` is the active index; `onStepClick` plus `maxNavigableStep` make already-visited steps clickable.
 
 #### C. Step body
 
@@ -53,7 +53,7 @@ A summary card of term/value rows showing every value the user is about to commi
 
 #### E. Action footer
 
-`ActionFooter` — `ghost` Back, `primary` Continue. On the final step Continue is the commit and takes `loading`.
+`ActionFooter`, a sibling of `PageBody` — `ghost` Back (leading `ChevronLeft`, or `X` for the step-one _Cancel_), `primary` Continue (trailing `ChevronRight`). On the final step Continue is the commit, carries its verb's icon, and takes `loading`.
 
 #### F. Success state
 
@@ -74,6 +74,8 @@ A centered confirmation card with the outcome and the onward action (view the re
 
 - Don't use a wizard to break up a long list of independent fields.
 - Don't make the header back button and the footer Back do the same thing.
+- Don't hand-write a header back button — the band has one — and don't hand-write the step indicator's frame; pass `framed`.
+- Don't ship a footer button without its icon. _Continue_ with no chevron is the tell of a hand-assembled footer.
 - Don't let Back discard the step's input.
 - Don't hide the step count. A user who can't see how many steps remain will abandon.
 - Don't allow the commit to run twice. `loading` disables the button; rely on it.
@@ -112,11 +114,11 @@ A centered confirmation card with the outcome and the onward action (view the re
 ### Component-specific guidelines
 
 - The step indicator must convey the current step to assistive technology, not only through colour or a filled circle.
-- The header's icon-only exit button requires an `aria-label`, and it must not read as _Back_ — it abandons the flow.
+- The header's icon-only exit is the band's built-in back control, and it carries its own `aria-label`. Point it at the collection with `backTo`, and make sure the copy around it does not lead a user to read it as the footer's step _Back_ — it abandons the flow.
 - Announce validation failures on Continue in a live region, and move focus to the first invalid field.
 
 ## Related patterns and components
 
 - [Create form](create-form.md) — the single-step default, and the first thing to try.
 - [Errors and validation](errors-and-validation.md) — per-step validation and the commit's error path.
-- Components: `StepIndicator`, `Stepper`, `Field`, `Card`, `ActionFooter`, `Button`, `KvGrid`.
+- Components: `StepIndicator`, `Field`, `Card`, `PageHeaderBand`, `PageBody`, `ActionFooter`, `Button`, `KvGrid`. (`Stepper` is a numeric step control, not a step indicator — it has no place in a wizard's chrome.)

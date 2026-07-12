@@ -10,7 +10,9 @@ Mount `Toaster` once, in the root layout. It tracks the app's light/dark prefere
 
 Then call `toast()` from anywhere: `toast.success`, `toast.info`, `toast.warning`, `toast.error`, plus sonner's `toast.loading`, `toast.promise`, `toast.dismiss`, and `toast.custom`. Each variant carries its own icon in the design system's status color.
 
-Toasts auto-dismiss: **1500ms** by default, and **3000ms for errors**, which need longer to read. The exported `toast` wraps sonner's so that a custom `duration` also drives the countdown bar — set `duration` once and the bar follows it, instead of drifting from the global default. A non-finite duration (a `loading` toast, or `Infinity`) simply shows no countdown bar.
+Toasts auto-dismiss: **1500ms** by default, and **3000ms for errors**, which need longer to read. The exported `toast` wraps sonner's so that a custom `duration` also drives the countdown bar — set `duration` on the `toast()` call and the bar follows it, instead of drifting from the global default. A non-finite duration (a `loading` toast, or `Infinity`) simply shows no countdown bar.
+
+Change a duration per toast, not on the `Toaster`. The countdown bar is keyed to each toast's own `duration` (falling back to the 1500ms default), so a `duration` set globally on the container would leave the bar running to a different clock than the toast.
 
 A toast is a transient, non-blocking confirmation. It disappears, so nothing important may live only there. Use `Alert` for a message that must stay on the page, and `AlertDialog` for something the user must acknowledge. Never report a failure the user has to act on through `toast.error` alone.
 
@@ -28,6 +30,7 @@ A toast is a transient, non-blocking confirmation. It disappears, so nothing imp
 - Don't put an action the user must take in a toast; it will vanish. Use `Alert` or `AlertDialog`.
 - Don't toast something the page already shows — a saved row that visibly updated needs no toast.
 - Don't fire several toasts for one action.
+- Don't set a global `duration` on `Toaster`; it desyncs the countdown bar. Set `duration` on the `toast()` call.
 
 ## Features
 

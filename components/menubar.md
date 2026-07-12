@@ -60,11 +60,32 @@ Reach for a menubar only in a dense, application-like surface — an editor, a c
 
 - #### Checkbox items, radio items, and submenus
 
-  `MenubarCheckboxItem`, `MenubarRadioGroup` with `MenubarRadioItem`, and `MenubarSub` behave exactly as their `DropdownMenu` counterparts — a toggle in place, a mutually exclusive set, and a nested menu.
+  `MenubarCheckboxItem` (`checked` / `onCheckedChange`), `MenubarRadioGroup` (`value` / `onValueChange`) with `MenubarRadioItem` (`value`), and `MenubarSub` behave exactly as their `DropdownMenu` counterparts — a toggle in place, a mutually exclusive set, and a nested menu. The checked indicator is drawn for you in the item's leading slot.
+
+  ```tsx
+  <MenubarContent>
+    <MenubarCheckboxItem checked={wrap} onCheckedChange={setWrap}>
+      Wrap lines
+    </MenubarCheckboxItem>
+    <MenubarSeparator />
+    <MenubarRadioGroup value={theme} onValueChange={setTheme}>
+      <MenubarRadioItem value="light">Light</MenubarRadioItem>
+      <MenubarRadioItem value="dark">Dark</MenubarRadioItem>
+    </MenubarRadioGroup>
+  </MenubarContent>
+  ```
 
 - #### Inset
 
   `inset` on an item, label, or sub-trigger indents its text to line up with items that carry a leading indicator.
+
+- #### Bar behavior
+
+  `Menubar` forwards the Base UI menubar root props: `modal` (default `true`), `disabled` (default `false`, disables the whole bar), `orientation` (default `horizontal`), and `loopFocus` (default `true`, arrow keys wrap at the ends).
+
+- #### Menu placement
+
+  `MenubarContent` defaults to `align="start"`, `alignOffset={-4}`, and `sideOffset={8}`, so a menu hangs under its trigger and lines up with the trigger's text. Override those props rather than nudging the panel with margin classes.
 
 ### States
 

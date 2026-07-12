@@ -8,9 +8,11 @@ Multi-line text input, with an optional character counter when `maxLength` is se
 
 `Textarea` is a multi-line field with the standard native `<textarea>` props plus `showCount`. It auto-grows to its content (`field-sizing-content`) and can also be resized vertically. As with `Input`, wrap it in a `Field` for the label, hint, and error copy.
 
-Set `showCount` together with `maxLength` to show a live character counter. The counter turns amber as the value nears the limit and red at the limit. Without `maxLength`, `showCount` shows a plain count.
+Set `showCount` together with `maxLength` to show a live `count / maxLength` counter under the field. The counter turns amber from 90% of the limit and red at the limit. Without `maxLength`, `showCount` shows a plain running count.
 
 `showCount` works in both controlled and uncontrolled use; the component reads `value` when controlled and tracks its own count otherwise.
+
+`showCount` also wraps the field in a full-width `<div>` to carry the counter, so a width class belongs on the surrounding layout, not on the `Textarea` — `className` still lands on the `<textarea>` itself.
 
 ## General guidelines
 
@@ -30,7 +32,7 @@ Set `showCount` together with `maxLength` to show a live character counter. The 
 
 - #### Character counter
 
-  With `showCount` and `maxLength`, a `count / maxLength` counter renders under the field. It shifts to the warning color near the limit and the error color at the limit.
+  With `showCount` and `maxLength`, a `count / maxLength` counter renders under the field, right-aligned. It shifts to the warning color at 90% of the limit and the error color at the limit.
 
   ```tsx
   import { Textarea } from "@cloud/ui";

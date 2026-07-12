@@ -10,7 +10,7 @@ Headless show and hide behavior. Callers own all of the visual styling.
 
 Use it for a single show-and-hide region. For a grouped, pre-styled set of sections with a chevron and dividers, use `Accordion` instead.
 
-Open and close state, controlled or uncontrolled, comes from the Base UI root props (`open`, `defaultOpen`, `onOpenChange`, `disabled`).
+Open and close state, controlled or uncontrolled, comes from the Base UI root props (`open`, `defaultOpen`, `onOpenChange`, `disabled`). `CollapsibleContent` is Base UI's `Collapsible.Panel`, so its props (`keepMounted`, `hiddenUntilFound`) are available on it.
 
 ## General guidelines
 
@@ -43,13 +43,35 @@ Open and close state, controlled or uncontrolled, comes from the Base UI root pr
 
 - #### Controlled state
 
-  Pass `open` and `onOpenChange` to drive the region from your own state; omit them for uncontrolled use with `defaultOpen`.
+  Pass `open` and `onOpenChange` to drive the region from your own state; omit them for uncontrolled use with `defaultOpen`. `onOpenChange` is called with the next open state and a Base UI event-details object.
+
+- #### Panel mounting
+
+  `CollapsibleContent` unmounts its children while closed. Two Base UI props change that:
+  - `keepMounted` keeps the panel in the DOM while hidden. Use it when the content must stay mounted, such as a form whose values should survive a collapse.
+  - `hiddenUntilFound` keeps the panel in the DOM as `hidden="until-found"` so the browser's find-in-page can reach and expand it. It overrides `keepMounted`.
+
+  ```tsx
+  <CollapsibleContent keepMounted className="pt-2">
+    …
+  </CollapsibleContent>
+  ```
+
+- #### Height animation
+
+  The panel publishes its measured size as the `--collapsible-panel-height` and `--collapsible-panel-width` CSS variables, so a height transition is written against the variable rather than a hardcoded value.
+
+  ```tsx
+  <CollapsibleContent className="h-(--collapsible-panel-height) overflow-hidden transition-[height] data-[ending-style]:h-0 data-[starting-style]:h-0">
+    …
+  </CollapsibleContent>
+  ```
 
 ### States
 
 - #### Expanded
 
-  The trigger reflects the open state through `aria-expanded`, and the content mounts or unmounts per the Base UI behavior. The visual treatment of each state is yours to style.
+  The trigger reflects the open state through `aria-expanded`, and the panel unmounts when closed unless `keepMounted` or `hiddenUntilFound` is set. The visual treatment of each state is yours to style.
 
 - #### Disabled
 

@@ -39,19 +39,19 @@ Use `ListConditionBand` with `SearchInput`, the most common quick filters, a Sea
 
 #### B. Advanced trigger
 
-Use `AdvancedFilterButton` to open the sheet and show the current count of advanced values.
+Use `AdvancedFilterButton` with `open`, `onToggle`, and `count` to open the sheet and show the current count of advanced values.
 
 #### C. Advanced filter sheet
 
-Use `AdvancedFilterSheet` as the shell for secondary controls. It owns the apply and reset affordances and should not contain unrelated page actions.
+Use `AdvancedFilterSheet` — `open`, `onOpenChange`, `onApply`, `onReset`, `resetDisabled` — as the shell for secondary controls. It owns the apply and reset affordances and should not contain unrelated page actions.
 
 #### D. Field groups
 
-Use `AdvancedFilterGroup` and `AdvancedFilterField` to organize related conditions. The consuming feature supplies domain field labels and values.
+Use `AdvancedFilterGroup` and `AdvancedFilterField` to organize related conditions. The consuming feature supplies domain field labels and values. A `Select` in the sheet needs an `items` map of value to label on its root, or its trigger shows the raw value.
 
 #### E. Shared filter state
 
-Use one `useListFilters` instance for quick and advanced controls. It supplies draft state, applied state, `apply`, `clearField`, and `clearAll`.
+Use one `useListFilters` instance for quick and advanced controls. It supplies draft state, applied state, `apply`, `clearField`, `clearAll`, `reset` for rolling back the sheet's draft, and `countActive` for the trigger's badge.
 
 #### F. Results collection
 

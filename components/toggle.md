@@ -12,6 +12,8 @@ Press-toggle button with an on/off state.
 
 Inside a `ToggleGroup`, a toggle restyles itself from the group's `variant` through a `data-variant` attribute on the root — no props to thread. So don't set `variant` on the items of a group; set it once on the group.
 
+`Toggle` does not accept `render`: it always renders its own button. To make some other element look like a toggle, apply `toggleVariants({ variant, size })` to it directly.
+
 `Toggle` is a _button that stays down_. When the thing being toggled is a setting that takes effect immediately, use `Switch`. When it's a value in a form, use `Checkbox`.
 
 ## General guidelines

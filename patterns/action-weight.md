@@ -27,6 +27,12 @@ Actions in `ListSummaryBar` climb a fixed ladder:
 
 No component enforces this. `actions` is a caller-supplied node, so the ladder is a review rule, not a type error.
 
+### A header action is a descriptor, and it always has an icon
+
+`PageHeader` and `PageHeaderBand` don't take button JSX in their `actions` prop — they take `HeaderAction[]` descriptors: `{label, icon, to?/onClick?, variant?, disabled?}`. Two consequences fall out of that shape. `icon` is **required**, so a header action without one does not compile. And there is no `size` field, so every header button is `md` and a `sm` one cannot get in — the size rule is enforced by the type, not by review.
+
+The same icon expectation reaches the `ActionFooter`'s primary, which is a children slot and therefore cannot enforce it: give the commit an icon with `Button`'s `iconLeft` / `iconRight`. The conventions are fixed — Continue → a trailing `ChevronRight`, Back → `ChevronLeft`, Cancel → `X`, Create → `Plus`, Save → `Save`, Publish → `CheckCircle2` — and anything else takes the glyph of its verb.
+
 ### Danger is a variant, not a colour
 
 A destructive action carries its meaning through `variant="danger"` or `variant="ghost-danger"`. Never paint a neutral button red by hand: the variant also carries the hover, the active, and the focus treatment, and a hand-coloured button loses all of them while looking correct in a screenshot.
@@ -39,7 +45,7 @@ An icon-only action in a row or a toolbar is `ghost` or `ghost-danger`. It does 
 
 #### A. Page header actions
 
-`PageHeader`'s `actions` slot. The screen's one `primary` CTA lives here, with `secondary` for the rest.
+`PageHeader`'s (or `PageHeaderBand`'s) `actions` prop — a `HeaderAction[]`, each with a required `icon` and no `size`. The screen's one `primary` CTA lives here, with `secondary` for the rest; `secondary` is also the default when a descriptor names no `variant`.
 
 #### B. Summary bar actions
 
@@ -51,11 +57,11 @@ An icon-only action in a row or a toolbar is `ghost` or `ghost-danger`. It does 
 
 #### D. Row actions
 
-An action column of icon-only `ghost` / `ghost-danger` buttons, each with a unique `aria-label`.
+`Table`'s `rowActions` render prop — `ghost` / `ghost-danger` verbs at `size="sm"`, each with a unique `aria-label`. They share the trailing cell with the chevron `Table` appends for a navigable row (verbs first, chevron last); you never build that column yourself.
 
 #### E. Form footer
 
-`ActionFooter` — a `ghost` escape (Cancel, Back) and a `primary` commit.
+`ActionFooter` — a `ghost` escape (Cancel, Back) and a `primary` commit, both carrying an icon.
 
 #### F. Dialog footer
 
@@ -67,6 +73,8 @@ The destructive confirmation takes `variant="danger"`; the escape is `ghost`.
 
 - Choose the variant by asking what slot the button is in, then what standing it has there.
 - Keep exactly one `primary` per screen.
+- Give every header action and every footer primary an icon, following the verb conventions.
+- Use the `Button` component. A bare `buttonVariants()` className skips `cn()` / tailwind-merge, so `secondary`'s transparent base border never resolves against the real one and the button ships with no border at all. When you need a link, keep the component and swap the element: `<Button render={<Link to={…} />}>`.
 - Demote everything in the summary bar to `ghost`, including the verbs that were `secondary` in the header.
 - Use `ghost-danger` for destructive actions in low-chrome contexts, and `danger` for the confirmation itself.
 - Name the reason in a comment when a slot's default weight is broken.
@@ -77,6 +85,7 @@ The destructive confirmation takes `variant="danger"`; the escape is `ghost`.
 - Don't pick the variant from the verb. _Delete_ is not automatically `danger`; a `ghost-danger` row icon is often the right weight, and the filled `danger` belongs in the confirmation.
 - Don't put a `secondary` or `primary` button in the summary bar.
 - Don't run two primaries on one screen.
+- Don't try to size a header action. There is no `size` field, and that is deliberate: header buttons are `md`.
 - Don't colour a button by hand to make it look destructive.
 - Don't give an icon action a fill or a brand tint to make it "findable". If it needs to be findable, it needs a label.
 
@@ -110,4 +119,4 @@ The destructive confirmation takes `variant="danger"`; the escape is `ghost`.
 - [List page](list-page.md) — the header/summary-bar split that makes this rule visible.
 - [Interactive surfaces](interactive-surfaces.md) — why row hover and inline-action hover must differ.
 - [Permission gating](permission-gating.md) — hiding an action the session can't perform, which happens _after_ you have chosen its weight.
-- Components: `Button`, `PageHeader`, `ListSummaryBar`, `ActionFooter`, `CardAction`, `AlertDialog`.
+- Components: `Button`, `PageHeader`, `PageHeaderBand`, `HeaderAction`, `ListSummaryBar`, `ActionFooter`, `CardAction`, `AlertDialog`.

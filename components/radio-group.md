@@ -6,9 +6,13 @@ Mutually exclusive option group. Prefer `ToggleRadioGroup` for labeled radio fie
 
 ## Development guidelines
 
-`RadioGroup` lays its items in a full-width grid with a small gap; each `RadioGroupItem` is a bare radio dot. For labeled radio fields, prefer the `ToggleRadioGroup` and `ToggleRadio` recipes, which pair each dot with its label and hit area. Use the primitives directly in custom layouts.
+`RadioGroup` lays its items in a full-width grid (`grid w-full gap-2`), one item per row unless you override the columns. Each `RadioGroupItem` is a bare 16px radio dot — a real `<button>` from the Base UI `Radio` primitive, so a `Label` with `htmlFor` pointing at its `id` associates correctly.
 
-Give every item a `value`, and control the selection with the Base UI `value` and `onValueChange` props on the group, or leave it uncontrolled with `defaultValue`.
+For labeled radio fields, prefer the `ToggleRadioGroup` and `ToggleRadio` recipes, which pair each dot with its label and hit area for you. Use these primitives directly only in custom layouts.
+
+Give every item a `value`, and control the selection with the Base UI `value` and `onValueChange` props on the group, or leave it uncontrolled with `defaultValue`. The group also takes `name` for form submission and `disabled` for the whole set.
+
+The dot carries an **invisible hit area** that extends 12px horizontally and 8px vertically past its 16px box, so it is comfortably clickable at that size. Don't crowd another interactive element right up against it — the hit areas will overlap and the wrong one will win.
 
 ## General guidelines
 
@@ -23,6 +27,7 @@ Give every item a `value`, and control the selection with the Base UI `value` an
 - Don't use a radio group for independent on/off choices. Use `Checkbox`.
 - Don't use it for a long list of options. Use `Select` or `Combobox`.
 - Don't leave items unlabeled; a bare dot needs an associated label.
+- Don't butt another clickable element against a dot — its hit area reaches past the dot's edge.
 
 ## Features
 
@@ -46,6 +51,21 @@ Give every item a `value`, and control the selection with the Base UI `value` an
 - #### Controlled state
 
   Drive the selection with `value` and `onValueChange` on the group, or use `defaultValue` for uncontrolled use.
+
+  ```tsx
+  <RadioGroup
+    value={method}
+    onValueChange={(v) => setMethod(String(v))}
+    name="payment-method"
+    aria-label="Payment method"
+  >
+    …
+  </RadioGroup>
+  ```
+
+- #### Labeled fields
+
+  In a form row, reach for the `ToggleRadioGroup` / `ToggleRadio` recipes rather than assembling `RadioGroupItem` + `Label` by hand: they own the label, the spacing, and the hit area.
 
 ### States
 

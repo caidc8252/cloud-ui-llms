@@ -6,26 +6,30 @@ The quick bar's trigger for the advanced-filter sheet, with an applied-count bad
 
 ## Development guidelines
 
-`AdvancedFilterButton` is the funnel button that opens the `AdvancedFilterSheet`. It has three states: at rest, showing a count badge, and open (primary-tinted, with the chevron flipped). It carries `aria-expanded`, so the open state is announced and not merely colored.
+`AdvancedFilterButton` is the funnel button that opens the `AdvancedFilterSheet`. It is a `secondary`, `md` `Button` with a funnel `iconLeft` and a chevron `iconRight`, and it has three states: at rest, showing a count badge, and open (primary-tinted, with the chevron flipped). It carries `aria-expanded`, so the open state is announced and not merely colored.
 
-`count` is **computed by the caller** — which fields count as "advanced" is the page's call, not the component's. The badge renders only when `count` is greater than zero. Keep the number honest: it is the user's only signal that filters they can't see are narrowing the list.
+Its whole API is `open`, `onToggle`, `count` — all three required. There is no `className`, no `disabled`, no label prop.
+
+`count` is **computed by the caller** — which fields count as "advanced" is the page's call, not the component's. The badge (an info `Badge`) renders only when `count` is greater than zero. Keep the number honest: it is the user's only signal that filters they can't see are narrowing the list.
+
+With `useListFilters`, the count is `filters.countActive(["region", "createdAt"])` — `countActive` reads the **applied** state by default, which is exactly what this badge should report. (Pass `"draft"` as the second argument only for the sheet's Reset-disabled check.)
 
 Its label comes from the `ui.listFilter.advanced` message, so it is localized inside the component; you pass no copy.
 
-Put it in `ListConditionBand`'s `toolbar` slot, at the end of the quick-bar controls.
+Put it in `ListConditionBand`'s `toolbar` slot, among the quick-bar controls — before the mandated secondary **Search** button, which stays last because it is the commit.
 
 ## General guidelines
 
 ### Do
 
 - Count exactly the filters that live in the sheet, and nothing that already has a quick-bar control.
-- Keep `count` in sync with the applied — not the draft — filter state.
-- Put it last in the quick-bar toolbar.
+- Derive `count` with `filters.countActive([...sheetKeys])`, which counts the applied — not the draft — state.
+- Keep it in the quick-bar toolbar, ahead of the Search button.
 
 ### Don't
 
 - Don't count a filter twice, once here and once as a quick-bar chip.
-- Don't let the badge show a stale count; a wrong number here is worse than none.
+- Don't feed it a draft count; the badge would light up for filters the list isn't actually applying yet.
 - Don't build your own funnel button; the three states and the `aria-expanded` wiring are already here.
 
 ## Features
@@ -33,19 +37,35 @@ Put it in `ListConditionBand`'s `toolbar` slot, at the end of the quick-bar cont
 - #### The trigger
 
   ```tsx
-  import { AdvancedFilterButton, AdvancedFilterSheet } from "@cloud/ui";
+  import { AdvancedFilterButton, AdvancedFilterSheet, useListFilters } from "@cloud/ui";
 
-  <AdvancedFilterButton open={sheetOpen} onToggle={() => setSheetOpen((v) => !v)} count={advancedCount} />
+  const SHEET_KEYS = ["region", "createdAt"] as const;
+  const filters = useListFilters({ initial: { q: "", region: "all", createdAt: "any" } });
 
-  <AdvancedFilterSheet open={sheetOpen} onOpenChange={setSheetOpen} onApply={apply} onReset={reset}>
+  <AdvancedFilterButton
+    open={sheetOpen}
+    onToggle={() => setSheetOpen((v) => !v)}
+    count={filters.countActive(SHEET_KEYS)}
+  />
+
+  <AdvancedFilterSheet
+    open={sheetOpen}
+    onOpenChange={setSheetOpen}
+    onApply={() => {
+      filters.apply();
+      setSheetOpen(false);
+    }}
+    onReset={() => filters.reset(SHEET_KEYS)}
+    resetDisabled={filters.countActive(SHEET_KEYS, "draft") === 0}
+  >
     …
   </AdvancedFilterSheet>;
   ```
 
 ### States
 
-- **Rest** — a secondary button with a funnel glyph.
-- **With filters** — an info `Badge` carrying the count.
+- **Rest** — a secondary `md` button with a funnel glyph.
+- **With filters** — an info `Badge` carrying the count, shown only when `count > 0`.
 - **Open** — primary-tinted, with the chevron rotated.
 
 ## Writing guidelines

@@ -1,83 +1,117 @@
 # PageHeader
 
-Full-bleed page-header band for list and create pages — title, description, and actions.
+Full-bleed page-header band for level-1 list and index pages — title, description, and actions.
 
-`PageHeader` is driven by props. Import it from `@cloud/ui`.
+`PageHeader` is driven by props. It also re-exports the `HeaderAction` type. Import them from `@cloud/ui`.
 
 ## Development guidelines
 
 `PageHeader` is the band that sits flush under the `AppHeader`, spanning edge to edge. Put it **outside** `PageBody` — the scroll root is unpadded precisely so this band can touch the edges.
 
-`title` is required. `description` is the muted subtext beneath it. `titleAdornment` is an inline chip next to the title, typically a status `Badge`. `actions` is the right-hand cluster of buttons.
+**Page tiering is a hard rule.** `PageHeader` is for **level-1 pages only** — a list or an index, the roots of navigation, which is why it has **no back button**. Every other page — create, edit, detail, sub-page — is a drill-down and uses `PageHeaderBand`, whose back button is built in. A create form does **not** get a `PageHeader`.
 
-`sticky` docks the band to the top of the scrollport. Because `Layout`'s `<main>` is the scroll root, `top-0` lands **under the app header**, not under the viewport top. Turn it on for single-step create and edit forms, where Cancel and Submit live in the header and must stay reachable while the form scrolls.
+The props are exactly four: `title` (required), `description` (the muted subtext beneath it), `actions`, and `sticky`. There is **no `titleAdornment`** and no children slot — the title block is the shared `ContentHeader`, which renders the `<h1>`. A status chip beside the title is a detail-page affordance; it lives on `PageHeaderBand`'s `variant="detail"`.
+
+`actions` is **not JSX** — it is a `HeaderAction[]` of descriptors:
+
+```ts
+type HeaderAction = {
+  label: string;
+  icon: React.ReactNode; // REQUIRED — every header action carries an icon
+  to?: string; // route → renders a Link
+  onClick?: () => void; // handler → renders a <button>; ignored when `to` is set
+  variant?: "primary" | "secondary" | "ghost" | "ghost-danger" | "danger" | "link"; // default "secondary"
+  disabled?: boolean;
+  ariaLabel?: string;
+};
+```
+
+That shape is the enforcement mechanism for two hard rules. **Size**: there is deliberately no `size` field, so the slot renders `md` buttons and nothing else — `sm`/`xs`/`lg` cannot enter a page header. **Icons**: `icon` is required at compile time, so a header action can never ship bare. The conventions are Create → `Plus`, Save → `Save`, Publish → `CheckCircle2`, and a verb-appropriate glyph otherwise.
+
+`sticky` (default `false`) docks the band to the top of the scrollport. Because `Layout`'s `<main>` is the scroll root, `top-0` lands **under the app header**, not under the viewport top.
 
 Three headers, three jobs — don't mix them up:
 
-- **`PageHeader`** — a full-bleed band for list and create pages: title and actions, no tabs.
-- **`PageHeaderBand`** — a full-bleed band for detail pages: it takes arbitrary header content plus a `tabs` row flush on its bottom edge.
-- **`ContentHeader`** — an in-content title, not a band. It lives inside `PageBody`.
+- **`PageHeader`** — the level-1 band: title, description, actions, no back button, no tabs.
+- **`PageHeaderBand`** — the level-2/3 band, with a built-in back button: `variant="page"` for create/edit/sub-pages, `variant="detail"` for the entity identity band with `tabs` on its bottom edge.
+- **`ContentHeader`** — the shared title block the two bands compose. It is **never a page header on its own** (no band chrome — no padding, border, or back); use it inside `PageBody` as a section title.
 
 ## General guidelines
 
 ### Do
 
 - Put `PageHeader` outside `PageBody`, directly in the scroll root.
-- Use `sticky` on a single-step form whose commit buttons live in the header.
-- Put the page's primary action in `actions`, and keep it to one.
-- Use `titleAdornment` for a status chip, not for a second title.
+- Use it only on a level-1 list or index page.
+- Pass `actions` as `HeaderAction` descriptors, each with an `icon`.
+- Put the page's primary action in `actions` with `variant: "primary"`, and keep it to one.
 
 ### Don't
 
-- Don't use `PageHeader` on a detail page with tabs. Use `PageHeaderBand`.
+- Don't use `PageHeader` on a create, edit, or detail page. Those are drill-downs — use `PageHeaderBand`, which has the back button.
 - Don't nest it inside `PageBody`; the gutters will inset the band and break the full bleed.
-- Don't stack `PageHeader` and `ContentHeader` — one title per page.
+- Don't stack `PageHeader` and `ContentHeader` as two titles — one page title per page.
+- Don't reach for a status chip here; there is no `titleAdornment` on this component.
 
 ## Features
 
 - #### Title, description, and actions
 
   ```tsx
-  import { PageHeader, Button, Badge } from "@cloud/ui";
+  import { PageHeader } from "@cloud/ui";
+  import { FolderTree, PackagePlus } from "lucide-react";
 
   <PageHeader
     title={t("merchants.title")}
     description={t("merchants.description")}
-    actions={<Button>{t("merchants.create")}</Button>}
+    actions={[
+      {
+        label: t("merchants.categories"),
+        to: "/merchants/categories",
+        variant: "secondary",
+        icon: <FolderTree size={16} />,
+      },
+      {
+        label: t("merchants.create"),
+        to: "/merchants/new",
+        variant: "primary",
+        icon: <PackagePlus size={16} />,
+      },
+    ]}
   />;
   ```
 
-- #### Title adornment
+- #### Action descriptors
 
-  An inline chip beside the title.
+  A descriptor with `to` renders a router `Link`; one with `onClick` renders a `<button>`. `to` wins when both are set. `variant` defaults to `secondary`, and the buttons are always `md`.
 
   ```tsx
+  import { Download } from "lucide-react";
+
   <PageHeader
-    title={merchant.name}
-    titleAdornment={<Badge tone="success">{t("status.live")}</Badge>}
-  />
+    title={t("reports.title")}
+    actions={[
+      {
+        label: t("reports.export"),
+        onClick: exportCsv,
+        disabled: rows.length === 0,
+        icon: <Download size={16} />,
+      },
+    ]}
+  />;
   ```
 
 - #### Sticky
 
-  `sticky` docks the band under the app header while the page scrolls — for forms whose Cancel and Submit sit in the header.
+  `sticky` docks the band under the app header while the list scrolls, so the title and the create action stay reachable.
 
   ```tsx
-  <PageHeader
-    title={t("merchants.create")}
-    sticky
-    actions={
-      <>
-        <Button variant="ghost">{t("common.cancel")}</Button>
-        <Button>{t("common.submit")}</Button>
-      </>
-    }
-  />
+  <PageHeader title={t("merchants.title")} sticky actions={actions} />
   ```
 
 ### States
 
-- **Sticky** — the band stays docked beneath the app header as the page scrolls.
+- **Sticky** — the band stays docked beneath the app header as the page scrolls. Off by default.
+- **Disabled action** — a descriptor with `disabled` renders a disabled `md` button; a `to` action ignores it, so gate route actions by omitting them.
 
 ## Writing guidelines
 
@@ -90,16 +124,16 @@ Three headers, three jobs — don't mix them up:
 
 - Title: name the page, matching the breadcrumb and the navigation label that got the user here.
 - Description: one line on what the page is for. Leave it out when the title says it all.
-- Actions: verb-first labels, and only one primary button.
+- Actions: verb-first labels, and only one `primary`.
 
 ## Accessibility guidelines
 
 ### General accessibility guidelines
 
-- The title renders as the page's `<h1>`, so there must be exactly one page header per page.
-- Actions are real buttons in the reading order of the page, not chrome — a keyboard user reaches them before the content.
-- Don't rely on `titleAdornment`'s color to carry status; the badge has text.
+- The title renders as the page's `<h1>` (via `ContentHeader`), so there must be exactly one page header per page.
+- Actions are real `Button`s in the reading order of the page, not chrome — a keyboard user reaches them before the content.
+- Every action carries an icon **and** a text label, so the icon is never the only carrier of meaning. Use `ariaLabel` only to give a terser label a fuller name.
 
 ### Component-specific guidelines
 
-- A `sticky` header covers content as the page scrolls. Keep it short, or a keyboard user tabbing down the form will find the focused field hidden behind it.
+- A `sticky` header covers content as the page scrolls. Keep the title block to one row, or a keyboard user tabbing down the page will find the focused element hidden behind it.

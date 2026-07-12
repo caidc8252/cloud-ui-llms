@@ -12,11 +12,15 @@ Many fields is not a reason to make a wizard. A wizard is for **staged** flows: 
 
 ### The exit lives in the header, the commit lives in the footer
 
-The header is a reduced, sticky detail-style band: a back button and the title, and **no actions**. The commit pair — a ghost _Cancel_ and the primary create action — rides a sticky `ActionFooter` at the bottom. The user can always leave and can always submit, no matter how long the form is; neither scrolls out of reach.
+A create or edit page is level-2, so its header is `PageHeaderBand` — the default `variant="page"`, which is title, optional description, and a **built-in back button** you cannot omit. Give the back button its destination with `backTo`. The band carries **no actions**; its job is to let the user leave. (`variant="page"` is not sticky by default, which is the right call here: the header has nothing the user needs while filling in field twenty.)
+
+The commit pair — a ghost _Cancel_ and the primary create action — rides a sticky `ActionFooter` at the bottom, a sibling of `PageBody`, never nested inside it. The user can always leave and can always submit, no matter how long the form is; neither scrolls out of reach.
 
 ### One column of section cards
 
-The body is a single centered column of `Card`s, one per coherent group of fields. Grouping is semantic, not spatial: put fields together because they mean something together, not to balance the page. Two-up field rows inside a card are fine for short, paired inputs.
+The body is a single column of `Card`s, one per coherent group of fields, filling the width `PageBody` gives it — no `max-w-*` lock on the page or the column. Only an individual control that is meaningless when stretched (a price, a quantity) takes a narrow width, and it takes it at the field. Grouping is semantic, not spatial: put fields together because they mean something together, not to balance the page. Two-up field rows inside a card are fine for short, paired inputs.
+
+Inside a `Field`, a control fills the field. That is automatic for `Input`, `Textarea`, `Combobox`, and `DatePicker`, and it is automatic for `Select` too once it is inside a `Field` — but a `Select` still needs an `items` map (value → label) on its root, or its trigger prints the raw value instead of the label. Nothing type-checks that.
 
 ### Validation has one source
 
@@ -30,11 +34,11 @@ Server actions are banned. The form POSTs through `@cloud/request/client` to a r
 
 #### A. Reduced header
 
-A sticky header band with a `Button variant="ghost" size="icon-sm"` carrying a `ChevronLeft` (with `aria-label`) and the page title. No action buttons.
+`PageHeaderBand` with `title`, an optional `description`, and `backTo`. The back button is built in — you do not write it, and there is no prop that removes it. No `actions`.
 
 #### B. Page body
 
-`PageBody`, which owns the page padding and the block gap. Do not hand-write page-level padding.
+`PageBody`, which owns the page padding and the block gap. Do not hand-write page-level padding, and do not add a width lock — the body fills the page.
 
 #### C. Section cards
 
@@ -46,7 +50,7 @@ A sticky header band with a `Button variant="ghost" size="icon-sm"` carrying a `
 
 #### E. Action footer
 
-`ActionFooter` — a sticky, full-bleed band with a `ghost` Cancel and a `primary` commit. The commit takes `loading` while the request is in flight.
+`ActionFooter` — a sticky, full-bleed band, placed as a **sibling of `PageBody`**, with a `ghost` Cancel and a `primary` commit. Both carry an icon: Cancel takes a leading `X`, and the commit takes the glyph of its verb (`Save` for _Save changes_, `Plus` for a create, `CheckCircle2` for a publish). `ActionFooter` is a children slot, so unlike a header's `HeaderAction[]` it cannot enforce that — use `Button`'s `iconLeft` / `iconRight` and don't skip it. The commit takes `loading` while the request is in flight.
 
 ## General guidelines
 
@@ -54,6 +58,8 @@ A sticky header band with a `Button variant="ghost" size="icon-sm"` carrying a `
 
 - Group fields into section cards by meaning, and title each card.
 - Mark required fields with `Field`'s `required`, and explain non-obvious ones with `hint` rather than with a tooltip.
+- Give the header's back button a real destination with `backTo`.
+- Give the footer's buttons icons — the primary always, the escape by the same convention (Cancel → `X`, Back → `ChevronLeft`).
 - Put the commit in the sticky footer so it stays reachable on a long form.
 - Set `loading` on the commit button while the request is in flight. It also disables the button, so you don't need a separate guard for double submits.
 - Route to the new record's detail page on success.
@@ -63,6 +69,8 @@ A sticky header band with a `Button variant="ghost" size="icon-sm"` carrying a `
 
 - Don't reach for a wizard just because the form is long.
 - Don't put actions in the reduced header. The header's job is to let the user leave.
+- Don't hand-build the header's back button, and don't use `ContentHeader` as the page header.
+- Don't cap the form's width with a `max-w-*`. Width belongs to the field, not to the page.
 - Don't use a server action. Mutations go through a route handler.
 - Don't validate with rules the server doesn't have. One schema, both sides.
 - Don't disable the submit button until every field is touched. Let the user submit and show them what's wrong.
@@ -107,8 +115,9 @@ A sticky header band with a `Button variant="ghost" size="icon-sm"` carrying a `
 
 ### Component-specific guidelines
 
-- The back button is icon-only and requires an `aria-label`.
+- The band's built-in back button is icon-only and ships with its own `aria-label`; give it a destination with `backTo` rather than leaving it on history.
 - A field's error must be associated with its control, not merely painted red nearby, so a screen reader reads the reason when focus lands.
+- Don't hand a `Field` an `error` before the user has touched it or submitted. A form that opens already red is reporting _not yet filled in_ as _filled in wrongly_, and nothing in the type system stops you.
 - Colour is never the only signal of an invalid field: `Field` pairs the tone with the error text.
 - On a failed submit, move focus to the first invalid field, or the user is left guessing what changed.
 
@@ -119,4 +128,4 @@ A sticky header band with a `Button variant="ghost" size="icon-sm"` carrying a `
 - [Unsaved changes](unsaved-changes.md) — the exit guard this page needs, and the exits it does not cover.
 - [Detail page](detail-page.md) — where a successful create lands.
 - [Errors and validation](errors-and-validation.md) — the schema, the codes, and where each error surfaces.
-- Components: `Field`, `Input`, `Textarea`, `Select`, `Combobox`, `DatePicker`, `Card`, `ActionFooter`, `PageBody`, `Button`.
+- Components: `Field`, `Input`, `Textarea`, `Select`, `Combobox`, `DatePicker`, `Card`, `PageHeaderBand`, `ActionFooter`, `PageBody`, `Button`.

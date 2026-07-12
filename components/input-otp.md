@@ -12,6 +12,8 @@ The component is presentation and per-slot entry only. It does not resend, count
 
 Error styling has a **single owner**: when a slot inside the group carries `aria-invalid`, the `InputOTPGroup` draws one red border and ring around the whole group via `:has()`. Individual slots deliberately do not draw their own error border — if they did, you would get the group's outline plus a second one per matching slot. Don't add an error border to a slot's `className`.
 
+`InputOTP` has two class hooks, and they are not interchangeable: `containerClassName` styles the flex row that holds the groups and separators, while `className` reaches the hidden real input behind them. Layout belongs on `containerClassName`.
+
 Use `InputOTP` only for short, fixed-length codes. For any other text, use `Input`.
 
 ## General guidelines
@@ -25,7 +27,9 @@ Use `InputOTP` only for short, fixed-length codes. For any other text, use `Inpu
 
 ### Don't
 
+- Wrap it in a `Field` for the label and the error message.
 - Don't put an error border on a slot; the group owns the invalid treatment.
+- Don't put layout classes on `className`; they land on the hidden input. Use `containerClassName`.
 - Don't use it for ordinary text or a password. Use `Input`.
 - Don't expect resend, countdown, or auto-submit from the component — build them around it.
 
@@ -72,6 +76,26 @@ Use `InputOTP` only for short, fixed-length codes. For any other text, use `Inpu
 
   Pass `pattern` to limit the accepted characters — digits only, for instance.
 
+- #### Label and error
+
+  There is no dedicated label or error part. Wrap the whole thing in a `Field` and use its `label`, `hint`, and `error` props; mark the slots `aria-invalid` so the group draws the invalid ring, and pass the message to `Field`'s `error`.
+
+  ```tsx
+  import { Field, InputOTP, InputOTPGroup, InputOTPSlot } from "@cloud/ui";
+
+  <Field label="Verification code" hint="We sent a 6-digit code to your email" error={codeError}>
+    <InputOTP maxLength={6} value={code} onChange={setCode}>
+      <InputOTPGroup>
+        {[0, 1, 2, 3, 4, 5].map((i) => (
+          <InputOTPSlot key={i} index={i} aria-invalid={!!codeError} />
+        ))}
+      </InputOTPGroup>
+    </InputOTP>
+  </Field>;
+  ```
+
+  Omit `htmlFor` on the `Field`: the visible slots are not the focus target.
+
 ### States
 
 - **Active** — the slot receiving input takes a primary border and ring, and shows a blinking caret.
@@ -87,15 +111,15 @@ Use `InputOTP` only for short, fixed-length codes. For any other text, use `Inpu
 ### Component-specific guidelines
 
 - Label the field with what the code is and where it came from, such as `Verification code` with helper text naming the channel.
-- On error, say what went wrong and what to do — `That code is incorrect or expired. Request a new one.` — in a `FieldError`, not only as a red border.
+- On error, say what went wrong and what to do — `That code is incorrect or expired. Request a new one.` — in the wrapping `Field`'s `error`, not only as a red border.
 
 ## Accessibility guidelines
 
 ### General accessibility guidelines
 
 - The visible boxes are presentation; there is one real input behind them, so the code is entered, pasted, and read as a single value.
-- Give the field a visible label. Inside a `Field`, `FieldLabel` associates it for you.
-- Don't rely on the red border alone to signal an invalid code; give a `FieldError` message.
+- Give the field a visible label with `Field`'s `label` prop. Omit `htmlFor` — the slots are presentational, so there is no single element to point at.
+- Don't rely on the red border alone to signal an invalid code; give `Field` an `error` message, which is announced through its `role="alert"`.
 
 ### Component-specific guidelines
 

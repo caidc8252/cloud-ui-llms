@@ -6,9 +6,15 @@ Floating panel anchored to a trigger, with header, title, and description slots.
 
 ## Development guidelines
 
-`Popover` is a click-triggered floating panel. Wrap the trigger in `PopoverTrigger`, put the panel content in `PopoverContent`, and position it with `side`, `align`, `sideOffset`, and `alignOffset`. The content defaults to `bottom`, centered, at a small offset, and is a fixed `w-72`.
+`Popover` is a click-triggered floating panel. Wrap the trigger in `PopoverTrigger`, put the panel content in `PopoverContent`, and position it with `side` (default `bottom`), `align` (default `center`), `sideOffset` (default `4`), and `alignOffset` (default `0`). The panel is a fixed `w-72` column with a `2.5` gap between its children — override the width with `className` when the content needs it.
 
-Use `MenuItem` for action rows inside the panel; pass `destructive` for a red delete-style row. For a full keyboard-navigable action menu, prefer `DropdownMenu`; for a hover preview, use `HoverCard`; for a short text hint, use `Tooltip`.
+`PopoverHeader` is a plain `div` wrapper; `PopoverTitle` and `PopoverDescription` are the Base UI title and description parts, so they are wired to the panel's accessible name and description.
+
+Use `MenuItem` for action rows inside the panel; pass `destructive` for a red delete-style row. `MenuItem` is a plain `<button type="button">` (its props are `ComponentProps<"button">` plus `destructive`), so it takes `onClick`, `disabled`, and the rest as you would expect.
+
+There is **no `PopoverClose` export**. Close the panel from inside by controlling it — `open` / `onOpenChange` on the root — and closing in your own handler.
+
+For a full keyboard-navigable action menu, prefer `DropdownMenu`; for a hover preview, use `HoverCard`; for a short text hint, use `Tooltip`.
 
 ## General guidelines
 
@@ -24,6 +30,7 @@ Use `MenuItem` for action rows inside the panel; pass `destructive` for a red de
 - Don't build a full navigable menu from popover `MenuItem`s. Use `DropdownMenu`.
 - Don't use a popover for a hover preview. Use `HoverCard`.
 - Don't put a long form or a whole task in a popover; use a `Modal` or `Sheet`.
+- Don't reach for a `PopoverClose` part — there isn't one. Control `open` and close it yourself.
 
 ## Features
 
@@ -54,9 +61,64 @@ Use `MenuItem` for action rows inside the panel; pass `destructive` for a red de
   </Popover>;
   ```
 
+- #### Titled panel
+
+  `PopoverHeader` stacks `PopoverTitle` and `PopoverDescription` for a panel that explains itself.
+
+  ```tsx
+  import {
+    Popover,
+    PopoverTrigger,
+    PopoverContent,
+    PopoverHeader,
+    PopoverTitle,
+    PopoverDescription,
+  } from "@cloud/ui";
+
+  <Popover>
+    <PopoverTrigger render={<Button variant="secondary" />}>Set limit</PopoverTrigger>
+    <PopoverContent side="bottom" align="end">
+      <PopoverHeader>
+        <PopoverTitle>Daily limit</PopoverTitle>
+        <PopoverDescription>Applies to every terminal on this account.</PopoverDescription>
+      </PopoverHeader>
+      <Input value={limit} onChange={(e) => setLimit(e.target.value)} />
+    </PopoverContent>
+  </Popover>;
+  ```
+
 - #### MenuItem
 
-  `MenuItem` is a full-width action row for use inside the panel. `destructive` gives it red text and a red hover for delete actions.
+  `MenuItem` is a full-width action row for use inside the panel. `destructive` gives it red text and a red hover for delete actions, and the row is dimmed when `disabled`.
+
+  ```tsx
+  <MenuItem disabled={!canRename} onClick={rename}>
+    Rename
+  </MenuItem>
+  <MenuItem destructive onClick={remove}>
+    Delete
+  </MenuItem>
+  ```
+
+- #### Controlled open state
+
+  The root takes `open`, `defaultOpen`, and `onOpenChange`. Since there is no close part, close the panel in the handler that performs the action.
+
+  ```tsx
+  <Popover open={open} onOpenChange={setOpen}>
+    <PopoverTrigger render={<Button variant="secondary" />}>Actions</PopoverTrigger>
+    <PopoverContent align="end">
+      <MenuItem
+        onClick={() => {
+          rename();
+          setOpen(false);
+        }}
+      >
+        Rename
+      </MenuItem>
+    </PopoverContent>
+  </Popover>
+  ```
 
 ## Writing guidelines
 

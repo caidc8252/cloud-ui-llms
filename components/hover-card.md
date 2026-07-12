@@ -47,6 +47,21 @@ Use it for a non-essential preview — a user summary, a link preview, a definit
   </HoverCard>;
   ```
 
+  `HoverCardContent` renders through a portal and a positioner, so it is not clipped by an overflow-hidden ancestor. Its width is fixed at `w-[280px]`; override it with `className` only when the preview genuinely needs another size.
+
+- #### Open state
+
+  `HoverCard` is uncontrolled by default. The root forwards the Base UI `PreviewCard` root props, so `defaultOpen`, `open`, and `onOpenChange` are available when a preview has to be driven from outside — for example, kept open while a screenshot or a test runs.
+
+  ```tsx
+  <HoverCard open={open} onOpenChange={setOpen}>
+    <HoverCardTrigger render={<button type="button">{user.name}</button>} />
+    <HoverCardContent side="right" align="start">
+      …
+    </HoverCardContent>
+  </HoverCard>
+  ```
+
 ## Writing guidelines
 
 ### General writing guidelines

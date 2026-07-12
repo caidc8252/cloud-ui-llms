@@ -35,11 +35,11 @@ No resources and no matching resources are different states. The former guides t
 
 #### A. Page header
 
-Use `PageHeader` in an application page for the plural resource name, a concise description, and the only primary page action.
+Use `PageHeader` in an application page for the plural resource name, a concise description, and the only primary page action. A list is a level-1 page, and level-1 is the only tier that uses `PageHeader`; every page it drills into uses `PageHeaderBand`. Pass actions as `HeaderAction` descriptors — `{label, icon, to or onClick, variant}` — where the icon is required and the size is fixed at `md`.
 
 #### B. Condition band
 
-Use `ListConditionBand` to group `SearchInput`, quick `Select` filters, and the secondary Search action. Keep this band non-sticky.
+Use `ListConditionBand` to group `SearchInput`, quick `Select` filters, and the secondary Search action. Give the Search action a leading `Search` icon and wire it to the filter hook's `apply`. Give every `Select` an `items` map of value to label on its root, or the trigger shows the raw value. Keep this band non-sticky.
 
 #### C. Applied filters
 
@@ -57,6 +57,8 @@ Use `ListSummaryBar` for the result count and low-emphasis collection actions su
 
 Use a typed `Table` with `stickyHeader` and `RichPagination`. The page supplies columns and server results; the components provide the shared presentation and interaction model.
 
+Set `onRowClick` for a navigable row and `Table` appends the trailing chevron itself — do not add that column to the config. Inline row verbs go in `rowActions`, at `size="sm"`, sharing the trailing cell with the chevron. `RichPagination` is the default footer for a results region; scroll-loading is an exception that needs a stated reason.
+
 ## General guidelines
 
 ### Do
@@ -71,6 +73,8 @@ Use a typed `Table` with `stickyHeader` and `RichPagination`. The page supplies 
 - Don't filter or count only the currently fetched page in the browser.
 - Don't make the condition band sticky or use `overflow-hidden` on the results card.
 - Don't add competing primary actions to the result summary.
+- Don't hand-write the row's trailing chevron column, and don't treat row verbs and the chevron as an either/or.
+- Don't assemble the filter bar out of bare controls. The list-filter family and `useListFilters` own that interaction.
 - Don't make a row navigational without a keyboard-reachable link or control.
 
 ## Writing guidelines

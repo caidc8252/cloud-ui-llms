@@ -2,11 +2,13 @@
 
 Horizontal bar showing numeric completion, with an optional label and value.
 
-`Progress` is a client component built on `@base-ui/react`'s `Progress`. The root renders its own track and indicator, so `Progress` alone is enough; `ProgressLabel` and `ProgressValue` are optional children, and `ProgressTrack` / `ProgressIndicator` are exported for the rare case you need to compose them by hand. Import them from `@cloud/ui` or `@cloud/ui/components/ui`.
+`Progress` is a client component built on `@base-ui/react`'s `Progress`. The root **always renders its own track and indicator**, so `Progress` alone is enough; `ProgressLabel` and `ProgressValue` are the optional children. `ProgressTrack` and `ProgressIndicator` are exported too, along with the `ProgressProps` and `ProgressTone` types. Import them from `@cloud/ui` or `@cloud/ui/components/ui`.
 
 ## Development guidelines
 
-`Progress` shows how far along a determinate task is. Pass `value` as a number from `0` to `100`. Any children you provide — typically a `ProgressLabel` and a `ProgressValue` — render above the bar; the root then appends the track and indicator itself.
+`Progress` shows how far along a determinate task is. Pass `value` as a number from `0` to `100`. Any children you provide — typically a `ProgressLabel` and a `ProgressValue` — render above the bar; the root then appends the 6px track and its indicator itself, and the indicator's width animates as `value` changes.
+
+> **The track is not a slot.** Because the root appends its own `ProgressTrack` after your children, passing a `ProgressTrack` as a child renders a **second** bar under the first — it does not replace it. `ProgressTrack` and `ProgressIndicator` are exported for building a bar directly on the Base UI root, not for composing inside `Progress`. Children of `Progress` are the label row, nothing else.
 
 `tone` sets the indicator color: `success`, `warning`, `error`, or `info`. Omit it for the default brand color. Unlike most components, `Progress` has **no `neutral` tone** — omitting `tone` already gives you the brand-colored bar, which is the right default for an in-flight task. Reach for a tone only when the bar's _outcome_ is what carries the meaning: `success` for a completed import, `error` for a failed upload, `warning` for a quota nearing its limit.
 
@@ -22,6 +24,8 @@ Use `Progress` when you know the percentage. When you don't, use `Spinner` or `S
 
 ### Don't
 
+- Don't pass `ProgressTrack` or `ProgressIndicator` as children of `Progress`; you get a second, empty bar.
+- Don't pass `tone="neutral"` — there is no such tone, and omitting `tone` is already the neutral-in-flight default.
 - Don't use a progress bar when you can't compute a percentage. Use `Spinner`.
 - Don't use it as a quota or utilization _meter_ without a label — a bar with no words reads as "in progress", not "84% of your limit".
 - Don't set `tone="success"` while work is still running; save it for completion.

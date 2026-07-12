@@ -8,9 +8,11 @@ Horizontal or vertical divider line, with optional centered label text.
 
 `Separator` draws a hairline in the subtle line token to divide content. Leave `orientation` at `horizontal` for a full-width rule, or set `vertical` to divide items in a row; a vertical separator stretches to the height of its flex row.
 
-Passing `label` switches to a labeled divider: a centered piece of text between two rules, for cases such as an "or" between two sign-in options. The plain and labeled forms render different markup, so choose `label` only when you want the text.
+Passing `label` (any `ReactNode`, though it is meant for a word or two) switches to a labeled divider: centered text between two rules, for cases such as an "or" between two sign-in options.
 
-Use the component props before adding custom classes. Set `orientation` and `label`, then use `className` only for local spacing.
+> **The labeled form is a different component in disguise.** It renders plain `div`s — not the Base UI separator — and it **ignores `orientation`, `className`, and every other prop you pass**. `<Separator label="or" className="my-6" />` compiles, and the margin is silently dropped. Put the spacing on a wrapper instead, and only reach for `label` when you actually want the text.
+
+Use the component props before adding custom classes. Set `orientation`, then use `className` only for local spacing — on the plain form, where it is applied.
 
 ## General guidelines
 
@@ -25,6 +27,7 @@ Use the component props before adding custom classes. Set `orientation` and `lab
 - Don't use a separator to fake spacing. Use layout gap utilities for spacing.
 - Don't stack multiple separators to create a heavier line. Use the `line-strong` boundary where a stronger divide is needed.
 - Don't put long text in `label`; it is for a word or two.
+- Don't pass `className`, `orientation`, or ARIA props alongside `label` — the labeled branch drops them. Wrap it instead.
 
 ## Features
 
@@ -44,10 +47,12 @@ Use the component props before adding custom classes. Set `orientation` and `lab
 
 - #### Labeled separator
 
-  Passing `label` renders centered text between two rules.
+  Passing `label` renders centered text between two rules. It is always horizontal, and it takes no other props — put any spacing on a wrapper.
 
   ```tsx
-  <Separator label="or" />
+  <div className="my-6">
+    <Separator label="or" />
+  </div>
   ```
 
 ## Writing guidelines
@@ -72,4 +77,4 @@ Use the component props before adding custom classes. Set `orientation` and `lab
 
 #### Labeled separator
 
-- The labeled form renders visible text inside plain elements. When the label carries meaning (such as `or` between two choices), the visible text conveys it; no extra ARIA is required.
+- The labeled form renders visible text inside plain `div`s and is **not** exposed as a separator to assistive technology. When the label carries meaning (such as `or` between two choices), the visible text conveys it; no extra ARIA is required — and none can be added, since the labeled branch does not forward props.

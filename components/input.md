@@ -10,7 +10,9 @@ Single-line text input, with validation tones beyond the invalid state.
 
 Use the component props before adding custom classes. Reach for `inputSize`, `variant`, `validation`, `invalid`, and `prefix`/`suffix` first, then use `className` only for local layout.
 
-`inputSize` controls height and padding and is distinct from the native HTML `size` attribute — do not confuse the two. `invalid` takes priority over `validation`: a field that is both invalid and "warn" renders as invalid.
+`Input` is `w-full`: it fills the slot it is given, so inside a `Field` it fills the field's column. Its width belongs to the field, not to its current value — don't pin it to a content-sized width, and don't hand-widen it to match a neighbouring control.
+
+`inputSize` controls height and padding and is distinct from the native HTML `size` attribute — do not confuse the two. Omitting it gives the `md` height. `invalid` takes priority over `validation`: a field that is both invalid and "warn" renders as invalid.
 
 There is one sharp edge with adornments. When you pass `prefix` or `suffix`, `Input` wraps itself in a flex container and your `className` lands on the inner `<input>`, not the wrapper. Layout classes (`w-full`, `mb-*`, `self-*`) then silently no-op. To control the outer width or spacing, wrap the input in your own element, or use `InputGroup`, whose `className` targets the outer container.
 
@@ -18,7 +20,7 @@ There is one sharp edge with adornments. When you pass `prefix` or `suffix`, `In
 
 ### Do
 
-- Wrap `Input` in a `Field` for the label, hint, and error message.
+- Wrap `Input` in a `Field` for the label, hint, and error message, and let it fill the field's width.
 - Use `inputSize` to match the surrounding control density.
 - Use `validation="warn"` or `validation="ok"` for non-blocking inline feedback, and `invalid` for a blocking error.
 - Use `prefix`/`suffix` for non-interactive adornments such as a currency symbol or a unit.
@@ -27,6 +29,7 @@ There is one sharp edge with adornments. When you pass `prefix` or `suffix`, `In
 ### Don't
 
 - Don't confuse `inputSize` with the HTML `size` attribute.
+- Don't shrink an `Input` to the size of the value it holds; it is `w-full` by design and its field owns its width.
 - Don't put layout classes on `className` when using `prefix`/`suffix`; they land on the inner input. Wrap the input or use `InputGroup`.
 - Don't set both `invalid` and a `validation` tone expecting the tone to show. Invalid wins.
 - Don't put interactive controls in `prefix`/`suffix`. Use `InputGroup` for buttons and add-ons.
@@ -35,7 +38,7 @@ There is one sharp edge with adornments. When you pass `prefix` or `suffix`, `In
 
 - #### Input size
 
-  `inputSize` is `sm`, `md`, or `lg`, controlling height and padding.
+  `inputSize` is `sm`, `md`, or `lg`, controlling height and padding. Left unset, the input renders at the `md` height.
 
   ```tsx
   import { Input } from "@cloud/ui";
@@ -45,7 +48,7 @@ There is one sharp edge with adornments. When you pass `prefix` or `suffix`, `In
 
 - #### Variant
 
-  `variant="filled"` uses a tonal `surface-3` fill for dense toolbars and nested forms; the border appears only on focus. The default variant is a bordered field on `surface-2`.
+  `variant` is `default` or `filled`. `variant="filled"` uses a tonal `surface-3` fill for dense toolbars and nested forms; the border appears only on focus. `default` is a bordered field on `surface-2`.
 
 - #### Validation and invalid
   - `validation="warn"` — amber border and focus ring for a non-blocking caution.

@@ -21,11 +21,11 @@ Use this flow when users can understand, complete, and validate the task without
 
 ### Exit and commit have separate homes
 
-The sticky reduced header gives users a consistent way to leave the form. The sticky footer keeps cancel and the primary commit action available without competing with the page title.
+The reduced header gives users a consistent way to leave the form: `PageHeaderBand`, whose back button is built in and whose `backTo` names the destination. The sticky footer keeps cancel and the primary commit action available without competing with the page title.
 
 ### Section cards create a reading order
 
-Cards group fields that belong to the same subject. The body remains a single centered column so users can move through the form in one predictable sequence.
+Cards group fields that belong to the same subject. The body remains a single column so users can move through the form in one predictable sequence. It fills the page's width — a form is not width-locked, and only an individual control that is meaningless when stretched gets a narrow width, at the field.
 
 ### Validation has one owner
 
@@ -35,11 +35,11 @@ The template shows presentation only. The feature owns field state, validation r
 
 #### A. Reduced header
 
-Use a sticky header with a labelled back link and the task title. The back destination should be explicit rather than relying on browser history.
+Use `PageHeaderBand` with the task title and `backTo`. The back button is part of the band, so there is nothing to build; the destination should be explicit rather than relying on browser history. Leave `actions` empty — the header's job is the exit.
 
 #### B. Page body
 
-Use `PageBody` to provide the standard content padding and a constrained form column.
+Use `PageBody` to provide the standard content padding and vertical rhythm. It does not constrain the column's width, and neither should you.
 
 #### C. Section cards
 
@@ -47,11 +47,11 @@ Use `Card`, `CardHeader`, `CardTitle`, and `CardContent` to group related fields
 
 #### D. Fields
 
-Use `Field` to connect a label, hint, required state, and error message with `Input`, `Textarea`, or another appropriate control.
+Use `Field` to connect a label, hint, required state, and error message with `Input`, `Textarea`, or another appropriate control. Inside a `Field`, the control fills the field. A `Select` still needs an `items` map of value to label on its root, or its trigger shows the raw value.
 
 #### E. Action footer
 
-Use `ActionFooter` for a ghost-weight cancel action and one primary create or save action.
+Use `ActionFooter`, as a sibling of `PageBody`, for a ghost-weight cancel action and one primary create or save action. Both carry an icon: cancel takes a leading `X`, and the commit takes its verb's glyph.
 
 ## General guidelines
 
@@ -103,7 +103,7 @@ Explain a constraint or purpose in the hint. State what must change in an error 
 
 #### Back action
 
-Use a real link for navigation and give an icon-only back action an accessible name.
+The band's built-in back button renders a real link when given `backTo`, and it carries its own accessible name.
 
 #### Action footer
 

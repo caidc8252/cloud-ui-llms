@@ -10,6 +10,8 @@ A collection of resources in a tabular format, with a filter band above it and p
 
 The page is three stacked regions: a `PageHeader` band carrying the title and the single create action, a condition band carrying the filters, and a results `Card` holding the count bar, the table, and the pager. Nothing else belongs at this level.
 
+A list is a level-1 page, and level-1 is the **only** tier that takes `PageHeader`. Every page a row leads to — the detail, the create form, a sub-page — is level-2 or deeper and takes `PageHeaderBand`, which carries a built-in back button. `ContentHeader` is never a page header on its own; it is the title block the header components compose internally, or a section heading inside `PageBody`.
+
 ### The sticky model
 
 This is the part most implementations get wrong. The condition band **scrolls away** — it is `sticky={false}` by default and it should stay that way. What stays docked to the top of the scroll root is the summary bar plus the table's own column header. The table is told where to dock with `stickyHeaderTop={LIST_SUMMARY_BAR_HEIGHT}`, which is why that constant is exported rather than being an internal detail: the two numbers must agree or the header will overlap the bar.
@@ -19,6 +21,8 @@ The results `Card` must run `overflow-clip` (or `overflow-visible`), not `overfl
 ### Draft state versus applied state
 
 Filters are a two-phase state machine, owned by `useListFilters`. Typing in the search box mutates `draft`; pressing Search calls `apply()`, which promotes `draft` to `applied` and fires `onApply`. The chips row and the result count read `applied`, never `draft`. This is what makes the page feel deliberate rather than twitchy, and it is what lets the request fire once instead of on every keystroke.
+
+This interaction is mandatory, not a suggestion: a list page's retrieval is the list-filter family plus `useListFilters`. A hand-rolled flex row of bare `Select`s that filters on change is not a lighter version of this — it is a different, wrong page.
 
 ### Completeness-dependent computation is server-side
 
@@ -32,15 +36,23 @@ The table's `empty` slot has to distinguish two situations. No data at all is a 
 
 #### A. Page header
 
-`PageHeader` from `@cloud/ui/components/layout` — title, description, and the `actions` slot. The single `variant="primary"` CTA of the screen lives here, normally _Create <resource>_.
+`PageHeader` from `@cloud/ui/components/layout` — `title`, `description`, and `actions`. `actions` is not a node slot: it takes `HeaderAction[]` descriptors — `{label, icon, to?/onClick?, variant?, disabled?}`. `icon` is **required**, and there is no `size` field, so the header's md buttons are locked at compile time. The single `variant="primary"` CTA of the screen lives here, normally _Create <resource>_.
 
 #### B. Condition band
 
-`ListConditionBand` with two slots. The toolbar slot holds `SearchInput`, any quick `Select` filters, and the Search button (`variant="secondary"`). The chips slot holds `AppliedFilters` wrapping one `FilterChip` per applied filter.
+`ListConditionBand` with two slots. The toolbar slot holds `SearchInput`, any quick `Select` filters, and the Search button. The chips slot holds `AppliedFilters` wrapping one `FilterChip` per applied filter.
+
+The Search button has one form, and it is not a free choice:
+
+`<Button variant="secondary" iconLeft={<Search className="size-4" />} onClick={filters.apply}>Search</Button>`
+
+The icon is part of it. The magnifier inside `SearchInput` is a prefix mark on a field; this one is the commit action, and the page needs both.
+
+Every quick `Select` needs an `items` map (value → label) on its **root**, or the trigger prints the raw value and the user reads `cat-mpos` instead of _Payment terminals_. Nothing type-checks this. Widths belong to the field, never to the current value: the band bounds its filters with a floor and a ceiling, and a filter whose options vary a lot takes an explicit `w-*` sized to the longest one — never a `min-w-*`, which collides with the band's floor and loses.
 
 #### C. Filter state
 
-`useListFilters({ initial, onApply })` supplies `draft`, `setDraft`, `apply`, `applied`, `clearField`, and `clearAll`. The page provides only the field shape and the fetch; the hook owns the state machine.
+`useListFilters({ initial, onApply })` supplies `draft`, `setDraft`, `apply`, `applied`, `clearField`, `clearAll`, `reset`, `countActive`, and `hasApplied`. The page provides only the field shape and the fetch; the hook owns the state machine.
 
 #### D. Results container
 
@@ -54,9 +66,17 @@ The table's `empty` slot has to distinguish two situations. No data at all is a 
 
 A typed `Table<R>` driven by a `TableColumn<R>[]` config. Never hand-write `thead` / `tbody`. Set `stickyHeader` with `stickyHeaderTop={LIST_SUMMARY_BAR_HEIGHT}`.
 
+Row navigation is `onRowClick`, and setting it is the whole job: `Table` **appends the trailing passive-chevron cell itself**. Do not write that column into your `columns` config — you will get two. `rowNav={false}` suppresses it when the row click is a selection toggle rather than navigation.
+
+Inline row verbs go through `rowActions={(row) => …}`. They **coexist** with the chevron in one trailing cell — verbs first at `size="sm"`, chevron last — and the component stops their propagation for you, so a verb click does not also navigate the row. Without `onRowClick`, the cell shows the verbs alone.
+
 #### G. Pagination
 
-`RichPagination` — page, page count, total, page size. Never hand-roll the page/size/range controls.
+`RichPagination` — `page`, `pageCount`, `onPageChange`, `total`, `pageSize`, `onPageSizeChange`. This is the **default** footer of a results region, not one of two equal options. Never hand-roll the page/size/range controls.
+
+Hold `page` and `pageSize` as state, derive `pageCount = ceil(total / pageSize)`, reset to page 1 whenever a filter or the page size changes, and clamp with `safePage = min(page, pageCount)` so a shrinking result set cannot strand the user on an empty page.
+
+Scroll-loading (`LoadMore`, `VirtualTable`'s `onReachEnd`) is the exception. Reach for it only when one of these holds, and name which one in a comment: a feed-like stream with no _page N_ semantics; an unknown or unbounded total; data that appends at the tail in real time; a cursor-only backend where offset paging is too expensive; or a touch-first, narrow-container surface. An ordinary back-office collection is none of those.
 
 #### H. Empty state
 
@@ -68,11 +88,12 @@ The `Empty` component, passed to the table's `empty` prop.
 
 - Use the shared list-filter family. The page supplies fields and predicates; the family owns the band, the chip row, the deferred apply, and the three-state trigger.
 - Send every filter, sort, and page to the server, and read the total from the server's pager.
+- Give every quick `Select` an `items` map on its root, and a width sized to its longest option when the options vary.
 - Set `numeric: true` on numeric, ID, and date columns and then write no classes — `Table` right-aligns the header and the body and applies `tabular-nums` for you.
 - Render an empty cell as `—`, not as blank.
-- Give the whole row to `onRowClick` when the row is navigational, and put a passive `ChevronRight` in a trailing right-aligned column as the affordance.
-- Keep row action buttons to `ghost` or `ghost-danger` only.
-- Use a two-line text column for a name plus a subtitle: `text-sm font-medium` over `text-2xs text-content-tertiary`, with `min-w-0` on the wrapper.
+- Give the whole row to `onRowClick` when the row is navigational, and let `Table` append the trailing chevron. That is the affordance; you do not build it.
+- Put inline row verbs in `rowActions` at `size="sm"`, and keep them to `ghost` or `ghost-danger`.
+- Use a two-line text column for a name plus a subtitle: `text-md font-medium` over `text-xs text-content-tertiary`, with `min-w-0` on the wrapper.
 
 ### Don't
 
@@ -81,7 +102,10 @@ The `Empty` component, passed to the table's `empty` prop.
 - Don't filter, sort, or count a fetched page on the client.
 - Don't put a `secondary` or `primary` button in the summary bar. It draws a box inside a box and competes with the count.
 - Don't fire the request on every keystroke. Search commits on `apply()`.
-- Don't let an inline row action trigger the row's navigation.
+- Don't hand-write the trailing chevron column. `Table` appends it whenever `onRowClick` is set, and a hand-written one lands beside it.
+- Don't make row verbs and the chevron an either/or. They share one trailing cell — verbs first, chevron last.
+- Don't build a filter row out of a bare flex container and unwrapped `Select`s.
+- Don't reach for scroll-loading because it feels modern. `RichPagination` is the default; the exception needs a reason.
 
 ## Writing guidelines
 
@@ -120,8 +144,8 @@ The `Empty` component, passed to the table's `empty` prop.
 
 ### Component-specific guidelines
 
-- A row that navigates on click needs a real focusable target inside it. `onRowClick` alone is a mouse-only affordance.
-- Icon-only actions in the action column need an `aria-label`, and the label must be unique per row (_Delete Admin role_, not _Delete_).
+- A row that navigates on click needs a real focusable target inside it. `onRowClick` alone is a mouse-only affordance, and the appended chevron is passive decoration, not a button.
+- Icon-only verbs in `rowActions` need an `aria-label`, and the label must be unique per row (_Delete Admin role_, not _Delete_).
 - The sticky column header must not hide the first row when a keyboard user tabs into the table; that is what the `stickyHeaderTop` offset exists to guarantee.
 
 ## Related patterns and components

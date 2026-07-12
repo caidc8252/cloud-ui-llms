@@ -1,14 +1,14 @@
 # Modal
 
-Centered dialog with a close affordance, in four widths.
+Centered dialog with a close affordance, in four widths plus fullscreen.
 
 `Modal` is a client component built on `@base-ui/react`'s `Dialog`. Import it from `@cloud/ui` or `@cloud/ui/components/ui`.
 
 ## Development guidelines
 
-`Modal` is a single, prop-driven component rather than a set of parts. Control it with `open` and `onClose`, and pass `title`, `description`, `footer`, and body `children`. The header (title, description, and close button) renders only when there is something to show; the body scrolls; the footer sticks to the bottom.
+`Modal` is a single, prop-driven component rather than a set of parts. Control it with `open` and `onClose` (a bare `() => void` — there is no `onOpenChange`), and pass `title`, `description`, `footer`, and body `children`. Each region is conditional: the header renders when there is a `title`, a `description`, or the close button; the body renders only when there are `children`; the footer renders only when there is a `footer`. The body scrolls, the header and footer do not. `className` lands on the dialog popup, and the props type is exported as `ModalProps`.
 
-Choose the width with `size`: `sm` (360px), `md` (480px, default), `lg` (640px), `xl` (880px), or `fullscreen` (a 32px frame on every side). On mobile the width always caps at the viewport minus a margin.
+Choose the width with `size`: `sm` (360px), `md` (480px, default), `lg` (640px), `xl` (880px), or `fullscreen` (a 32px frame on every side). The four presets are `sm:` breakpoint caps; below that, and always, the width caps at the viewport minus a 1rem margin per side, and the height at the viewport minus 96px.
 
 Dismissal is configurable and independent: `closeOnOverlay` (default `true`), `closeOnEscape` (default `true`), and `showCloseButton` (default `true`). For a dialog that must not be dismissed casually — a forced decision — use `AlertDialog` instead.
 
@@ -57,11 +57,11 @@ Dismissal is configurable and independent: `closeOnOverlay` (default `true`), `c
 
 - #### Header slots
 
-  `title` and `description` render in the header; `showCloseButton` (default `true`) adds the corner close control. Omit all three to render a headerless modal.
+  `title` and `description` render in the header; `showCloseButton` (default `true`) adds the corner close control. To render a headerless modal you must omit `title` and `description` **and** pass `showCloseButton={false}` — the close button alone keeps the header row alive.
 
 - #### Dismissal
 
-  `closeOnOverlay`, `closeOnEscape`, and `showCloseButton` each gate one dismissal path and are independent of one another.
+  `closeOnOverlay` (default `true`), `closeOnEscape` (default `true`), and `showCloseButton` (default `true`) each gate one dismissal path and are independent of one another. `closeOnEscape={false}` is implemented by inspecting the close reason and cancelling the underlying dismissal, so it suppresses Escape only — the overlay and the close button keep working unless you turn them off too.
 
 ## Writing guidelines
 

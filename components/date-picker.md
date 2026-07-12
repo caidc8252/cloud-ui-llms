@@ -8,22 +8,24 @@ Single-date field. An input-styled trigger that opens a calendar popover.
 
 `DatePicker` is the date _field_. Its trigger is a button styled to look exactly like an `Input`, and clicking it opens a popover holding a `Calendar` in `single` mode.
 
-The value type is `Date | null` — controlled through `value` / `onValueChange`, or uncontrolled through `defaultValue`. `formatStr` sets how the chosen date is rendered in the trigger; `placeholder` is what shows when there is none. Both are user-facing, so pass a translated `placeholder` and a `formatStr` that suits the locale.
+The value type is `Date | null` — controlled through `value` / `onValueChange`, or uncontrolled through `defaultValue` (default `null`). `formatStr` sets how the chosen date is rendered in the trigger; `placeholder` is what shows when there is none. Both already follow the active locale: `placeholder` falls back to the built-in translated string, and `formatStr` to that locale's default pattern (`MMM d, yyyy` in English). Override them only when this field needs something more specific — and pass a translated string when you do.
 
-Bound the selectable dates with `minDate` and `maxDate`, or with `disabledDays`, a predicate that receives a `Date` and returns whether it can't be picked. Blocking a date is better than accepting it and rejecting it afterwards.
+Once a date is set, a clear (×) button appears inside the trigger and resets the value to `null`. It is suppressed when the field is `required` or `disabled`.
 
-`size` is `sm`, `md`, or `lg`, matching `Input` and `Button`. `invalid` puts the destructive border and ring on the trigger and sets `aria-invalid`, exactly as `Input` and `Select` do. Pass `name`, `required`, and `id` to wire it into a form and to a `FieldLabel`.
+Bound the selectable dates with `minDate` and `maxDate`, or with `disabledDays`, a predicate that receives a `Date` and returns whether it can't be picked. Blocking a date is better than accepting it and rejecting it afterwards. `minDate` and `maxDate` are normalized to the start and end of their day, so passing a timestamp doesn't accidentally disable the boundary day.
 
-For a range, use `DateRangePicker`. When a time comes with the date, use `DateTimePicker`. Use `Calendar` directly only when the month grid _is_ the page.
+`size` is `sm`, `md` (default), or `lg`, matching `Input` and `Button`. `invalid` puts the destructive border and ring on the trigger and sets `aria-invalid`, exactly as `Input` and `Select` do. Pass `name`, `required`, and `id` to wire it into a form and to a `Field` label (via the field's `htmlFor`); `name` renders a hidden input carrying the date as `yyyy-MM-dd`.
+
+For a range, use `DateRangePicker`. When a time comes with the date, use `DateTimePicker`. For a time on its own, use `TimePicker`. Use `Calendar` directly only when the month grid _is_ the page.
 
 ## General guidelines
 
 ### Do
 
 - Use `minDate`, `maxDate`, or `disabledDays` to block dates that can't be chosen.
-- Pass a translated `placeholder` and a locale-appropriate `formatStr`.
+- Let `placeholder` and `formatStr` fall back to the locale defaults; if you override them, pass a translated string and a locale-appropriate pattern.
 - Match the `size` to the other fields on the form.
-- Set `invalid` and pair it with a `FieldError` message.
+- Set `invalid` and pair it with `Field`'s `error` message.
 
 ### Don't
 
@@ -62,11 +64,12 @@ For a range, use `DateRangePicker`. When a time comes with the date, use `DateTi
 
 - #### In a form
 
-  `name`, `required`, and `id` wire the picker into a form and to its label.
+  `name`, `required`, and `id` wire the picker into a form and to its label. `name` renders a hidden input holding the date as `yyyy-MM-dd`; `required` also removes the clear button.
 
 ### States
 
 - **Empty** — the trigger shows the `placeholder` in muted text.
+- **Filled** — the formatted date, plus a clear (×) button unless the field is `required` or `disabled`.
 - **Invalid** — destructive border and ring, and `aria-invalid` on the trigger.
 - **Disabled** — the trigger is dimmed and the popover won't open.
 
@@ -87,8 +90,8 @@ For a range, use `DateRangePicker`. When a time comes with the date, use `DateTi
 ### General accessibility guidelines
 
 - The trigger is a real button that opens the popover, and focus moves into the calendar and back out again on close.
-- Give the picker a visible label. Inside a `Field`, `FieldLabel` associates it through `id`.
-- `invalid` sets `aria-invalid`, but the red border is not a message — pair it with a `FieldError`.
+- Give the picker a visible label. Inside a `Field`, set `htmlFor` to the picker's `id` so the label points at it.
+- `invalid` sets `aria-invalid`, but the red border is not a message — pair it with `Field`'s `error`.
 
 ### Component-specific guidelines
 

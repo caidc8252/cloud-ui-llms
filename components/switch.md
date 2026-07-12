@@ -6,11 +6,11 @@ Binary toggle switch. Prefer `ToggleSwitch` for fields that need an inline label
 
 ## Development guidelines
 
-`Switch` is a bare on/off toggle. For a labeled form row, prefer the `ToggleSwitch` recipe, which pairs the switch with a label and hit area. Use `Switch` directly in custom layouts.
+`Switch` is a bare on/off toggle — it has no `label` prop of its own. For a labeled form row, prefer the `ToggleSwitch` recipe, which takes a `label` alongside `checked` / `defaultChecked` / `onCheckedChange` / `disabled` / `size` and wires the label to the control. Use `Switch` directly in custom layouts.
 
 Use a switch for a setting that takes effect immediately, such as enabling a feature. Use a `Checkbox` when the choice is part of a form the user submits later.
 
-`size` is `default` or `sm`. The enlarged hit target is preserved at both sizes.
+`size` is `default` (36×20px) or `sm` (24×14px). The enlarged hit target is preserved at both sizes — the switch reaches past its track on every side, so a small switch is still comfortable to hit.
 
 ## General guidelines
 
@@ -30,7 +30,7 @@ Use a switch for a setting that takes effect immediately, such as enabling a fea
 
 - #### Size
 
-  There are two sizes: `default` and `sm`.
+  There are two sizes: `default` (36×20px, the default) and `sm` (24×14px).
 
   ```tsx
   import { Switch } from "@cloud/ui";

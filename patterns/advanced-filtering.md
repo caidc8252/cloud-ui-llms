@@ -16,7 +16,7 @@ The sheet edits `draft`. Nothing happens to the list while the sheet is open. Ap
 
 ### The trigger carries the state
 
-`AdvancedFilterButton` has three states: at rest it is a plain button; with active advanced filters it shows a count badge; the count is the number of _applied_ advanced fields, not draft ones. The page computes that count by looking at the applied values of the keys it considers advanced — the component does not guess which of your fields are advanced.
+`AdvancedFilterButton` has three states: at rest it is a plain button; with active advanced filters it shows a count badge; the count is the number of _applied_ advanced fields, not draft ones. The page computes that count — the component does not guess which of your fields are advanced — but it does not count by hand: `useListFilters` supplies `countActive(keys, source?)`, which compares each key against its initial value and defaults to the applied set. Declare an `ADVANCED_KEYS` tuple and pass it in.
 
 ### Chips are the source of truth for the user
 
@@ -26,23 +26,23 @@ Whatever is in effect appears as a `FilterChip` in `AppliedFilters`, whether it 
 
 #### A. Quick bar
 
-`ListConditionBand`'s toolbar slot, unchanged from the [list page](list-page.md): `SearchInput`, the Search button, and now the advanced trigger.
+`ListConditionBand`'s toolbar slot, unchanged from the [list page](list-page.md): `SearchInput`, the Search button in its one fixed form (`variant="secondary"`, a `Search` icon on the left, `onClick={filters.apply}`), and now the advanced trigger.
 
 #### B. Advanced trigger
 
-`AdvancedFilterButton` — `open`, `onToggle`, and `count`. The page owns the open state and computes `count` from the applied advanced keys.
+`AdvancedFilterButton` — `open`, `onToggle`, and `count`. The page owns the open state and derives `count` with the hook's `countActive(ADVANCED_KEYS)`.
 
 #### C. Sheet shell
 
-`AdvancedFilterSheet` — the right-side sheet with the funnel header, and the apply and reset actions in its footer.
+`AdvancedFilterSheet` — `open`, `onOpenChange`, `onApply`, `onReset`, `resetDisabled`, and the fields as children. It supplies the right-side sheet with the funnel header, and Reset (left) and Apply & Search (right) in its footer.
 
 #### D. Field groups
 
-`AdvancedFilterGroup` wraps a labeled section of the sheet. `AdvancedFilterField` wraps one labeled control. The controls themselves are ordinary primitives — `Select`, `Input`, `DateRangePicker`.
+`AdvancedFilterGroup` wraps a labeled section of the sheet. `AdvancedFilterField` wraps one labeled control. The controls themselves are ordinary primitives — `Select` (with its `items` map on the root, or the trigger prints raw values), `Input`, `DateRangePicker`.
 
 #### E. Shared filter state
 
-The same `useListFilters` instance that drives the quick bar. The sheet writes to `draft` through `setDraft`; the footer's apply calls `apply()`.
+The same `useListFilters` instance that drives the quick bar. The sheet writes to `draft` through `setDraft`; the footer's apply calls `apply()`; its reset calls `reset(ADVANCED_KEYS)`, which rolls back the draft without touching what is currently applied.
 
 #### F. Chip row
 
@@ -53,7 +53,7 @@ The same `useListFilters` instance that drives the quick bar. The sheet writes t
 ### Do
 
 - Drive the sheet from the same `useListFilters` instance as the quick bar, so one apply commits both.
-- Declare which keys are advanced (an `ADVANCED_KEYS` tuple in the page) and derive the trigger count from the applied values of those keys.
+- Declare which keys are advanced (an `ADVANCED_KEYS` tuple in the page) and derive the trigger count with `countActive(ADVANCED_KEYS)` rather than counting by hand.
 - Group the sheet's fields under `AdvancedFilterGroup` headings when there is more than a handful.
 - Render a chip for every applied filter, including the ones set in the sheet.
 - Reset selection and go back to page 1 when filters change. A user acting on a selection they can no longer see is a data-integrity bug, not a UX wrinkle.

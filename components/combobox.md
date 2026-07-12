@@ -2,7 +2,7 @@
 
 Searchable dropdown for choosing one option — or several — from a long list.
 
-`Combobox` is a client component built on `@base-ui/react`'s `Combobox`. It is a single component driven by props, not a set of parts. Import it, and the `ComboboxOption` type, from `@cloud/ui` or `@cloud/ui/components/ui`.
+`Combobox` is a client component built on `@base-ui/react`'s `Combobox`. It is a single component driven by props, not a set of parts. Import it, and the `ComboboxOption` / `ComboboxProps` types, from `@cloud/ui` or `@cloud/ui/components/ui`.
 
 ## Development guidelines
 
@@ -15,9 +15,11 @@ Selection mode follows `multiple`, and so does the shape of `value`:
 
 In multi-select, the chosen options render as removable chips in the trigger. `maxChips` caps how many chips show: past that count you get the first `maxChips` chips plus a trailing, non-removable `+N` pill. Leave it undefined and every chip renders, wrapping the trigger to as many lines as it takes.
 
-`size` is `sm` or `md` (default), matching `Input` and `Select` at the same size. `invalid` gives the trigger the destructive border and ring, and sets `aria-invalid`, so a combobox inside a `Field` errors like any other control.
+`size` is `sm` or `md` (default), matching `Input` and `Select` at the same size. In single-select it fixes the trigger height; in multi-select it sets a **minimum** height instead, and the trigger grows taller as the chips wrap. `invalid` gives the trigger the destructive border and ring, and sets `aria-invalid`, so a combobox inside a `Field` errors like any other control. `disabled` disables the whole control; a single option opts out with `disabled` on its `ComboboxOption`.
 
-`placeholder`, `searchPlaceholder`, and `emptyText` are all user-facing — pass translated strings. `emptyText` defaults to an empty string, so if you want the "no results" line to say anything, you must supply it.
+The trigger is `w-full`, so the field owns the width and it holds still whatever is selected. `className` lands on the trigger — that is where you bound the width, not on a wrapper.
+
+`placeholder`, `searchPlaceholder`, and `emptyText` are all user-facing — pass translated strings. `placeholder` falls back to `Select…` and `searchPlaceholder` to `Search…`, both untranslated, so pass your own. `emptyText` defaults to an empty string, and an empty `emptyText` renders **no** "no results" line at all — if a fruitless search should say so, you must supply it.
 
 ## General guidelines
 
