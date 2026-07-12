@@ -134,7 +134,6 @@ This index is for  AI agents writing business application UI. Consume public pac
 - [Permission gating](patterns/permission-gating.md): Client and server access gates, typed permission codes, effective permissions, and UX behavior for unavailable actions.
 - [Side navigation](patterns/side-navigation.md): Sidebar projection from module manifests and effective permissions, including menu levels, icons, ordering, and accessibility.
 - [Timestamps](patterns/timestamps.md): Store integer seconds, choose render and input edges deliberately, and format absolute or relative times consistently.
-- [Design tokens](patterns/design-tokens.md): Token naming, semantic color roles, spacing, typography, radius, shadow, motion, dark mode, and lint constraints.
 - [Portal page rules](../../.claude/team-rule/coding-rules/ui_ui-and-pages.md): Binding page composition, density, accessibility, action hierarchy, lists, forms, details, color, and typography guidance.
 
 ## Demos
