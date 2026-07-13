@@ -1,6 +1,15 @@
 # Edit resource
 
-A dedicated page carrying the same shape as the create form, pre-filled and dirty-tracked. **The only sanctioned edit shape — there is no inline edit and no split-board edit.**
+The same shape as the create form, pre-filled and dirty-tracked, in one of two sanctioned containers. **There is no inline edit and no split-board edit, in either container.**
+
+### Pick the container by the form's size, not by taste
+
+| | Use it when |
+|---|---|
+| **Overlay** — `Modal`, or `Sheet` when it needs room | One section of fields, no sub-navigation, and the user does not need the page behind it. **This is the default: most edits are a handful of fields, and a whole page for them is too heavy.** |
+| **Dedicated page** | More than one section card, or a multi-step wizard; or the edit must be deep-linkable; or the form is long enough that the commit needs a sticky `ActionFooter` to stay reachable. |
+
+The rule is decidable from the field list alone, so create and edit land in the same container and two authors reading this page reach the same answer. Everything below applies to both containers unless it names one.
 
 [Create form](create-form.md) | [Style template](../demos/create-form.md) | [Binding rules](../../../../.claude/team-rule/coding-rules/ui_ui-and-pages.md)
 
@@ -8,7 +17,9 @@ A dedicated page carrying the same shape as the create form, pre-filled and dirt
 
 ### Edit is create, pre-filled
 
-The edit page is the create page with the record loaded into it. Same reduced header, same one column of section cards, same `Field`s, same sticky `ActionFooter`. Share the field components between the two — one form, two entry points — so a field added to create cannot silently go missing from edit. Everything in [Create form](create-form.md) applies here unless this page says otherwise.
+Edit is create with the record loaded into it. Same `Field`s, same order, same hints. Share the field components between the two — one form, two entry points — so a field added to create cannot silently go missing from edit. Everything in [Create form](create-form.md) applies here unless this page says otherwise.
+
+On a page: the reduced header, one column of section cards, and a sticky `ActionFooter`. In an overlay: the `Modal`'s own title and footer carry the title verb and the commit — do not nest an `ActionFooter` inside a `Modal`.
 
 Three things differ, and only three: the title verb, the commit verb, and the dirty gate.
 
@@ -24,15 +35,17 @@ Locking a user, resetting their password, resending an invitation, deleting a ro
 
 The test is reversibility of intent: a **field** is a value the user is proposing and may still abandon by cancelling. An **action** is a thing that happens. A lock toggle that only takes effect on _Save changes_ is a trap — the user believes the account is locked and walks away.
 
-Put these on the detail page, or in the edit page's header as secondary actions — never in the card body among the fields. See [Delete patterns](delete-patterns.md) for the destructive ones.
+Put these on the detail page, or in the edit page's header as secondary actions — never in the card body among the fields, and never in an edit overlay at all: an overlay's footer belongs to the draft's commit and escape, and a lock that fires from beside _Save changes_ reads as part of the draft. See [Delete patterns](delete-patterns.md) for the destructive ones.
 
-### The page returns to where it came from
+### It returns to where it came from
 
-Create routes to the new record's detail page — there is nowhere else to go. Edit returns to the record's detail page, which is almost always where the user started. Do not dump them back on the list; they came to look at one record, and they still want to.
+Create routes to the new record's detail page — there is nowhere else to go. An edit page returns to the record's detail page, which is almost always where the user started; do not dump them back on the list, because they came to look at one record and they still want to. An edit overlay simply closes onto the record it was opened from, which is the same promise kept for free — and is the main reason the overlay is the lighter choice.
 
 ### Leaving with unsaved changes is caught
 
 A dirty form that the user navigates away from must ask first. See [Unsaved changes](unsaved-changes.md) — the dirty flag from the commit gate is the same flag that arms the guard, and if you compute it wrong, both break together.
+
+An overlay has three ways out, not one: the escape button, the close affordance, and `Esc`. All three are "navigating away" — arm the guard on every one of them, or the cheapest container becomes the one that silently drops the user's work.
 
 ### There is no inline edit, and no split board
 
@@ -44,22 +57,28 @@ Some existing screens edit a record in a right-hand pane beside a list of record
 
 The create form's blocks, unchanged — see [Create form](create-form.md) for A through E. What is specific to edit:
 
-#### A. Loaded draft
+#### A. Container
+
+`Modal` (or `Sheet`) for a one-section form; a page for a multi-section one. Decide from the field list before you build either, and give create the same container — a create overlay whose edit is a page is two designs for one form.
+
+#### B. Loaded draft
 
 The record, fetched and copied into a draft. The pristine copy stays around so the dirty check has something to compare against.
 
-#### B. Dirty gate
+#### C. Dirty gate
 
-`disabled={!dirty || saving}` on the commit. `dirty` is a value comparison against the pristine copy, not a "has been touched" flag.
+`disabled={!dirty || saving}` on the commit — the page's `ActionFooter` button, or the `Modal`'s footer button. `dirty` is a value comparison against the pristine copy, not a "has been touched" flag.
 
-#### C. Header actions
+#### D. Header actions — page only
 
-The record's state transitions — _Lock_, _Reset password_, _Delete_ — as `secondary` or `danger` buttons in the reduced header, per [Action weight](action-weight.md). Never among the fields.
+The record's state transitions — _Lock_, _Reset password_, _Delete_ — as `secondary` or `danger` buttons in the reduced header, per [Action weight](action-weight.md). Never among the fields. An edit overlay has no such header: leave its transitions on the detail page behind it.
 
 ## General guidelines
 
 ### Do
 
+- Pick the container from the field list: one section of fields is an overlay, more than one is a page.
+- Give create and edit the same container.
 - Share the field components with the create page. One form, two entry points.
 - Disable the commit while the draft equals the loaded record.
 - Recompute `dirty` by comparing values, so an edit that is typed and untyped goes back to clean.
@@ -70,6 +89,10 @@ The record's state transitions — _Lock_, _Reset password_, _Delete_ — as `se
 
 ### Don't
 
+- Don't spend a whole page on a form of a handful of fields. That is what the overlay is for.
+- Don't nest an `ActionFooter` inside a `Modal` — the modal's footer already carries the commit.
+- Don't put state transitions in an edit overlay's footer. They are not the draft's commit.
+- Don't let `Esc` or the close affordance skip the unsaved-changes guard.
 - Don't build an inline editor from a table cell or a key-value row. There is no primitive, and no contract.
 - Don't copy the legacy split-board edit into a new module.
 - Don't put a lock, a reset, or a delete among the fields. They are not values the user is proposing.
@@ -86,9 +109,10 @@ The record's state transitions — _Lock_, _Reset password_, _Delete_ — as `se
 
 ### Component-specific guidelines
 
-#### Page title
+#### Title
 
 - The verb plus the resource: _Edit role_. Not _Editing role_, not the record's name alone.
+- The same wording whether it is the page title or the `Modal`'s title. The container changes; the sentence does not.
 
 #### Buttons
 
@@ -120,4 +144,4 @@ The record's state transitions — _Lock_, _Reset password_, _Delete_ — as `se
 - [Detail page](detail-page.md) — where the user came from, and where a successful save returns them.
 - [Delete patterns](delete-patterns.md) — the destructive state transitions and their tiers.
 - [Action weight](action-weight.md) — the variant a header action takes.
-- Components: `Field`, `Input`, `Textarea`, `Select`, `Combobox`, `Card`, `ActionFooter`, `PageBody`, `Button`, `ConfirmModal`.
+- Components: `Field`, `Input`, `Textarea`, `Select`, `Combobox`, `Card`, `Button`; `Modal` or `Sheet` for the overlay container; `PageBody` and `ActionFooter` for the page container.

@@ -1,6 +1,8 @@
 # Create form
 
-A single-page form for creating or editing a resource. The default create shape — use it unless the flow genuinely has stages.
+A single-step form for creating or editing a resource. The default create shape — use it unless the flow genuinely has stages.
+
+**Container:** a one-section form goes in an overlay (`Modal`, or `Sheet` when it needs room) — a whole page for a handful of fields is too heavy. A form of more than one section card, or one that must be deep-linkable, gets its own page. Create and edit share the container; see [Edit resource](edit-resource.md), which owns this rule. The blocks below describe the page shape — in an overlay, the `Modal`'s own title and footer stand in for the header band and the `ActionFooter`.
 
 [Style template](../demos/create-form.md) | [Binding rules](../../../../.claude/team-rule/coding-rules/ui_ui-and-pages.md)
 
@@ -10,9 +12,9 @@ A single-page form for creating or editing a resource. The default create shape 
 
 Many fields is not a reason to make a wizard. A wizard is for **staged** flows: a later step depends on an earlier answer, the flow branches, there is a review gate, or an external process runs between steps. Fields that are merely numerous but independent stay on one page, split into section cards. See [Create wizard](create-wizard.md) for the other side of that test.
 
-### The exit lives in the header, the commit lives in the footer
+### On a page: the exit lives in the header, the commit lives in the footer
 
-A create or edit page is level-2, so its header is `PageHeaderBand` — the default `variant="page"`, which is title, optional description, and a **built-in back button** you cannot omit. Give the back button its destination with `backTo`. The band carries **no actions**; its job is to let the user leave. (`variant="page"` is not sticky by default, which is the right call here: the header has nothing the user needs while filling in field twenty.)
+A create or edit **page** is level-2, so its header is `PageHeaderBand` — the default `variant="page"`, which is title, optional description, and a **built-in back button** you cannot omit. Give the back button its destination with `backTo`. The band carries **no actions**; its job is to let the user leave. (`variant="page"` is not sticky by default, which is the right call here: the header has nothing the user needs while filling in field twenty.)
 
 The commit pair — a ghost _Cancel_ and the primary create action — rides a sticky `ActionFooter` at the bottom, a sibling of `PageBody`, never nested inside it. The user can always leave and can always submit, no matter how long the form is; neither scrolls out of reach.
 
