@@ -16,7 +16,7 @@
  * read exactly what they read before.
  */
 
-import { writeFile, mkdir, readdir, cp } from "node:fs/promises";
+import { writeFile, mkdir, readdir, cp, rm } from "node:fs/promises";
 import { join, dirname, relative, sep } from "node:path";
 
 import { readText } from "./lib/read.mjs";
@@ -39,6 +39,10 @@ const SKIP = new Set([
   "scripts",
   "assets",
 ]);
+
+// The output is a complete view of the source tree. Start clean so removing a
+// source document also removes its previously generated HTML route.
+await rm(OUT, { recursive: true, force: true });
 
 const write = async (rel, html) => {
   const out = join(OUT, rel);

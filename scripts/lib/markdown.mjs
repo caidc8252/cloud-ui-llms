@@ -48,7 +48,57 @@ const wrapTables = (html) =>
     .replace(/<table>/g, '<div class="table-scroll"><table>')
     .replace(/<\/table>/g, "</table></div>");
 
-export const render = (md) => wrapTables(marked.parse(md));
+const textContent = (html) =>
+  html
+    .replace(/<[^>]+>/g, "")
+    .replace(/&quot;/g, '"')
+    .replace(/&#39;/g, "'")
+    .replace(/&amp;/g, "&");
+
+function colorSwatch(value, mode) {
+  const color = textContent(value);
+  return `<span class="color-preview__swatch color-preview__swatch--${mode}" style="--color-preview-value: ${esc(color)}" aria-hidden="true"></span>`;
+}
+
+function colorPreview(lightValue, darkValue, { light, dark }) {
+  const lightColor = textContent(lightValue);
+  const darkColor = textContent(darkValue);
+  return `<span class="color-preview" role="img" data-color-light="${esc(`${light}: ${lightColor}`)}" data-color-dark="${esc(`${dark}: ${darkColor}`)}" aria-label="${esc(`${light}: ${lightColor}`)}">${colorSwatch(lightValue, "light")}${colorSwatch(darkValue, "dark")}</span>`;
+}
+
+const colorModeControl = ({ light, dark }) => `<div class="color-mode-switch" role="group" aria-label="Palette visual mode">
+  <button type="button" aria-pressed="true" data-color-mode-tab="light">${light} mode</button>
+  <button type="button" aria-pressed="false" data-color-mode-tab="dark">${dark} mode</button>
+</div>`;
+
+/* The Colors reference has the same four data columns in every palette table.
+ * Add the visual-only fifth column at render time so the Markdown remains a
+ * compact, useful source for both people and agents. */
+function addColorPreviews(html, { preview, light, dark }) {
+  let insertedModeControl = false;
+  return html.replace(
+    /<table>\n<thead>\n<tr>\n<th>(Token|令牌)<\/th>\n<th>(Light value|浅色值)<\/th>\n<th>(Dark value|深色值)<\/th>\n<th>(Description|说明)<\/th>\n<\/tr>\n<\/thead>\n<tbody>([\s\S]*?)<\/tbody><\/table>/g,
+    (_, token, lightHeader, darkHeader, description, rows) => {
+      const withPreviews = rows.replace(
+        /(<tr>\n<td>[\s\S]*?<\/td>\n<td>)([\s\S]*?)(<\/td>\n<td>)([\s\S]*?)(<\/td>)(\n<td>)/g,
+        (_, beforeLight, lightValue, betweenValues, darkValue, afterDark, beforeDescription) =>
+          `${beforeLight}<span class="color-value color-value--light">${lightValue}</span><span class="color-value color-value--dark">${darkValue}</span>${afterDark}\n<td>${colorPreview(lightValue, darkValue, { light, dark })}</td>${beforeDescription}`,
+      );
+      const modeControl = insertedModeControl
+        ? ""
+        : colorModeControl({ light, dark });
+      insertedModeControl = true;
+      return `${modeControl}<table>\n<thead>\n<tr>\n<th>${token}</th>\n<th>Value</th>\n<th>${preview}</th>\n<th>${description}</th>\n</tr>\n</thead>\n<tbody>${withPreviews}</tbody></table>`;
+    },
+  );
+}
+
+export const render = (md, colorPreviewLabels) => {
+  const html = marked.parse(md);
+  return wrapTables(
+    colorPreviewLabels ? addColorPreviews(html, colorPreviewLabels) : html,
+  );
+};
 export const renderInline = (md) => marked.parseInline(md || "");
 
 /** Inline markdown with its anchors removed — for a card whose whole surface is a link. */

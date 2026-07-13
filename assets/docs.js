@@ -27,6 +27,37 @@ menu?.addEventListener("click", () => {
   menu.setAttribute("aria-expanded", String(Boolean(open)));
 });
 
+const colorsReference = document.querySelector(".colors-reference");
+if (colorsReference) {
+  const modeTabs = [...colorsReference.querySelectorAll("[data-color-mode-tab]")];
+  const setColorMode = (mode) => {
+    colorsReference.dataset.colorMode = mode;
+    for (const tab of modeTabs) {
+      tab.setAttribute("aria-pressed", String(tab.dataset.colorModeTab === mode));
+    }
+    for (const preview of colorsReference.querySelectorAll(".color-preview")) {
+      preview.setAttribute("aria-label", preview.dataset[`color${mode[0].toUpperCase()}${mode.slice(1)}`]);
+    }
+  };
+  for (const tab of modeTabs) {
+    tab.addEventListener("click", () => setColorMode(tab.dataset.colorModeTab));
+    tab.addEventListener("keydown", (event) => {
+      if (!['ArrowLeft', 'ArrowRight', 'Home', 'End'].includes(event.key)) return;
+      event.preventDefault();
+      const current = modeTabs.indexOf(tab);
+      const next =
+        event.key === 'Home'
+          ? 0
+          : event.key === 'End'
+            ? modeTabs.length - 1
+            : (current + (event.key === 'ArrowRight' ? 1 : -1) + modeTabs.length) %
+              modeTabs.length;
+      modeTabs[next].focus();
+      setColorMode(modeTabs[next].dataset.colorModeTab);
+    });
+  }
+}
+
 /* Light up the section being read. `seen` is keyed by id rather than by element
  * so the first *visible* link wins in document order — an observer fires per
  * element, and without this the highlight jitters between neighbours. */

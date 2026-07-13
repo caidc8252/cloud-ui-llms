@@ -17,7 +17,11 @@ import { page, toc } from "./layout.mjs";
  */
 export async function docPage({ rel, md, section }) {
   const title = (md.match(/^#\s+(.+)$/m) || [, basename(rel, ".md")])[1].trim();
-  const html = render(md);
+  const isColors = /(?:^|\/)colors\.md$/.test(rel);
+  const colorPreviewLabels = isColors
+    ? { preview: "Preview", light: "Light", dark: "Dark" }
+    : undefined;
+  const html = render(md, colorPreviewLabels);
 
   const tabs =
     section?.title === "Components"
@@ -25,7 +29,15 @@ export async function docPage({ rel, md, section }) {
       : null;
 
   if (!tabs) {
-    return page({ title, body: html, rel, section, tocHtml: toc(md) });
+    return page({
+      title,
+      body: isColors
+        ? `<div class="colors-reference" data-color-mode="light">${html}</div>`
+        : html,
+      rel,
+      section,
+      tocHtml: toc(md),
+    });
   }
 
   /* The title and the lede sit ABOVE the tab bar, as they do on cloudscape: they
