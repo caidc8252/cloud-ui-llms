@@ -860,3 +860,61 @@ main > .lede {
   border: 0;
   border-radius: 0;
 }
+
+/* ── Doc tabs ────────────────────────────────────────────────── */
+
+.tabs-bar {
+  display: flex;
+  gap: 2px;
+  margin: 24px 0 28px;
+  border-bottom: 1px solid var(--line-default);
+  overflow-x: auto;
+}
+.tabs-bar button {
+  flex: none;
+  padding: 10px 14px;
+  font: inherit;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--content-secondary);
+  background: none;
+  border: 0;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -1px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+.tabs-bar button:hover {
+  color: var(--content-primary);
+}
+.tabs-bar button[aria-selected="true"] {
+  color: var(--primary);
+  font-weight: 620;
+  border-bottom-color: var(--primary);
+}
+.tabs-bar button:focus-visible {
+  outline: 2px solid var(--line-focus);
+  outline-offset: -2px;
+  border-radius: var(--radius-sm) var(--radius-sm) 0 0;
+}
+
+/* The tab already names the section — repeating it as an h2 at the top of its
+ * own panel is the same words twice. Kept in the DOM for the anchor. */
+.panel-title {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+[role="tabpanel"] > h3:first-of-type {
+  margin-top: 0;
+}
+
+/* A tab with no h3s has an empty rail, and an "On this page" heading with
+ * nothing under it reads as broken. Let the rail disappear instead. */
+.toc.tabbed:not(:has(.toc-group:not([hidden]))) {
+  display: none;
+}

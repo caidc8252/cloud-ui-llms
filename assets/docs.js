@@ -46,3 +46,62 @@ if (links.length) {
     if (el) observer.observe(el);
   }
 }
+
+/* ── Tabs ─────────────────────────────────────────────────────────────────────
+ * A component doc is one page with five panels, not five pages. The tab bar is
+ * derived from the document's own `## ` headings, so this only has to switch
+ * what is visible and keep three things in step: the rail, the URL, and the
+ * heading a deep link is asking for.
+ */
+const tabBar = document.querySelector(".tabs-bar");
+if (tabBar) {
+  const tabs = [...tabBar.querySelectorAll("[role=tab]")];
+  const panelOf = (id) => document.getElementById(`panel-${id}`);
+  const groupOf = (id) => document.querySelector(`.toc-group[data-for="${id}"]`);
+
+  function show(id, { push = true } = {}) {
+    if (!panelOf(id)) return false;
+    for (const t of tabs) {
+      const on = t.dataset.tab === id;
+      t.setAttribute("aria-selected", String(on));
+      panelOf(t.dataset.tab).hidden = !on;
+      const g = groupOf(t.dataset.tab);
+      if (g) g.hidden = !on || !g.children.length;
+    }
+    if (push) history.replaceState(null, "", `#${id}`);
+    return true;
+  }
+
+  for (const t of tabs) {
+    t.addEventListener("click", () => show(t.dataset.tab));
+    /* Arrow keys move between tabs — the standard model, and the only way a
+     * keyboard user gets past the first panel without tabbing through it. */
+    t.addEventListener("keydown", (e) => {
+      const i = tabs.indexOf(t);
+      const next =
+        e.key === "ArrowRight" ? i + 1 : e.key === "ArrowLeft" ? i - 1 : null;
+      if (next === null) return;
+      e.preventDefault();
+      const target = tabs[(next + tabs.length) % tabs.length];
+      target.focus();
+      show(target.dataset.tab);
+    });
+  }
+
+  /* A deep link can name a tab (#features) or a heading inside one (#do). Either
+   * has to open the right panel first — otherwise the browser scrolls to an
+   * element that is `hidden`, which means it does nothing at all and the link
+   * looks broken. */
+  function openFor(hash) {
+    const id = hash.replace(/^#/, "");
+    if (!id) return;
+    if (show(id, { push: false })) return;
+    const panel = document.getElementById(id)?.closest("[role=tabpanel]");
+    if (panel) {
+      show(panel.id.replace(/^panel-/, ""), { push: false });
+      document.getElementById(id)?.scrollIntoView();
+    }
+  }
+  openFor(location.hash);
+  window.addEventListener("hashchange", () => openFor(location.hash));
+}
