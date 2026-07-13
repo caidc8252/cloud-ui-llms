@@ -1,6 +1,6 @@
 # Demos
 
-A demo is a compilable `@cloud/ui` layout template. Use these examples to see how components, layout primitives, and interaction rules compose into a complete interface. They are static source references, not production-ready screens: adapt the relevant template inside the application module rather than importing it directly.
+A demo is a **prose walkthrough** of how components, layout primitives, and interaction rules compose into a complete interface. **There is no code here** — do not come looking for a file to copy. Each demo restates its pattern's composition in shorter form; when the two differ, the pattern is the authority. For code, read the `components/*.md` doc of the component you need.
 
 ### [List page](list-page.md)
 

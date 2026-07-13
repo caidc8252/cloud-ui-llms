@@ -133,9 +133,7 @@ Each entry states the condition that selects it. Read the conditions here and pi
 
 ## Demos
 
-Compilable page templates. Start from one and adapt it inside your module — they are references to copy from, not components to import.
-
-- [Demos](demos/index.md): Compilable `@cloud/ui` page and chart examples. Start here to select a template, then adapt it to the application module.
+- [Demos](demos/index.md): Prose walkthroughs of the standard page compositions — **no code**. They restate a pattern's composition in shorter form; the pattern is the fuller account and the authority. **Runnable code lives in `components/*.md`**, next to the component it exercises.
 
 ## Foundations
 
@@ -155,11 +153,9 @@ Colour, spacing, layout, typography, iconography, motion. The decisions every co
 
 ## Code Snippets
 
-The demo templates again, as source to copy.
-
-- [List page source](demos/list-page.md): Copy and adapt the standard list composition.
-- [Advanced-filter list source](demos/advanced-filter-list.md): Copy and adapt the advanced filtering composition.
-- [Create form source](demos/create-form.md): Copy and adapt the single-page create composition.
-- [Create wizard source](demos/create-wizard.md): Copy and adapt the staged create composition.
-- [Detail page source](demos/detail-page.md): Copy and adapt the resource detail composition.
-- [Chart source](demos/charts.md): Copy and adapt themed chart compositions without importing Recharts directly.
+- [List page demo](demos/list-page.md): The standard list composition, walked through in prose. The fuller account is [List page](patterns/list-page.md).
+- [Advanced-filter list demo](demos/advanced-filter-list.md): The advanced filtering composition, walked through in prose. The fuller account is [Advanced filtering](patterns/advanced-filtering.md).
+- [Create form demo](demos/create-form.md): The single-page create composition, walked through in prose. The fuller account is [Create form](patterns/create-form.md).
+- [Create wizard demo](demos/create-wizard.md): The staged create composition, walked through in prose. The fuller account is [Create wizard](patterns/create-wizard.md).
+- [Detail page demo](demos/detail-page.md): The resource detail composition, walked through in prose. The fuller account is [Detail page](patterns/detail-page.md).
+- [Charts demo](demos/charts.md): Themed chart composition, walked through in prose — never import Recharts directly. The fuller account is [Data visualization](patterns/data-visualization.md).
