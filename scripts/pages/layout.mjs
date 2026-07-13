@@ -18,11 +18,16 @@ let MODEL = null;
 export const useIndex = (model) => (MODEL = model);
 
 function topNav(up, current) {
+  const currentEntry = current ? MODEL.entry(current) : null;
   return MODEL.sections
-    .filter((s) => s.items.length && !/get started/i.test(s.title))
+    .filter(
+      (s) =>
+        s.items.length &&
+        !/^(?:get started|demo walkthroughs)$/i.test(s.title),
+    )
     .map((s) => {
-      const to = s.indexHref ?? s.items[0].md.replace(/\.md$/, ".html");
-      const on = s === current ? ' class="on"' : "";
+      const to = MODEL.entry(s);
+      const on = s === current || to === currentEntry ? ' class="on"' : "";
       return `<a href="${up}/${to}"${on}>${esc(s.title)}</a>`;
     })
     .join("");
@@ -114,8 +119,8 @@ ${body.includes("data-preview") ? `<link rel="stylesheet" href="${up}/assets/ui.
 <header class="top">
   <button class="menu" type="button" aria-label="Show navigation" aria-expanded="false">☰</button>
   <a class="brand" href="${up}/index.html">@cloud/ui</a>
-  <nav class="tabs" aria-label="Sections">${topNav(up, section)}</nav>
   <span class="grow"></span>
+  <nav class="tabs" aria-label="Sections">${topNav(up, section)}</nav>
   <a class="btn" href="${raw}">View source .md</a>
   <button class="btn theme" type="button" aria-label="Switch theme">◐</button>
 </header>

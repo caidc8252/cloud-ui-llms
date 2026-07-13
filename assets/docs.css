@@ -1366,42 +1366,66 @@ main > .lede {
 /* Hero. Dark in both themes — it is a masthead, not a surface, and it is the one
  * place the docs get to look like a front door rather than a page. */
 .hero {
-  background:
-    radial-gradient(
-      1200px 400px at 15% 0%,
-      color-mix(in oklch, var(--primary) 45%, transparent),
-      transparent 70%
+  display: flex;
+  align-items: center;
+  background-color: #07090d;
+  background-image:
+    linear-gradient(
+      90deg,
+      rgb(7 9 13 / 0.98) 0%,
+      rgb(7 9 13 / 0.92) 31%,
+      rgb(7 9 13 / 0.48) 53%,
+      rgb(7 9 13 / 0.04) 78%
     ),
-    oklch(16% 0.012 265);
+    linear-gradient(180deg, rgb(7 9 13 / 0.08), rgb(7 9 13 / 0.52)),
+    url("./hero-cloud-ribbons.png");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
   color: oklch(97% 0 0);
-  padding: 88px 24px 80px;
+  padding: 44px 24px 60px;
 }
 .hero-in {
+  width: 100%;
   max-width: 1200px;
   margin: 0 auto;
 }
 .hero h1 {
-  font-size: 56px;
+  font-size: 42px;
+  line-height: 1.2;
   font-weight: 680;
-  letter-spacing: -0.03em;
+  letter-spacing: -0.045em;
   margin: 0 0 12px;
   color: inherit;
+  text-shadow: 0 2px 28px rgb(0 0 0 / 0.45);
 }
 .hero .lede {
-  font-size: 26px;
-  font-weight: 500;
-  line-height: 1.3;
+  font-size: 32px;
+  font-weight: 450;
+  line-height: 1.25;
   letter-spacing: -0.015em;
   margin: 0 0 16px;
-  color: oklch(92% 0.01 265);
-  max-width: 22ch;
+  color: #fff;
+  max-width: 34ch;
 }
 .hero .sub {
-  font-size: 15px;
-  line-height: 1.6;
+  font-size: 16px;
+  line-height: 1.5;
   max-width: 62ch;
   margin: 0 0 32px;
-  color: oklch(75% 0.012 265);
+  color: #fff;
+}
+.hero strong {
+  color: #fff;
+}
+.hero .sub a {
+  color: #fff;
+  text-decoration: underline;
+  text-decoration-color: rgb(255 255 255 / 0.55);
+  text-underline-offset: 0.18em;
+}
+.hero .sub a:hover {
+  text-decoration-color: #fff;
 }
 .hero .sub code {
   background: oklch(100% 0 0 / 0.1);
@@ -1578,13 +1602,24 @@ main > .lede {
     font-size: 28px;
   }
   .hero {
-    padding: 56px 20px 64px;
+    padding: 36px 20px 60px;
+    background-image:
+      linear-gradient(
+        90deg,
+        rgb(7 9 13 / 0.96) 0%,
+        rgb(7 9 13 / 0.84) 58%,
+        rgb(7 9 13 / 0.34) 100%
+      ),
+      linear-gradient(180deg, rgb(7 9 13 / 0.18), rgb(7 9 13 / 0.7)),
+      url("./hero-cloud-ribbons.png");
+    background-position: 62% center;
   }
   .hero h1 {
-    font-size: 40px;
+    font-size: 36px;
   }
   .hero .lede {
-    font-size: 21px;
+    font-size: 24px;
+    line-height: 1.3;
     max-width: none;
   }
   .cards {
