@@ -99,6 +99,7 @@ export function page({ title, body, rel, section, tocHtml, home = false, raw, on
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>${esc(title)} · @cloud/ui</title>
 <link rel="stylesheet" href="${up}/assets/docs.css">
+${body.includes("data-preview") ? `<link rel="stylesheet" href="${up}/assets/ui.css">` : ""}
 <script>
   // Before first paint, so the page never flashes the wrong theme.
   (function () { var t = localStorage.getItem("cloud-ui-docs-theme"); if (t) document.documentElement.dataset.theme = t; })();
@@ -130,6 +131,7 @@ export function page({ title, body, rel, section, tocHtml, home = false, raw, on
 </div>
 
 <script src="${up}/assets/docs.js" defer></script>
+${body.includes("data-preview") ? `<script type="module" src="${up}/assets/playground.js"></script>` : ""}
 </body>
 </html>
 `;

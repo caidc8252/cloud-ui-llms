@@ -6,6 +6,32 @@ read directly.
 
 The HTML is a **view** of that markdown — generated from it, never the other way round.
 
+## Live previews (optional)
+
+The tsx examples in the component docs can render as **real components** — the
+actual `@cloud/ui`, with the actual Tailwind CSS. Nothing is authored for this:
+the 212 examples already in the docs are the previews.
+
+It is off unless you vendor the package, because **`@cloud/ui` is private and
+this repo is public — the tarball must never be committed**:
+
+```bash
+# from the monorepo:  pnpm --filter @cloud/ui pack
+cp ../cloud-next-scaffold/cloud-ui-0.0.1.tgz .
+npm run preview:install
+npm run serve
+```
+
+`*.tgz` is gitignored. Without it the docs site builds exactly as before —
+every example keeps its code block and nothing 404s. The previews are an
+enhancement, never a dependency.
+
+> Vendoring is a stopgap. A tarball is a snapshot, so the day `Button` changes,
+> these previews are showing an old one — and a design system whose docs are
+> behind its code is worse than one with no previews at all. Publish `@cloud/ui`
+> to a private registry, or move these docs into the monorepo, and the problem
+> stops existing.
+
 ## Preview it locally
 
 ```bash

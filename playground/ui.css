@@ -1,0 +1,12 @@
+/* The stylesheet the previews render against.
+ *
+ * Tailwind scans two places: @cloud/ui's dist (where the components' class names
+ * live, reached through the package's own @source "./") and the markdown, because
+ * the examples carry classes of their own — `className="size-4"` on an icon. Miss
+ * the second and the previews come out subtly wrong, which is worse than not
+ * having them. */
+@import "@cloud/ui/component-defaults.css";
+@import "@cloud/ui/globals.css";
+@source "../components";
+@source "../patterns";
+@source "../demos";
