@@ -121,7 +121,9 @@ To remove a slot's padding, use `flush`. A plain `className="p-0"` cannot overri
 
   Re-add padding through `className` when a flush slot still needs some, such as `<CardContent flush className="py-1">`.
 
-  The shell is `overflow-hidden`, which traps a sticky table header. When the flush content is a `Table` with `stickyHeader`, put `className="overflow-clip"` on the `Card` so the header can dock to the page scroll root.
+  The shell is `overflow-hidden`, which makes the card a scroll container, and a scroll container traps a sticky table header. When the flush content is a `Table` with `stickyHeader`, put `className="overflow-clip"` on the `Card` — clip still rounds the corners but establishes no scroll container — so the header can dock to the page scroll root, `PageBody`.
+
+  That default `overflow-hidden` is also why `PageBody` pins its direct children at `shrink-0`, and you must not override it: a scroll container's automatic minimum size is zero, so a tall `Card` dropped straight into the body would otherwise collapse to fit and clip its own content instead of letting the page scroll.
 
 - #### Media - optional
 

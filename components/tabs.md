@@ -58,10 +58,12 @@ Set `orientation` on the root (`horizontal` by default) when you need vertical t
 
   On a detail page, the tab strip sits on the bottom edge of the `PageHeaderBand`. Put the `Tabs` root around both the band and the panels, hand the `TabsList` to the band's `tabs` slot, and leave the panels as siblings. The band draws the rail with its own bottom border and suppresses the docked list's underline, so the active tab's indicator lands on a single, edge-to-edge line.
 
-  ```tsx
-  import { Tabs, TabsList, TabsTrigger, TabsContent, PageHeaderBand } from "@cloud/ui";
+  Here `Tabs` owns the whole page, so it is also the flex column that fills `<main>`, and **each panel must host its own `PageBody`** — that is the page's scroll root. Only the active panel is mounted, so there is still exactly one scroll root at a time. Leave the panels bare (or give them padding alone) and the page has **no scroll container**: `<main>` clips, so everything below the fold is unreachable. `min-h-0` is load-bearing in both places — without it the flex item sizes to its content and nothing scrolls.
 
-  <Tabs defaultValue="overview" className="gap-0">
+  ```tsx
+  import { Tabs, TabsList, TabsTrigger, TabsContent, PageHeaderBand, PageBody } from "@cloud/ui";
+
+  <Tabs defaultValue="overview" className="flex min-h-0 flex-1 flex-col gap-0">
     <PageHeaderBand
       variant="detail"
       title={product.name}
@@ -73,8 +75,12 @@ Set `orientation` on the root (`horizontal` by default) when you need vertical t
         </TabsList>
       }
     />
-    <TabsContent value="overview">…</TabsContent>
-    <TabsContent value="skus">…</TabsContent>
+    <TabsContent value="overview" className="flex min-h-0 flex-col">
+      <PageBody>…</PageBody>
+    </TabsContent>
+    <TabsContent value="skus" className="flex min-h-0 flex-col">
+      <PageBody>…</PageBody>
+    </TabsContent>
   </Tabs>;
   ```
 

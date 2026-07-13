@@ -1,14 +1,14 @@
 # ActionFooter
 
-Full-bleed action band pinned to the bottom of the page — the commit cluster.
+Full-bleed action band at the bottom of the page — the commit cluster.
 
 `ActionFooter` takes `children` (plus an optional `className`) and renders them as a right-aligned cluster. Import it, and the `ActionFooterProps` type, from `@cloud/ui`.
 
 ## Development guidelines
 
-`ActionFooter` is the bottom counterpart to the sticky header bands (`PageHeader` / `PageHeaderBand`). It carries a right-aligned commit cluster: a ghost Cancel or Back to the left of one primary action.
+`ActionFooter` is the bottom counterpart to the header bands (`PageHeader` / `PageHeaderBand`). It carries a right-aligned commit cluster: a ghost Cancel or Back to the left of one primary action.
 
-**Placement matters.** It must be a **sibling of `PageBody`** — a direct child of `Layout`'s `<main>` scroll root, _after_ `PageBody`, never nested inside its gutters. The layout keys off the footer's `data-action-footer` attribute and turns `<main>` into a flex column only when a footer is present. That is what makes both halves of its behaviour work: `mt-auto` pins the band to the bottom of the viewport on a short page, while `sticky bottom-0` keeps it in view as a long page scrolls beneath it. Nest it inside `PageBody` and you get neither. Pages without a footer are untouched.
+**Placement matters.** It must be a **sibling of `PageBody`** — a direct child of `Layout`'s `<main>`, _after_ `PageBody`, never nested inside its gutters. `<main>` is always a fixed-height flex column that clips, and `PageBody` is the one thing in it that scrolls. The footer sits below that scroll region as a `shrink-0` band, so it is simply always in view — no `sticky`, no `mt-auto`, and no difference between a short page and a long one. Nest it inside `PageBody` and it scrolls away with the content.
 
 **Every button in the footer carries an icon.** This is a hard rule for the whole action-band family (`ActionFooter` / `PageHeader` / `PageHeaderBand`). The header bands enforce it at compile time — their `actions` are `HeaderAction` descriptors whose `icon` field is required — but `ActionFooter` is a plain `children` slot, so nothing type-checks it here: it is on you. Use `Button`'s `iconLeft` / `iconRight`. The conventions: **Continue / forward → `ChevronRight` (trailing, `iconRight`) · Back → `ChevronLeft` · Cancel → `X` · Create → `Plus` · Save → `Save` · Publish → `CheckCircle2`**, and a verb-appropriate glyph otherwise.
 
@@ -20,7 +20,7 @@ Full-bleed action band pinned to the bottom of the page — the commit cluster.
 
 ### Do
 
-- Put it directly in the scroll root, after `PageBody`.
+- Put it directly in `<main>`, as a sibling after `PageBody`.
 - Keep it to one primary action, with subordinate ghost controls to its left.
 - Use it for the page-level commit on a form — Save, Submit, Continue.
 - Give every button an icon, via `iconLeft` / `iconRight`.
@@ -28,7 +28,8 @@ Full-bleed action band pinned to the bottom of the page — the commit cluster.
 
 ### Don't
 
-- Don't nest it inside `PageBody`; the pinning and the sticky behaviour both depend on it being a sibling.
+- Don't nest it inside `PageBody`; it would scroll away with the content instead of staying below the scroll region.
+- Don't reach for `sticky` / `mt-auto` / `fixed` to hold it down; being a `shrink-0` sibling of `PageBody` already does that.
 - Don't use it in a modal. Use the `Modal` footer.
 - Don't put more than one primary button in it; if everything is primary, nothing is.
 - Don't ship a bare text button here — nothing will fail to compile, and the band will read as unfinished.
@@ -88,8 +89,7 @@ Full-bleed action band pinned to the bottom of the page — the commit cluster.
 
 ### States
 
-- **Short page** — `mt-auto` pins the band to the bottom of the viewport.
-- **Long page** — `sticky bottom-0` keeps it in view while the content scrolls beneath it.
+- **Any page** — the band sits below `PageBody`, the only thing that scrolls, so it is always in view. Short pages and long pages behave identically; there is no second case.
 
 ## Writing guidelines
 
@@ -108,8 +108,8 @@ Full-bleed action band pinned to the bottom of the page — the commit cluster.
 ### General accessibility guidelines
 
 - The footer is a real `<footer>` element containing real buttons, in the reading order after the content.
-- Because the band is sticky, keep it to one row — a tall footer eats the viewport and can hide the field a keyboard user just focused.
-- The primary action must be reachable by Tab without scrolling to the end of a long form; the sticky band is what guarantees that, which is why the placement rule matters.
+- Because the band is always on screen, keep it to one row — a tall footer eats the height left for `PageBody` and shrinks the area a keyboard user is scrolling through.
+- The primary action must be reachable by Tab without scrolling to the end of a long form; sitting outside the scroll region is what guarantees that, which is why the placement rule matters.
 
 ### Component-specific guidelines
 

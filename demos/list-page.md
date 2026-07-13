@@ -25,7 +25,7 @@ Search and quick filters update draft state first. They affect the request and t
 
 ### Sticky results context
 
-The filter band scrolls with the page. The result summary and table header stay available at the top of the scroll region, so users retain the result context while reading a long list.
+The filter band scrolls with the body. The result summary and table header stick to the top of the page's scroll region — `PageBody` — so users retain the result context while reading a long list. The page header sits outside that region and never scrolls at all.
 
 ### Empty and zero-results states
 

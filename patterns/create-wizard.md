@@ -1,6 +1,6 @@
 # Create wizard
 
-A staged create flow: a step indicator, one step of fields at a time, a review step, and a sticky bottom navigation. Use it only when the flow is genuinely staged.
+A staged create flow: a step indicator, one step of fields at a time, a review step, and a persistent bottom navigation. Use it only when the flow is genuinely staged.
 
 [Style template](../demos/create-wizard.md) | Binding rules (app repo: `.claude/team-rule/coding-rules/ui_ui-and-pages.md`)
 
@@ -27,7 +27,7 @@ The header's back button **exits the entire flow** — it abandons the create. I
 
 ### The footer carries the flow
 
-The sticky `ActionFooter` holds a `ghost` Back and a `primary` Continue, both carrying their icon: Back takes a leading `ChevronLeft`, Continue takes a **trailing** `ChevronRight` (`iconRight`) because it points forward, and on step one, where Back has nothing to go back to, the escape is _Cancel_ with a leading `X`. On the last step, Continue becomes the commit — _Create record_, with its verb's icon — and takes `loading` while the request is in flight.
+The `ActionFooter` — a sibling of `PageBody`, below the scroll region, so the navigation is always in view without being pinned — holds a `ghost` Back and a `primary` Continue, both carrying their icon: Back takes a leading `ChevronLeft`, Continue takes a **trailing** `ChevronRight` (`iconRight`) because it points forward, and on step one, where Back has nothing to go back to, the escape is _Cancel_ with a leading `X`. On the last step, Continue becomes the commit — _Create record_, with its verb's icon — and takes `loading` while the request is in flight.
 
 ### The draft lives in the page
 
@@ -53,7 +53,7 @@ A summary card of term/value rows showing every value the user is about to commi
 
 #### E. Action footer
 
-`ActionFooter`, a sibling of `PageBody` — `ghost` Back (leading `ChevronLeft`, or `X` for the step-one _Cancel_), `primary` Continue (trailing `ChevronRight`). On the final step Continue is the commit, carries its verb's icon, and takes `loading`.
+`ActionFooter`, a sibling of `PageBody` and never inside it — `ghost` Back (leading `ChevronLeft`, or `X` for the step-one _Cancel_), `primary` Continue (trailing `ChevronRight`). It sits below the scrolling step body, which is what keeps it in view; it takes no pinning of its own. On the final step Continue is the commit, carries its verb's icon, and takes `loading`.
 
 #### F. Success state
 

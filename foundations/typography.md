@@ -38,8 +38,8 @@ Even-number steps only. There is no 11px and no 13px in the scale.
 | `text-lg`  | 16px | Emphasized body, small headings.                                                                                                                               |
 | `text-xl`  | 18px | Section heading.                                                                                                                                               |
 | `text-2xl` | 24px | Page and detail title.                                                                                                                                         |
-| `text-3xl` | 28px | Display heading.                                                                                                                                               |
-| `text-4xl` | 36px | Large display, KPI values.                                                                                                                                     |
+| `text-3xl` | 28px | KPI value. Not a page title and not a heading — the figure a stat tile reports.                                                                                |
+| `text-4xl` | 36px | Large KPI — the same figure when it is the dashboard's headline number.                                                                                        |
 | `text-5xl` | 48px | Largest display.                                                                                                                                               |
 
 **Three rungs are off the ladder and the lint errors on them** (`type-boundary/no-deprecated-text-scale`): `text-sm` and `text-2xs` — the deprecated aliases above, exact duplicates of `text-md` and `text-xs` — and `text-base`, which is Tailwind's own rung and was never ours. Each rung declares its own line-height, so a call site writes `text-md` and nothing else; a `leading-*` marks a deliberate departure, never a repair.
@@ -87,7 +87,7 @@ The system has no list component and no list token. Lists are Tailwind: `list-di
 
 **Within one block, size carries the hierarchy and tone only refines it.** This is the rule that most often gets inverted, and the failure mode is specific: stacked lines that share a size read as unexplained greys no matter how carefully you split them across `content-primary` / `-secondary` / `-tertiary`. The reader sees three lines of the same size in three shades and concludes the shades are decorative. `Timeline` gets this right — the title is `text-md` and the description and meta drop to `text-xs`, so the tone difference lands on top of a size difference that already established the order.
 
-**A number that reports rather than headlines keeps its slot's size and takes emphasis from weight.** `ListSummaryBar`'s count is `text-xs font-semibold`, not `text-2xl`. It is the most important value in the bar, and it is still small — because it lives in a low-chrome strip, and blowing it up would make the bar compete with the table it describes. Weight promotes it within its slot; size would promote it out of its slot.
+**A number that reports rather than headlines keeps its slot's size and takes emphasis from weight.** `ListSummaryBar`'s count is `text-xs font-semibold`, not `text-3xl` — it is a count, not a KPI. It is the most important value in the bar, and it is still small — because it lives in a low-chrome strip, and blowing it up would make the bar compete with the table it describes. Weight promotes it within its slot; size would promote it out of its slot.
 
 **Never remove a focus ring, and never encode meaning in colour alone** — including in type. A red word is not an error message.
 

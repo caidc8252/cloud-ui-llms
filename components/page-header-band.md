@@ -10,12 +10,12 @@ Full-bleed page-header band for level-2/3 pages — built-in back button, title,
 
 `variant` picks the title-block shape, and **the two are genuinely different headers**, not one with a size knob:
 
-- **`variant="page"`** (the default) — a non-detail level-2 page: new, edit, a sub-page. The title block is the shared `ContentHeader`: `title` + `description`, with `titleAdornment` and `actions` flush right. **Not sticky** by default.
-- **`variant="detail"`** — the entity **identity band**. Purpose-built, and deliberately *not* a `ContentHeader`: an optional leading `avatar` tile, the title with its status badge **inline** beside it via `titleAdornment`, a `meta` facts row beneath (created date, reference, category), `actions` on the right, and `tabs` docked on the bottom edge. **Sticky** by default.
+- **`variant="page"`** (the default) — a non-detail level-2 page: new, edit, a sub-page. The title block is the shared `ContentHeader`: `title` + `description`, with `titleAdornment` and `actions` flush right.
+- **`variant="detail"`** — the entity **identity band**. Purpose-built, and deliberately *not* a `ContentHeader`: an optional leading `avatar` tile, the title with its status badge **inline** beside it via `titleAdornment`, a `meta` facts row beneath (created date, reference, category), `actions` on the right, and `tabs` docked on the bottom edge.
 
 `avatar` and `meta` are **detail-only** and are ignored on the page variant. On detail, `meta` **replaces** `description` as the subline: pass one or the other, and `meta` wins when both are set.
 
-`sticky` has **no fixed default** — it is `sticky ?? variant === "detail"`, so it is **`true` for detail and `false` for page** unless you pass it. It docks the band at the top of the scrollport, which is `Layout`'s `<main>`, so `top-0` lands under the `AppHeader`.
+There is **no `sticky` prop** on either variant, and nothing to configure: the band is a **sibling of `PageBody`** inside a `<main>` that clips instead of scrolling. Only `PageBody` scrolls, so the band — tab row and all — stays docked under the `AppHeader` for free.
 
 **The band owns the tabs track line.** Its own `border-b` *is* the rail, and the band suppresses the docked `TabsList`'s underline for you (a `line` list would otherwise draw a second rule one pixel above the band's border, giving a 2px two-tone line under the tabs). So pass a plain `TabsList` — no `shadow-none`, no variant gymnastics. The active indicator still sits on the rule. A standalone `Tabs` outside a band keeps its own underline.
 
@@ -39,7 +39,7 @@ There is deliberately **no `size` field**: the slot renders `md` buttons and not
 
 ### Do
 
-- Put `PageHeaderBand` outside `PageBody`, directly in the scroll root.
+- Put `PageHeaderBand` outside `PageBody`, as a direct child of `<main>`, so it doesn't scroll.
 - Use `variant="detail"` for an entity page, and let `avatar` + `titleAdornment` + `meta` build the identity — that is what the variant is for.
 - Wrap the band **and** the `TabsContent` panels in one `Tabs` root when you use `tabs`.
 - Give `backTo` a destination whenever the parent page is known; fall back to history only when it isn't.
@@ -71,7 +71,7 @@ There is deliberately **no `size` field**: the slot renders `md` buttons and not
   } from "@cloud/ui";
   import { CheckCircle2, Tag } from "lucide-react";
 
-  <Tabs defaultValue="overview" className="gap-0">
+  <Tabs defaultValue="overview" className="flex min-h-0 flex-1 flex-col gap-0">
     <PageHeaderBand
       variant="detail"
       title={merchant.name}
@@ -102,10 +102,10 @@ There is deliberately **no `size` field**: the slot renders `md` buttons and not
         </TabsList>
       }
     />
-    <TabsContent value="overview">
+    <TabsContent value="overview" className="flex min-h-0 flex-col">
       <PageBody>…</PageBody>
     </TabsContent>
-    <TabsContent value="contracts">
+    <TabsContent value="contracts" className="flex min-h-0 flex-col">
       <PageBody>…</PageBody>
     </TabsContent>
   </Tabs>;
@@ -113,7 +113,7 @@ There is deliberately **no `size` field**: the slot renders `md` buttons and not
 
 - #### Page variant
 
-  The default. A create, edit, or sub-page: title, description, back button, and — when the page commits from the header rather than an `ActionFooter` — actions. No tabs, no identity block, not sticky.
+  The default. A create, edit, or sub-page: title, description, back button, and — when the page commits from the header rather than an `ActionFooter` — actions. No tabs, no identity block.
 
   ```tsx
   <PageHeaderBand
@@ -137,7 +137,7 @@ There is deliberately **no `size` field**: the slot renders `md` buttons and not
 
 ### States
 
-- **Sticky** — the band, including the tab row, stays docked beneath the app header as the body scrolls. On by default for `variant="detail"`, off for `variant="page"`; `sticky` overrides either way.
+- **Always in view** — the band, including the tab row, stays docked beneath the app header as the body scrolls. Not a prop and not a mode: it simply doesn't live in the scroll root.
 - **Disabled action** — a descriptor with `disabled` renders a disabled `md` button (a `to` action ignores it).
 
 ## Writing guidelines
@@ -164,5 +164,5 @@ There is deliberately **no `size` field**: the slot renders `md` buttons and not
 
 ### Component-specific guidelines
 
-- A sticky band with a tall identity block eats the viewport and hides the field a keyboard user just focused. Keep `avatar` + title + `meta` to the one identity row the component lays out — don't stuff extra rows into `titleAdornment`.
+- The band is always on screen, so a tall identity block permanently eats the viewport the scrolling body has left. Keep `avatar` + title + `meta` to the one identity row the component lays out — don't stuff extra rows into `titleAdornment`.
 - Don't rely on `titleAdornment`'s color to carry status; the badge has text.

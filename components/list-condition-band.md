@@ -22,7 +22,7 @@ The Search button has one shape, and it is not yours to redesign — **the icon 
 
 Everything in the band sizes at **`md`** — `SearchInput` is an `md` `Input`, the quick `Select`s take `size="md"`, the Search button and `AdvancedFilterButton` are `md` buttons. A `sm` control in the quick bar breaks the row's baseline.
 
-`sticky` defaults to **`false`**, and that is the right default. On the standard list page it is the **`ListSummaryBar` and the table's sticky header that dock**, not the filter band — the band scrolls away, because once the user has set their filters, the thing they need pinned is the result count and the column headers. Pass `sticky` only when the filter band itself must stay in view; it then docks under the app header, with the full-bleed negative-margin math applied for you.
+`sticky` defaults to **`false`**, and that is the right default. The band lives inside `PageBody`, the page's one scroll root, so by default it scrolls away with the content. On the standard list page it is the **`ListSummaryBar` and the table's sticky header that dock**, not the filter band — because once the user has set their filters, the thing they need pinned is the result count and the column headers. Pass `sticky` only when the filter band itself must stay in view; it then docks at the top of `PageBody`, flush under the page header band (which never scrolls in the first place), with the full-bleed negative-margin math applied for you.
 
 The band is followed by the results region, which has a fixed composition: `Card overflow-clip` > `ListSummaryBar` > `Table stickyHeader stickyHeaderTop={LIST_SUMMARY_BAR_HEIGHT}` > `RichPagination`.
 
@@ -130,12 +130,12 @@ The band is followed by the results region, which has a fixed composition: `Card
 
 - #### Sticky
 
-  `sticky` docks the band under the app header. Off by default — the standard list page docks the summary bar and the table header instead.
+  `sticky` docks the band at the top of the page scroll root (`PageBody`), flush under the page header band. Off by default — the standard list page docks the summary bar and the table header instead.
 
 ### States
 
 - **In flow** (default) — the band scrolls away with the content.
-- **Sticky** — the band docks under the app header, full-bleed.
+- **Sticky** — the band docks at the top of `PageBody`, flush under the page header band, full-bleed.
 
 ## Writing guidelines
 
@@ -147,7 +147,7 @@ The band is followed by the results region, which has a fixed composition: `Card
 
 - The band is a layout shell. Its accessibility comes from the controls inside it, so every quick-bar control needs its own accessible name.
 - When filters change the results, announce the new count. The chip row shows _what_ is applied; the count tells the user what it _did_.
-- Keep the docked strips to a minimum. Every sticky bar is viewport a keyboard user doesn't get, and a focused row can end up hidden behind one.
+- Keep the docked strips to a minimum. The page header band already sits above the scroll root permanently; every sticky bar under it is more scroll viewport a keyboard user doesn't get, and a focused row can end up hidden behind one.
 
 ### Component-specific guidelines
 

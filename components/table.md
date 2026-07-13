@@ -27,7 +27,7 @@ Sorting is controlled: pass `sort` as `{ key, dir }` and handle `onSortChange`. 
 
 **The row tail is one cell, not two.** When a navigable row also needs inline verbs, pass `rowActions={(row, index) => …}`: the verbs and the chevron **coexist in the single trailing cell — verbs first, chevron last**. It is not a choice between them. Use `size="sm"` buttons for the verbs; `Table` already wraps them so their clicks `stopPropagation` and don't fire the row's `onRowClick`. Pass `rowActions` without `onRowClick` and you get the verbs alone, no chevron.
 
-`stickyHeader` docks the header to the **page** scroll root rather than the wrapper. That comes with a real trade-off: it drops the wrapper's own horizontal scrollbar (an `overflow-x: auto` would clip the sticky header), so a wide table overflows the page instead. Leave it off for wide tables. The host `Card` must also use `overflow-clip` — its default `overflow-hidden` traps the sticky. When a sticky bar sits above the table, set `stickyHeaderTop` to that bar's height (for example `LIST_SUMMARY_BAR_HEIGHT`, which is `48`) so the header tiles flush beneath it.
+`stickyHeader` docks the header to the **page** scroll root — `PageBody` — rather than to the wrapper, so it comes to rest flush under the page header band (which never scrolls at all). That comes with a real trade-off: it drops the wrapper's own horizontal scrollbar (an `overflow-x: auto` would clip the sticky header), so a wide table overflows the page instead. Leave it off for wide tables. The host `Card` must also use `overflow-clip` — its default `overflow-hidden` makes the card a scroll container of its own and traps the sticky. When a sticky bar sits above the table, set `stickyHeaderTop` to that bar's height (for example `LIST_SUMMARY_BAR_HEIGHT`, which is `48`) so the header tiles flush beneath it.
 
 The standard result region is `Card overflow-clip` > `ListSummaryBar` > `Table stickyHeader stickyHeaderTop={LIST_SUMMARY_BAR_HEIGHT}` > `RichPagination`. Numbered pagination is the default footer for a table; scroll loading is not.
 
@@ -173,7 +173,7 @@ For thousands of rows, use `VirtualTable`, which shares this columns/sort/rowKey
 
 - #### Sticky header
 
-  `stickyHeader` docks the header to the page scroll root; `stickyHeaderTop` offsets it below any sticky bar above the table. The host `Card` must use `overflow-clip`.
+  `stickyHeader` docks the header to the page scroll root (`PageBody`); `stickyHeaderTop` offsets it below any sticky bar above the table. The host `Card` must use `overflow-clip`.
 
   ```tsx
   <Card elevation={1} className="overflow-clip">

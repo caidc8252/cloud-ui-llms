@@ -21,7 +21,7 @@ Use this flow when users can understand, complete, and validate the task without
 
 ### Exit and commit have separate homes
 
-The reduced header gives users a consistent way to leave the form: `PageHeaderBand`, whose back button is built in and whose `backTo` names the destination. The sticky footer keeps cancel and the primary commit action available without competing with the page title.
+The reduced header gives users a consistent way to leave the form: `PageHeaderBand`, whose back button is built in and whose `backTo` names the destination. The action footer sits below the scrolling body rather than inside it, so cancel and the primary commit stay available however long the form runs, without competing with the page title. The header stays in view for the same reason.
 
 ### Section cards create a reading order
 
@@ -39,7 +39,7 @@ Use `PageHeaderBand` with the task title and `backTo`. The back button is part o
 
 #### B. Page body
 
-Use `PageBody` to provide the standard content padding and vertical rhythm. It does not constrain the column's width, and neither should you.
+Use `PageBody` to provide the standard content padding and vertical rhythm. It is also the page's scroll region — the fields scroll here, between the header and the action footer. It does not constrain the column's width, and neither should you.
 
 #### C. Section cards
 
@@ -51,7 +51,7 @@ Use `Field` to connect a label, hint, required state, and error message with `In
 
 #### E. Action footer
 
-Use `ActionFooter`, as a sibling of `PageBody`, for a ghost-weight cancel action and one primary create or save action. Both carry an icon: cancel takes a leading `X`, and the commit takes its verb's glyph.
+Use `ActionFooter`, as a sibling of `PageBody` and never inside it, for a ghost-weight cancel action and one primary create or save action. Being a sibling is what keeps it in view: the body scrolls, the footer does not. Both carry an icon: cancel takes a leading `X`, and the commit takes its verb's glyph.
 
 ## General guidelines
 

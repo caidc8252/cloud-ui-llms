@@ -103,9 +103,9 @@ Spacing separates blocks; sizing bounds them. Both come from shared scales, and 
 
 ### Page padding
 
-`PageBody` owns the page's padding and its block rhythm in one class — `gap-6 px-6 pt-6 pb-8`. The `Layout` scroll area has **no** padding of its own, so a page that does not render a `PageBody` has no padding at all.
+`PageBody` owns the page's padding and its block rhythm in one class — `gap-6 px-6 pt-6 pb-8`. `Layout`'s `<main>` has **no** padding of its own, and it clips rather than scrolls, so a page that does not render a `PageBody` has no padding at all — and no scroll root, which leaves everything below the fold unreachable.
 
-`PAGE_BODY_PADDING_CLASS_NAME` (`px-6 pt-6 pb-8` — the padding without the gap) is exported for the one case where the padding must live on a different surface. A detail page's `TabsContent` is that case: the tabs sit above the body, so each panel carries the page padding itself. Reach for it only when the padding genuinely cannot sit on a `PageBody`.
+`PAGE_BODY_PADDING_CLASS_NAME` (`px-6 pt-6 pb-8` — the padding without the gap) is exported for the rare host that must own the page padding itself. It is padding only: it creates **no** scroll root, so it is not the way to fill a tabbed detail page's panels — each `TabsContent` hosts its own `PageBody`. Reach for it only when the padding genuinely cannot sit on a `PageBody`.
 
 ### Content width
 

@@ -14,9 +14,9 @@ Many fields is not a reason to make a wizard. A wizard is for **staged** flows: 
 
 ### On a page: the exit lives in the header, the commit lives in the footer
 
-A create or edit **page** is level-2, so its header is `PageHeaderBand` — the default `variant="page"`, which is title, optional description, and a **built-in back button** you cannot omit. Give the back button its destination with `backTo`. The band carries **no actions**; its job is to let the user leave. (`variant="page"` is not sticky by default, which is the right call here: the header has nothing the user needs while filling in field twenty.)
+A create or edit **page** is level-2, so its header is `PageHeaderBand` — the default `variant="page"`, which is title, optional description, and a **built-in back button** you cannot omit. Give the back button its destination with `backTo`. The band carries **no actions**; its job is to let the user leave. It takes no `sticky` prop — there is none — and it needs none: the band is a sibling of `PageBody`, the page's scroll root, so it is never scrolled away in the first place.
 
-The commit pair — a ghost _Cancel_ and the primary create action — rides a sticky `ActionFooter` at the bottom, a sibling of `PageBody`, never nested inside it. The user can always leave and can always submit, no matter how long the form is; neither scrolls out of reach.
+The commit pair — a ghost _Cancel_ and the primary create action — rides an `ActionFooter` at the bottom, a sibling of `PageBody`, never nested inside it. Band, `PageBody` and footer are the three rows of the page's flex column, and only the middle one scrolls. So the user can always leave and can always submit, no matter how long the form is; neither scrolls out of reach, and nothing has to be pinned to make that true.
 
 ### One column of section cards
 
@@ -40,7 +40,7 @@ Server actions are banned. The form POSTs through `@cloud/request/client` to a r
 
 #### B. Page body
 
-`PageBody`, which owns the page padding and the block gap. Do not hand-write page-level padding, and do not add a width lock — the body fills the page.
+`PageBody`, which owns the page padding and the block gap, and is the page's one scroll root — the form scrolls here and nowhere else. Do not hand-write page-level padding, and do not add a width lock — the body fills the page.
 
 #### C. Section cards
 
@@ -52,7 +52,7 @@ Server actions are banned. The form POSTs through `@cloud/request/client` to a r
 
 #### E. Action footer
 
-`ActionFooter` — a sticky, full-bleed band, placed as a **sibling of `PageBody`**, with a `ghost` Cancel and a `primary` commit. Both carry an icon: Cancel takes a leading `X`, and the commit takes the glyph of its verb (`Save` for _Save changes_, `Plus` for a create, `CheckCircle2` for a publish). `ActionFooter` is a children slot, so unlike a header's `HeaderAction[]` it cannot enforce that — use `Button`'s `iconLeft` / `iconRight` and don't skip it. The commit takes `loading` while the request is in flight.
+`ActionFooter` — a full-bleed band, placed as a **sibling of `PageBody`** and never inside it, with a `ghost` Cancel and a `primary` commit. Sitting below the scroll region is what keeps it in view; it is not pinned, and there is nothing to configure. Both carry an icon: Cancel takes a leading `X`, and the commit takes the glyph of its verb (`Save` for _Save changes_, `Plus` for a create, `CheckCircle2` for a publish). `ActionFooter` is a children slot, so unlike a header's `HeaderAction[]` it cannot enforce that — use `Button`'s `iconLeft` / `iconRight` and don't skip it. The commit takes `loading` while the request is in flight.
 
 ## General guidelines
 
@@ -62,7 +62,7 @@ Server actions are banned. The form POSTs through `@cloud/request/client` to a r
 - Mark required fields with `Field`'s `required`, and explain non-obvious ones with `hint` rather than with a tooltip.
 - Give the header's back button a real destination with `backTo`.
 - Give the footer's buttons icons — the primary always, the escape by the same convention (Cancel → `X`, Back → `ChevronLeft`).
-- Put the commit in the sticky footer so it stays reachable on a long form.
+- Put the commit in the `ActionFooter`, as a sibling of `PageBody`, so it stays reachable on a long form.
 - Set `loading` on the commit button while the request is in flight. It also disables the button, so you don't need a separate guard for double submits.
 - Route to the new record's detail page on success.
 - Keep the field components shared with the edit page — the same form usually serves create and edit.

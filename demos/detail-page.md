@@ -23,7 +23,7 @@ Use one detail route for the resource and tabs for peer sections of its informat
 
 The header identifies the resource and holds page-level actions. The tab strip docks on the header band's bottom edge — the band owns that rail — so users can switch sections without losing the resource name, status, or available actions.
 
-The header is `PageHeaderBand` with `variant="detail"`, and it is configured through props rather than children: `title`, `avatar`, `titleAdornment` for the status badge, `meta` for the facts row, `backTo`, `actions`, and `tabs`. Its back button is built in and cannot be omitted, and the detail variant is sticky by default.
+The header is `PageHeaderBand` with `variant="detail"`, and it is configured through props rather than children: `title`, `avatar`, `titleAdornment` for the status badge, `meta` for the facts row, `backTo`, `actions`, and `tabs`. Its back button is built in and cannot be omitted. The band sits outside the page's scroll region rather than inside it, so it never scrolls: the resource identity and the tab strip docked to the band's edge stay in place while the active panel scrolls beneath them.
 
 ### Overview prioritizes scanability
 
@@ -37,7 +37,7 @@ The page can initiate an edit or related-item action, but mutations must follow 
 
 #### A. Tabs root
 
-Use `Tabs` as the page root so the header and panels share one resource context.
+Use `Tabs` as the page root so the header and panels share one resource context. Each panel carries its own `PageBody`, which is the page's scroll region — only the active panel is mounted, so the page scrolls in exactly one place. Padding alone does not make a panel scrollable; give it a `PageBody` or the content below the fold cannot be reached.
 
 #### B. Detail header
 

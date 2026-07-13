@@ -10,7 +10,7 @@ Overflow container with scrollbars styled to match the design system.
 
 The viewport becomes focusable — and shows a focus ring — exactly when the content actually overflows, so a scrollable region is reachable by keyboard and a non-scrolling one does not add a dead tab stop. `ScrollBar` takes `orientation`, which defaults to `vertical`; the thumb is a thin (4px track) rounded bar in the strong line color.
 
-Use `ScrollArea` for a bounded region inside the page — a menu, a sidebar, a long list in a card, a panel of raw text. Don't wrap the page itself in one; let the document scroll natively so the browser's scroll restoration, anchoring, and mobile chrome behave normally. And don't wrap a component that already owns a scrolling viewport: `LogConsole` bounds itself with `maxHeight`, so putting it in a `ScrollArea` nests one scroll region inside another.
+Use `ScrollArea` for a bounded region inside the page — a menu, a sidebar, a long list in a card, a panel of raw text. Don't wrap the page itself in one: the document never scrolls, and the page already has exactly one scroll root, `PageBody`. A second full-height scroll area nested inside it is what breaks the sticky bars and table headers that dock to `PageBody`'s top edge. And don't wrap a component that already owns a scrolling viewport: `LogConsole` bounds itself with `maxHeight`, so putting it in a `ScrollArea` nests one scroll region inside another.
 
 ## General guidelines
 
@@ -22,7 +22,7 @@ Use `ScrollArea` for a bounded region inside the page — a menu, a sidebar, a l
 
 ### Don't
 
-- Don't wrap the whole page or the document body in a scroll area.
+- Don't wrap the whole page in a scroll area — `PageBody` is already the page's one scroll root.
 - Don't nest scroll areas; a scroll region inside a scroll region is a trap for pointer and keyboard alike.
 - Don't hide overflowing content behind a scrollbar with no other cue that there is more to see.
 

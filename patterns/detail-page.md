@@ -10,13 +10,15 @@ Everything known about a single resource, on one page, with tabs when there is m
 
 The default detail page is a single route with same-page `Tabs`. The `Tabs` root wraps the **whole page**, including the header band, because the band's bottom edge is where the `TabsList` docks. Per-tab sub-routes are the exception, not the shape.
 
+Because `Tabs` wraps the whole page, it is also the flex column that fills `<main>`, and the page's scroll root lives inside a panel: `Tabs` root is `flex min-h-0 flex-1 flex-col`, each `TabsContent` is `flex min-h-0 flex-col`, and **each panel hosts its own `PageBody`**. Only the active panel is mounted, so the page still has exactly one scroll root at any moment. `min-h-0` is load-bearing in both places — without it the flex item sizes to its content and nothing scrolls.
+
 Split a block into its own sub-route only when it is heavy (its own list, its own pagination) or independently permissioned, and note the reason where you do it.
 
 ### The band is prop-driven, and it is a different header from a page header
 
-A detail page is level-2, so it takes `PageHeaderBand` with `variant="detail"` — never `PageHeader`, and never a bare `ContentHeader`. The band is configured entirely through props, not children: `title`, `titleAdornment`, `avatar`, `meta`, `backTo` / `onBack`, `actions`, `tabs`, `variant`, `sticky`. There is no children slot to fill.
+A detail page is level-2, so it takes `PageHeaderBand` with `variant="detail"` — never `PageHeader`, and never a bare `ContentHeader`. The band is configured entirely through props, not children: `title`, `titleAdornment`, `avatar`, `meta`, `backTo` / `onBack`, `actions`, `tabs`, `variant`. There is no children slot to fill. There is no `sticky` prop — the band does not need one.
 
-`variant="detail"` is not a restyled page header — it is a purpose-built identity band. It does not compose `ContentHeader` at all: instead of title-plus-description it gives you a leading `avatar` tile, the status `Badge` inline beside the title through `titleAdornment`, and a `meta` facts row underneath. `meta` replaces `description` as the subline; passing both means only `meta` shows. It is sticky by default (`variant="page"` is not), so the identity stays put while the panels scroll.
+`variant="detail"` is not a restyled page header — it is a purpose-built identity band. It does not compose `ContentHeader` at all: instead of title-plus-description it gives you a leading `avatar` tile, the status `Badge` inline beside the title through `titleAdornment`, and a `meta` facts row underneath. `meta` replaces `description` as the subline; passing both means only `meta` shows. The band never scrolls, because it is a **sibling** of the scroll root rather than content inside it: the identity, and the tab strip docked to its edge, stay put while the active panel scrolls beneath them. Nothing is pinned to achieve that; it falls out of the structure.
 
 ### The band and the tabs are one object
 
@@ -40,7 +42,7 @@ An edit on a detail page opens a modal (or navigates to the edit form) and commi
 
 #### A. Tabs root
 
-`Tabs` wrapping the entire page, with `defaultValue` set to the overview tab.
+`Tabs` wrapping the entire page, with `defaultValue` set to the overview tab, and `flex min-h-0 flex-1 flex-col` so it is the flex column that fills `<main>`.
 
 #### B. Header band
 
@@ -60,7 +62,9 @@ A `TabsList` in the band's `tabs` slot, with a `TabsTrigger` per block. A count 
 
 #### F. Tab panels
 
-`TabsContent` with `PAGE_BODY_PADDING_CLASS_NAME` — the panel supplies the page padding that `PageBody` would otherwise own, because the tabs live above it.
+`TabsContent` with `flex min-h-0 flex-col`, holding that panel's **own `PageBody`**. `PageBody` is the scroll root, and only the mounted panel has one, so the page still scrolls in exactly one place.
+
+Do not hand the panel a bare `PAGE_BODY_PADDING_CLASS_NAME` instead. That constant is padding only — no `overflow-y` — so a page built that way has **no scroll container at all**: everything below the fold is clipped and the user cannot reach it. `<main>` clips and does not scroll, and neither does the document, so nothing upstream will rescue it.
 
 #### G. Overview blocks
 
@@ -75,6 +79,7 @@ Page-level actions in the band's `actions` prop — `HeaderAction[]` descriptors
 ### Do
 
 - Wrap the whole page in `Tabs` so the strip can dock to the band's edge.
+- Give every tab panel its own `PageBody`. It is the panel's scroll root, and the band stays out of it on purpose.
 - Use `KvGrid` for the overview, and let the columns auto-fit the card.
 - Put the status where the title is — a resource's state is part of its identity, not a detail buried in the grid. `titleAdornment` is the slot that does it.
 - Give every band action an icon. `HeaderAction.icon` is required, and the compiler will say so.
@@ -85,6 +90,7 @@ Page-level actions in the band's `actions` prop — `HeaderAction[]` descriptors
 ### Don't
 
 - Don't split every tab into a route just to keep the page file small. Split the components instead.
+- Don't give a `TabsContent` `PAGE_BODY_PADDING_CLASS_NAME` and stop there. Padding is not a scroll root, and the page ends up with none.
 - Don't build the back button. It is part of the band, and there is no prop that removes it.
 - Don't use `ContentHeader` as the page header, and don't force a detail page into `variant="page"`. An identity band is richer than title-plus-description, and that is the point of the variant.
 - Don't hand-write the auto-fit grid. Use `KvGrid`.
@@ -138,4 +144,4 @@ Page-level actions in the band's `actions` prop — `HeaderAction[]` descriptors
 - [Delete patterns](delete-patterns.md) — the tier the page's delete action takes, computed from the record.
 - [Timestamps](timestamps.md) — how the created/updated values in the meta line are stored and rendered.
 - [Permission gating](permission-gating.md) — hiding a block or an action the session can't use.
-- Components: `PageHeaderBand`, `Tabs`, `KvGrid`, `KeyValue`, `StatCard`, `Card`, `Badge`, `Modal`.
+- Components: `PageHeaderBand`, `Tabs`, `PageBody`, `KvGrid`, `KeyValue`, `StatCard`, `Card`, `Badge`, `Modal`.

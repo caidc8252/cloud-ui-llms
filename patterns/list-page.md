@@ -14,9 +14,11 @@ A list is a level-1 page, and level-1 is the **only** tier that takes `PageHeade
 
 ### The sticky model
 
-This is the part most implementations get wrong. The condition band **scrolls away** — it is `sticky={false}` by default and it should stay that way. What stays docked to the top of the scroll root is the summary bar plus the table's own column header. The table is told where to dock with `stickyHeaderTop={LIST_SUMMARY_BAR_HEIGHT}`, which is why that constant is exported rather than being an internal detail: the two numbers must agree or the header will overlap the bar.
+This is the part most implementations get wrong. The page's one scroll root is `PageBody`; the `PageHeader` band is its non-scrolling sibling above it, so the band stays in view for free and takes no `sticky` of its own. Everything below it scrolls inside `PageBody`, and that is what the page's sticky children dock to.
 
-The results `Card` must run `overflow-clip` (or `overflow-visible`), not `overflow-hidden`, or it traps the sticky children and nothing docks at all.
+The condition band **scrolls away** — it is `sticky={false}` by default and it should stay that way. What stays docked at the top of `PageBody`, flush under the header band, is the summary bar plus the table's own column header. The table is told where to dock with `stickyHeaderTop={LIST_SUMMARY_BAR_HEIGHT}`, which is why that constant is exported rather than being an internal detail: the two numbers must agree or the header will overlap the bar.
+
+The results `Card` must run `overflow-clip` (or `overflow-visible`), not `overflow-hidden`, or the card is itself a scroll container: it traps the sticky children and nothing docks to `PageBody` at all.
 
 ### Draft state versus applied state
 
@@ -98,7 +100,7 @@ The `Empty` component, passed to the table's `empty` prop.
 ### Don't
 
 - Don't make the condition band sticky. It is meant to scroll away; the summary bar and the column header are what dock.
-- Don't put `overflow-hidden` on the results card. It traps the sticky header and the bar.
+- Don't put `overflow-hidden` on the results card. It makes the card a scroll container, which traps the sticky header and the bar.
 - Don't filter, sort, or count a fetched page on the client.
 - Don't put a `secondary` or `primary` button in the summary bar. It draws a box inside a box and competes with the count.
 - Don't fire the request on every keystroke. Search commits on `apply()`.

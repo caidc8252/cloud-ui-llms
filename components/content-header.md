@@ -6,7 +6,9 @@ The header family's shared title block — a heading, optional subtext, and a fl
 
 ## Development guidelines
 
-**Never use `ContentHeader` on its own as a page header.** This is a hard rule. It is the *title block* the header bands are built from — a bare `flex items-center justify-between` row with an `<h1>`, a muted description and a flush-right `children` cluster. It has **no band chrome of its own**: no padding, no background, no bottom border, no sticky, no back button. Standing alone at the top of a page it reads as an unfinished skeleton.
+**Never use `ContentHeader` on its own as a page header.** This is a hard rule. It is the *title block* the header bands are built from — a bare `flex items-center justify-between` row with an `<h1>`, a muted description and a flush-right `children` cluster. It has **no band chrome of its own**: no padding, no background, no bottom border, no back button. Standing alone at the top of a page it reads as an unfinished skeleton.
+
+It also lives on the other side of the scroll line from the bands. `ContentHeader` goes **inside `PageBody`**, as its first block, and **scrolls away with the body**. The bands are siblings of `PageBody` in a `<main>` that doesn't scroll, so they stay in view; the title block doesn't.
 
 There are exactly two legal ways to use it:
 
@@ -15,7 +17,7 @@ There are exactly two legal ways to use it:
 
 Pick the band by page level:
 
-- **`PageHeader`** — full-bleed band for **level-1 pages only** (list / index). No back button: a level-1 page is a navigation root. `sticky` docks it under the app header.
+- **`PageHeader`** — full-bleed band for **level-1 pages only** (list / index). No back button: a level-1 page is a navigation root. It sits outside `PageBody` and stays under the app header without a `sticky` prop — there isn't one.
 - **`PageHeaderBand`** — full-bleed band for **every other page** (new, edit, sub-page, detail). The back button is built in and always rendered — `backTo` gives it a destination, otherwise it goes back in history. `variant="page"` (default) uses the shared `ContentHeader`; `variant="detail"` is a purpose-built identity band (leading `avatar`, inline `titleAdornment` badge, a `meta` facts row, `tabs` docked on the bottom edge) and does **not** go through `ContentHeader` at all.
 
 So a detail page never gets a `ContentHeader` — an entity identity band is richer than title + description. Reach for `PageHeaderBand variant="detail"` instead.
@@ -32,11 +34,11 @@ When a band builds the `ContentHeader`, the action slot is fed from `HeaderActio
 
 ### Don't
 
-- **Don't use it alone as a page header.** It has no band chrome — no padding, border, background, sticky or back. Use `PageHeader` (level-1) or `PageHeaderBand` (everything else).
+- **Don't use it alone as a page header.** It has no band chrome — no padding, border, background or back — and it scrolls away. Use `PageHeader` (level-1) or `PageHeaderBand` (everything else).
 - Don't force a detail page into it; use `PageHeaderBand variant="detail"`.
 - Don't combine it with a `PageHeader` on the same page; you'd render two `<h1>`s.
 - Don't put it outside `PageBody` when you do use it directly; it has no gutters of its own.
-- Don't expect it to stick; the band it sits in owns the sticky behaviour, not the title block.
+- Don't expect it to stay in view; it is inside the scroll root and scrolls with the body. Staying put is the band's job, and the band gets it by living outside `PageBody`, not from a prop.
 
 ## Features
 
@@ -58,7 +60,6 @@ When a band builds the `ContentHeader`, the action slot is fed from `HeaderActio
           variant: "primary",
         },
       ]}
-      sticky
     />
     <PageBody>
       <Card>…</Card>
@@ -81,7 +82,7 @@ When a band builds the `ContentHeader`, the action slot is fed from `HeaderActio
   </PageBody>;
   ```
 
-  The title is hard-coded to `<h1>` at `text-3xl`, and the page's band already rendered one — so this use costs you a second `<h1>` and a page-sized heading in the middle of the body. Do it only when the section really is a peer of the page title; otherwise write the heading at the level the position calls for.
+  The title is hard-coded to `<h1>` at `text-2xl` (24px, `font-semibold tracking-tight` — the page-title size), and the page's band already rendered one — so this use costs you a second `<h1>` and a page-sized heading in the middle of the body. Do it only when the section really is a peer of the page title; otherwise write the heading at the level the position calls for.
 
 - #### Actions
 

@@ -7,7 +7,7 @@ The same shape as the create form, pre-filled and dirty-tracked, in one of two s
 | | Use it when |
 |---|---|
 | **Overlay** — `Modal`, or `Sheet` when it needs room | One section of fields, no sub-navigation, and the user does not need the page behind it. **This is the default: most edits are a handful of fields, and a whole page for them is too heavy.** |
-| **Dedicated page** | More than one section card, or a multi-step wizard; or the edit must be deep-linkable; or the form is long enough that the commit needs a sticky `ActionFooter` to stay reachable. |
+| **Dedicated page** | More than one section card, or a multi-step wizard; or the edit must be deep-linkable; or the form is long enough that the commit needs an `ActionFooter` — sitting below the page's scroll region, as a sibling of `PageBody` — to stay reachable. |
 
 The rule is decidable from the field list alone, so create and edit land in the same container and two authors reading this page reach the same answer. Everything below applies to both containers unless it names one.
 
@@ -19,7 +19,7 @@ The rule is decidable from the field list alone, so create and edit land in the 
 
 Edit is create with the record loaded into it. Same `Field`s, same order, same hints. Share the field components between the two — one form, two entry points — so a field added to create cannot silently go missing from edit. Everything in [Create form](create-form.md) applies here unless this page says otherwise.
 
-On a page: the reduced header, one column of section cards, and a sticky `ActionFooter`. In an overlay: the `Modal`'s own title and footer carry the title verb and the commit — do not nest an `ActionFooter` inside a `Modal`.
+On a page: the reduced header, one column of section cards in the scrolling `PageBody`, and an `ActionFooter` below it. In an overlay: the `Modal`'s own title and footer carry the title verb and the commit — do not nest an `ActionFooter` inside a `Modal`.
 
 Three things differ, and only three: the title verb, the commit verb, and the dirty gate.
 

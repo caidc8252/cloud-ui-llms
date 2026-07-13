@@ -282,8 +282,8 @@ Even-number steps only. There is no 11px and no 13px step.
 | `--text-lg`  | Emphasized body, small headings                                                                                                                                             | `text-lg`  | `16px` |
 | `--text-xl`  | Section heading                                                                                                                                                             | `text-xl`  | `18px` |
 | `--text-2xl` | Page heading                                                                                                                                                                | `text-2xl` | `24px` |
-| `--text-3xl` | Display heading                                                                                                                                                             | `text-3xl` | `28px` |
-| `--text-4xl` | Large display, KPI values                                                                                                                                                   | `text-4xl` | `36px` |
+| `--text-3xl` | KPI value. Not a page title and not a heading                                                                                                                               | `text-3xl` | `28px` |
+| `--text-4xl` | Large KPI — the same figure as the dashboard's headline number                                                                                                              | `text-4xl` | `36px` |
 | `--text-5xl` | Largest display                                                                                                                                                             | `text-5xl` | `48px` |
 
 #### Font families (8)

@@ -6,11 +6,11 @@ Full-bleed page-header band for level-1 list and index pages — title, descript
 
 ## Development guidelines
 
-`PageHeader` is the band that sits flush under the `AppHeader`, spanning edge to edge. Put it **outside** `PageBody` — the scroll root is unpadded precisely so this band can touch the edges.
+`PageHeader` is the band that sits flush under the `AppHeader`, spanning edge to edge. Put it **outside** `PageBody`, as a direct child of `Layout`'s `<main>` — so it doesn't scroll. `<main>` clips rather than scrolls; `PageBody`, its sibling, is the page's one scroll root. `<main>` is also unpadded (`PageBody` owns the page gutters), which is what lets the band touch the edges.
 
 **Page tiering is a hard rule.** `PageHeader` is for **level-1 pages only** — a list or an index, the roots of navigation, which is why it has **no back button**. Every other page — create, edit, detail, sub-page — is a drill-down and uses `PageHeaderBand`, whose back button is built in. A create form does **not** get a `PageHeader`.
 
-The props are exactly four: `title` (required), `description` (the muted subtext beneath it), `actions`, and `sticky`. There is **no `titleAdornment`** and no children slot — the title block is the shared `ContentHeader`, which renders the `<h1>`. A status chip beside the title is a detail-page affordance; it lives on `PageHeaderBand`'s `variant="detail"`.
+The props are exactly three: `title` (required), `description` (the muted subtext beneath it), and `actions`. There is **no `sticky`** — the band never scrolls, so it has nothing to stick to. There is **no `titleAdornment`** and no children slot — the title block is the shared `ContentHeader`, which renders the `<h1>`. A status chip beside the title is a detail-page affordance; it lives on `PageHeaderBand`'s `variant="detail"`.
 
 `actions` is **not JSX** — it is a `HeaderAction[]` of descriptors:
 
@@ -28,7 +28,7 @@ type HeaderAction = {
 
 That shape is the enforcement mechanism for two hard rules. **Size**: there is deliberately no `size` field, so the slot renders `md` buttons and nothing else — `sm`/`xs`/`lg` cannot enter a page header. **Icons**: `icon` is required at compile time, so a header action can never ship bare. The conventions are Create → `Plus`, Save → `Save`, Publish → `CheckCircle2`, and a verb-appropriate glyph otherwise.
 
-`sticky` (default `false`) docks the band to the top of the scrollport. Because `Layout`'s `<main>` is the scroll root, `top-0` lands **under the app header**, not under the viewport top.
+There is **no sticky prop, and no sticky behaviour to configure**. The band is a sibling of `PageBody` inside a `<main>` that does not scroll, so it stays docked under the app header for free while the body scrolls beneath it.
 
 Three headers, three jobs — don't mix them up:
 
@@ -40,7 +40,7 @@ Three headers, three jobs — don't mix them up:
 
 ### Do
 
-- Put `PageHeader` outside `PageBody`, directly in the scroll root.
+- Put `PageHeader` outside `PageBody`, as a direct child of `<main>`, so it doesn't scroll.
 - Use it only on a level-1 list or index page.
 - Pass `actions` as `HeaderAction` descriptors, each with an `icon`.
 - Put the page's primary action in `actions` with `variant: "primary"`, and keep it to one.
@@ -100,17 +100,16 @@ Three headers, three jobs — don't mix them up:
   />;
   ```
 
-- #### Sticky
+- #### Always in view
 
-  `sticky` docks the band under the app header while the list scrolls, so the title and the create action stay reachable.
+  The band never scrolls: it sits beside `PageBody` in a non-scrolling `<main>`, so the title and the create action stay reachable while the list scrolls. Nothing to opt into.
 
   ```tsx
-  <PageHeader title={t("merchants.title")} sticky actions={actions} />
+  <PageHeader title={t("merchants.title")} actions={actions} />
   ```
 
 ### States
 
-- **Sticky** — the band stays docked beneath the app header as the page scrolls. Off by default.
 - **Disabled action** — a descriptor with `disabled` renders a disabled `md` button; a `to` action ignores it, so gate route actions by omitting them.
 
 ## Writing guidelines
@@ -136,4 +135,4 @@ Three headers, three jobs — don't mix them up:
 
 ### Component-specific guidelines
 
-- A `sticky` header covers content as the page scrolls. Keep the title block to one row, or a keyboard user tabbing down the page will find the focused element hidden behind it.
+- The band is always on screen, so every row it costs is a row the scrolling body never gets back. Keep the title block to one row.
