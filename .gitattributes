@@ -1,0 +1,8 @@
+# The build parses these line by line, and a CRLF checkout breaks it: in a JS
+# regex `.` does not match \r, so `/^##\s+(.+)$/` fails on "## Components\r".
+# Keep them LF on every platform.
+*.md   text eol=lf
+*.txt  text eol=lf
+*.mjs  text eol=lf
+*.css  text eol=lf
+*.json text eol=lf
