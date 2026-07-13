@@ -10,6 +10,8 @@ Draggable track and thumb for selecting a numeric value or range.
 
 Set `orientation="vertical"` for a vertical track; a vertical slider carries a built-in minimum height of 160px, and grows if its container is taller. Drive the value with `value` and `onValueChange`, or leave it uncontrolled with `defaultValue`.
 
+There are **two change callbacks, and they are not interchangeable**. `onValueChange` fires continuously while the thumb is being dragged — use it to keep the visible read-out in step with the thumb. `onValueCommitted` fires once, when the drag ends (pointer up or key release) — use it for anything with a cost or a consequence: staging a pending change, writing to a store, firing a request. Committing on `onValueChange` is the classic mistake here: one drag across the track produces a change per pixel, so a single gesture writes dozens of records or fires dozens of requests. Neither callback raises a type error when you pick the wrong one.
+
 Use a slider for an approximate value where the exact number is not critical. When the precise number matters, pair it with a numeric input or use `Stepper`.
 
 ## General guidelines
@@ -20,11 +22,13 @@ Use a slider for an approximate value where the exact number is not critical. Wh
 - Always pass `value` / `defaultValue` as an array — one element for a single thumb, two for a range.
 - Provide an accessible label for the slider.
 - Pair the slider with a visible value read-out when the number matters.
+- Use `onValueChange` for the live read-out and `onValueCommitted` for the write.
 
 ### Don't
 
 - Don't use a slider when the user needs to enter an exact number. Use `Stepper` or an input.
 - Don't use it for a small set of discrete choices. Use `RadioGroup` or `Select`.
+- Don't persist from `onValueChange`; a single drag would write once per pixel. Commit in `onValueCommitted`.
 - Don't pass a bare number as the value; it renders two thumbs at the bounds instead of one.
 - Don't omit the accessible name; a bare track is not self-describing.
 
@@ -48,6 +52,19 @@ Use a slider for an approximate value where the exact number is not critical. Wh
 - #### Orientation
 
   Set `orientation="vertical"` for a vertical track. It comes with a 160px minimum height; give the container more height for a taller track.
+
+- #### Drag versus commit
+
+  `onValueChange` streams during the drag; `onValueCommitted` fires once at the end. Read out with the first, write with the second.
+
+  ```tsx
+  <Slider
+    value={[brightness]}
+    onValueChange={([next]) => setBrightness(next)}        // live read-out
+    onValueCommitted={([next]) => stageChange("brightness", next)}  // one record per gesture
+    aria-label="Brightness"
+  />
+  ```
 
 ### States
 

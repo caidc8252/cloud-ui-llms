@@ -12,7 +12,17 @@ What is importable, and from which entry point. **Names and types only** — for
 | `@cloud/ui/components/ui` | The primitives and recipes alone. Same components as the root barrel — reach for it only when you want to be explicit. |
 | `@cloud/ui/components/layout` | The application shell and page-layout components. Also re-exported from the root. |
 | `@cloud/ui/components/chart` | **Charts, and only here.** |
-| `@cloud/ui/components/list-filter` | The list filtering family. Also re-exported from the root. |
+| `@cloud/ui/components/list-filter` | The list filtering family — but **import it from the root barrel**. See below. |
+
+### Import the list-filter family from the root
+
+`ListConditionBand`, `SearchInput`, `AdvancedFilterButton` / `Sheet` / `Group` / `Field`, `AppliedFilters`, `FilterChip`, `ListSummaryBar` and the `useListFilters` hook are all re-exported from `@cloud/ui`, and that is the import you want:
+
+```tsx
+import { ListConditionBand, SearchInput, AppliedFilters, useListFilters } from "@cloud/ui"
+```
+
+The `@cloud/ui/components/list-filter` subpath names a real directory in the source tree, but whether it *resolves* depends on the consuming app's alias or exports map — apps commonly alias only `@cloud/ui`, `/components/layout` and `/components/chart`, and a deep import then fails to resolve (or, worse, prefix-matches into something meaningless). The root barrel always works.
 
 ### Charts are a deliberate exception
 

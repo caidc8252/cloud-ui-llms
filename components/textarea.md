@@ -6,7 +6,9 @@ Multi-line text input, with an optional character counter when `maxLength` is se
 
 ## Development guidelines
 
-`Textarea` is a multi-line field with the standard native `<textarea>` props plus `showCount`. It auto-grows to its content (`field-sizing-content`) and can also be resized vertically. As with `Input`, wrap it in a `Field` for the label, hint, and error copy.
+`Textarea` is a multi-line field with the standard native `<textarea>` props plus `showCount` and `invalid`. It auto-grows to its content (`field-sizing-content`) and can also be resized vertically. As with `Input`, wrap it in a `Field` for the label, hint, and error copy.
+
+`invalid` paints the error border and ring and sets `aria-invalid`, exactly as it does on `Input` — the two fields take the same prop, so a form doesn't need one convention for single-line and another for multi-line. Passing `aria-invalid` directly has the same effect.
 
 Set `showCount` together with `maxLength` to show a live `count / maxLength` counter under the field. The counter turns amber from 90% of the limit and red at the limit. Without `maxLength`, `showCount` shows a plain running count.
 
@@ -52,7 +54,11 @@ Set `showCount` together with `maxLength` to show a live `count / maxLength` cou
 
 - #### Invalid
 
-  A passed `aria-invalid` applies the error border and ring.
+  `invalid` (or a passed `aria-invalid`) applies the error border and ring. Same prop as `Input`.
+
+  ```tsx
+  <Textarea invalid={!notes.trim()} value={notes} onChange={(e) => setNotes(e.target.value)} />
+  ```
 
 - #### Disabled
 

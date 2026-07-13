@@ -19,6 +19,8 @@ Each `TableColumn<R>` is `{ key, title }` plus:
 
 Sorting is controlled: pass `sort` as `{ key, dir }` and handle `onSortChange`. Clicking a sortable header cycles **unsorted → asc → desc → unsorted**, and that third click reports `null`. Treat `null` as "restore the natural order" — don't ignore it, or the header sticks on `desc` and the user can never get back.
 
+`sortable` on its own does nothing: a column marked `sortable` with no `onSortChange` on the table renders as plain header text, not as a control. Sorting is opt-in on both ends, so marking columns while forgetting the handler can't leave a clickable-looking header that never sorts.
+
 `density` is `compact`, `comfortable` (default), or `spacious` — compact for ops and data-dense screens, spacious for reports. `striped`, `bordered`, and `stickyFirstColumn` are the other visual variants. `rowState(row, index)` returns `{ selected, disabled, expanded }` for per-row treatment; a selected row gets a left accent bar, and a `disabled` row is dimmed, inert, and does not fire `onRowClick`.
 
 **Row navigation is whole-row click plus a passive chevron, and the chevron is not yours to write.** Pass `onRowClick` and `Table` **automatically appends** a right-aligned trailing column holding a decorative `ChevronRight` — the whole row is the click target, and there are no inline buttons. Never hand-write that trailing actions column; you will get two chevrons. `rowNav={false}` suppresses the appended chevron for the case where the row click is a selection toggle rather than navigation.

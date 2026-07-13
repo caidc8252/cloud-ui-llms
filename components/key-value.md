@@ -12,6 +12,15 @@ The columns are **container-responsive**, with no breakpoints: the grid auto-fit
 
 `KeyValue` takes `label` and `value`, plus `wide` and `className`; that is the whole surface. An empty value — `undefined`, `null`, or `""` — renders an em dash in tertiary text, so a missing field reads as "nothing here" rather than as a broken layout. Don't pre-substitute your own placeholder. Note that `0` and `false` are values, not emptiness, and render as themselves.
 
+**Emptiness is decided from the value you pass, not from what it renders.** A React element is always a non-empty value, even when the component it names renders `null` — so `value={<Chips items={[]} />}` silently loses the em dash and leaves the row blank, with no type error and no lint warning. When the value is computed, call a plain function that returns `ReactNode | undefined` and let `undefined` reach the prop:
+
+```tsx
+const chips = (values: string[]) =>
+  values.length ? <div className="flex gap-1">{values.map(v => <Badge key={v}>{v}</Badge>)}</div> : undefined
+
+<KeyValue label="Network" value={chips(model.networks)} />   // empty list → em dash
+```
+
 `wide` makes a cell span the whole grid row. Use it for long free text — an address, a note — so the value gets the full container width instead of wrapping inside a narrow column.
 
 This is **display only**. The data fetch and any edit affordances live in the consuming page; `KvGrid` renders no inputs and no buttons.

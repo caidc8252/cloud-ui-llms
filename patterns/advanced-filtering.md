@@ -18,6 +18,8 @@ The sheet edits `draft`. Nothing happens to the list while the sheet is open. Ap
 
 `AdvancedFilterButton` has three states: at rest it is a plain button; with active advanced filters it shows a count badge; the count is the number of _applied_ advanced fields, not draft ones. The page computes that count — the component does not guess which of your fields are advanced — but it does not count by hand: `useListFilters` supplies `countActive(keys, source?)`, which compares each key against its initial value and defaults to the applied set. Declare an `ADVANCED_KEYS` tuple and pass it in.
 
+A multi-select field can hold a plain `string[]`: arrays are compared by their members, order-insensitively, so an empty selection still counts as "not applied" even though the array is a fresh reference on every render. Don't flatten a multi-select into a joined `"a|b"` string to make the count behave. Fields holding other objects still compare by identity — keep the reference stable, or count them yourself.
+
 ### Chips are the source of truth for the user
 
 Whatever is in effect appears as a `FilterChip` in `AppliedFilters`, whether it was set in the bar or in the sheet. A user must never have to open the sheet to find out what is filtering the list. Each chip removes exactly its own field; _Clear all_ removes everything, bar and sheet alike.
