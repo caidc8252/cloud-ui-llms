@@ -14,7 +14,7 @@ Numeric input with `−` and `+` buttons.
 
 Typing is not stomped on: the input holds its own draft string while focused, so an external `value` update doesn't overwrite the keystrokes mid-entry. An empty or unparseable draft reverts to `value` on blur.
 
-The `+` and `−` buttons are icon-only, so their accessible names come from `decrementLabel` and `incrementLabel` (defaults: `"Decrement"` / `"Increment"` — pass translated strings). They sit **outside the tab order** (`tabIndex={-1}`) on purpose: keyboard users adjust the value from the input itself with the arrow keys, rather than tabbing through two buttons per field. Give the field a label through `id` (paired with a `FieldLabel`) or `aria-label`.
+The `+` and `−` buttons are icon-only, so their accessible names come from `decrementLabel` and `incrementLabel` (defaults: `"Decrement"` / `"Increment"` — pass translated strings). They sit **outside the tab order** (`tabIndex={-1}`) on purpose: keyboard users adjust the value from the input itself with the arrow keys, rather than tabbing through two buttons per field. Give the field a label by putting the `Stepper` in a `Field` whose `htmlFor` matches the `Stepper`'s `id`, or by passing `aria-label`. (There is no `FieldLabel` export — `Field` renders the `Label` for you.)
 
 `className` styles the `InputGroup` root; `inputClassName` styles the input (which is centered by default).
 
@@ -64,7 +64,7 @@ Use a stepper when the value is small, bounded, and adjusted rather than typed �
 
 - #### In a form
 
-  `id` and `name` wire it to a `FieldLabel` and to a form post.
+  `id` and `name` wire it to its `Field`'s `htmlFor` and to a form post.
 
 ### States
 

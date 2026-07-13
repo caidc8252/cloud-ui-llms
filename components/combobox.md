@@ -107,7 +107,7 @@ The trigger is `w-full`, so the field owns the width and it holds still whatever
 ### General accessibility guidelines
 
 - The trigger, search input, listbox, and options carry the correct roles and relationships through the Base UI primitive.
-- Give the combobox a visible label. Inside a `Field`, `FieldLabel` associates it for you.
+- Give the combobox a visible label. Inside a `Field`, pass `htmlFor` matching the combobox's `id` and `Field` renders the `Label` for you. (There is no `FieldLabel` export.)
 - `invalid` sets `aria-invalid`, but the red border is not a message — pair it with a `FieldError`.
 
 ### Component-specific guidelines

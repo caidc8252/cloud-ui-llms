@@ -10,7 +10,7 @@ Overflow container with scrollbars styled to match the design system.
 
 The viewport becomes focusable — and shows a focus ring — exactly when the content actually overflows, so a scrollable region is reachable by keyboard and a non-scrolling one does not add a dead tab stop. `ScrollBar` takes `orientation`, which defaults to `vertical`; the thumb is a thin (4px track) rounded bar in the strong line color.
 
-Use `ScrollArea` for a bounded region inside the page — a menu, a sidebar, a log panel, a long list in a card. Don't wrap the page itself in one; let the document scroll natively so the browser's scroll restoration, anchoring, and mobile chrome behave normally.
+Use `ScrollArea` for a bounded region inside the page — a menu, a sidebar, a long list in a card, a panel of raw text. Don't wrap the page itself in one; let the document scroll natively so the browser's scroll restoration, anchoring, and mobile chrome behave normally. And don't wrap a component that already owns a scrolling viewport: `LogConsole` bounds itself with `maxHeight`, so putting it in a `ScrollArea` nests one scroll region inside another.
 
 ## General guidelines
 

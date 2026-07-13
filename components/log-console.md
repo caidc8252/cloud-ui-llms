@@ -27,6 +27,7 @@ Levels are colored by severity: `V`, `D`, and `I` read muted, while `W`, `E`, an
 
 ### Don't
 
+- Don't wrap it in a `ScrollArea`. It already owns its scrolling viewport — bound that with `maxHeight`. A scroll region inside a scroll region traps the pointer and the keyboard.
 - Don't pre-filter `lines` yourself and _also_ control the filters; the component filters internally and you'll double-filter.
 - Don't expect `onDownload` to receive everything — it gets what's on screen after filtering.
 - Don't expect a download button without `onDownload`; the button only renders when the handler is there.

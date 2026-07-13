@@ -111,7 +111,7 @@ Inside an addon, `InputGroupText` is non-interactive content — a currency symb
 ### General accessibility guidelines
 
 - The group is a `role="group"` around a real control, so the addons don't come between the label and the field.
-- Give the control a visible label. Inside a `Field`, `FieldLabel` associates it for you.
+- Give the control a visible label. Inside a `Field`, pass `htmlFor` matching the control's `id` and `Field` renders the `Label` for you. (There is no `FieldLabel` export.)
 - Set `aria-invalid` on the control so the error is announced, and pair it with a `FieldError` — the red border is not a message.
 
 ### Component-specific guidelines

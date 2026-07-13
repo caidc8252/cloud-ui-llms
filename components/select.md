@@ -188,7 +188,7 @@ Use `Select` when the options are few enough to scan and the user picks exactly 
 ### General accessibility guidelines
 
 - The trigger, popup, and options carry the correct roles and relationships through the Base UI primitive.
-- Give the select a visible label. Inside a `Field`, `FieldLabel` is associated for you; otherwise use `Label` with the trigger, or an `aria-label`.
+- Give the select a visible label. Inside a `Field`, pass `htmlFor` matching the trigger's `id` and `Field` renders the `Label` for you (there is no `FieldLabel` export); otherwise use `Label` with the trigger, or an `aria-label`.
 - Don't rely on the check indicator's color alone; the selected value is also reflected in the trigger.
 
 ### Component-specific guidelines
