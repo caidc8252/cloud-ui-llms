@@ -1,6 +1,5 @@
 # Colors
 
-[中文](./colors.zh-CN.md)
 
 Colors establish visual hierarchy, identify interaction, communicate status, and distinguish data. The @cloud/ui palette is defined as semantic design tokens so the same component markup remains meaningful in light and dark themes.
 
