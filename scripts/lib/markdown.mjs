@@ -1,5 +1,5 @@
 import { marked } from "marked";
-import { esc, slug } from "./read.mjs";
+import { createSlugger, esc } from "./read.mjs";
 import { compileExample } from "./preview.mjs";
 import { previewsAvailable } from "./preview-available.mjs";
 
@@ -8,7 +8,12 @@ import { previewsAvailable } from "./preview-available.mjs";
 const renderer = {
   heading({ tokens, depth }) {
     const raw = tokens.map((t) => t.raw ?? "").join("");
-    return `<h${depth} id="${slug(raw)}">${this.parser.parseInline(tokens)}</h${depth}>\n`;
+    let headingSlug = headingSluggers.get(this.parser);
+    if (!headingSlug) {
+      headingSlug = createSlugger();
+      headingSluggers.set(this.parser, headingSlug);
+    }
+    return `<h${depth} id="${headingSlug(raw)}">${this.parser.parseInline(tokens)}</h${depth}>\n`;
   },
 
   // A link to another doc points at that doc's *view*. Otherwise clicking through
@@ -26,6 +31,10 @@ const renderer = {
     return `<a href="${to}"${t}${internal ? "" : ' target="_blank" rel="noopener"'}>${text}</a>`;
   },
 };
+
+/* A parser instance belongs to one marked.parse call, so its slugger is also
+ * page-local without relying on mutable reset state between document builds. */
+const headingSluggers = new WeakMap();
 
 /* A tsx example gets a live preview above it — the same component the reader is
  * about to copy, rendered from the same package the app imports. The code that

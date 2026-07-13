@@ -25,8 +25,28 @@ export async function verify(out) {
   await collect(out);
 
   let broken = 0;
+  let brokenFragments = 0;
+  let duplicateIds = 0;
   for (const f of pages) {
     const html = await readFile(f, "utf8");
+    const ids = new Set();
+    for (const [, id] of html.matchAll(/\sid="([^"]+)"/g)) {
+      if (ids.has(id)) {
+        if (duplicateIds < 6) {
+          console.error(`  duplicate id: ${relative(out, f)} -> #${id}`);
+        }
+        duplicateIds++;
+      }
+      ids.add(id);
+    }
+    for (const [, id] of html.matchAll(/href="#([^"]+)"/g)) {
+      if (!ids.has(id)) {
+        if (brokenFragments < 6) {
+          console.error(`  broken fragment: ${relative(out, f)} -> #${id}`);
+        }
+        brokenFragments++;
+      }
+    }
     for (const [, href] of html.matchAll(/(?:href|src)="([^"#]+)"/g)) {
       if (/^(https?:|mailto:|\/)/.test(href)) continue;
       if (href.includes("/.claude/")) continue; // known: escapes the site, pending
@@ -38,8 +58,12 @@ export async function verify(out) {
     }
   }
 
-  if (broken) {
-    console.error(`\n${broken} broken reference(s) in the built site.`);
+  if (broken || brokenFragments || duplicateIds) {
+    if (broken) console.error(`\n${broken} broken reference(s) in the built site.`);
+    if (brokenFragments) {
+      console.error(`\n${brokenFragments} broken fragment link(s) in the built site.`);
+    }
+    if (duplicateIds) console.error(`\n${duplicateIds} duplicate id(s) in the built site.`);
     process.exit(1);
   }
   return pages.length;

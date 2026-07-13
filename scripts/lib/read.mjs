@@ -29,3 +29,23 @@ export const slug = (text) =>
     .replace(/[^\w\s-]/g, "")
     .trim()
     .replace(/\s+/g, "-");
+
+/**
+ * Heading ids must be unique within a page. Keep the first GitHub-style slug as
+ * written and suffix later collisions, including collisions with an already
+ * suffixed heading ("Example", "Example", "Example 1").
+ */
+export function createSlugger() {
+  const used = new Set();
+  const nextSuffix = new Map();
+
+  return (text) => {
+    const base = slug(text);
+    let id = base;
+    let suffix = nextSuffix.get(base) ?? 1;
+    while (used.has(id)) id = `${base}-${suffix++}`;
+    used.add(id);
+    nextSuffix.set(base, suffix);
+    return id;
+  };
+}

@@ -26,7 +26,7 @@ import { useIndex } from "./pages/layout.mjs";
 import { docPage } from "./pages/doc.mjs";
 import { hubPage } from "./pages/hub.mjs";
 import { homePage } from "./pages/home.mjs";
-import { buildPreviewAssets } from "./lib/preview-assets.mjs";
+import { buildFontAssets, buildPreviewAssets } from "./lib/preview-assets.mjs";
 import { previewsAvailable } from "./lib/preview-available.mjs";
 
 const ROOT = process.cwd();
@@ -91,6 +91,7 @@ for (const section of index.sections) {
 await write("index.html", homePage(index));
 
 await cp(join(ROOT, "assets"), join(OUT, "assets"), { recursive: true });
+await buildFontAssets(OUT);
 
 /* ── The live-preview assets ─────────────────────────────────────────────────
  * Only built when something needs them. They are heavy — a Tailwind pass over

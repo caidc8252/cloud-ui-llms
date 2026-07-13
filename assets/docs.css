@@ -11,6 +11,35 @@
  * wrong here, it is wrong in the design system — fix it there.
  */
 
+@font-face {
+  font-family: "Geist Variable";
+  font-style: normal;
+  font-display: swap;
+  font-weight: 100 900;
+  src: url("./files/geist-latin-wght-normal.woff2") format("woff2-variations");
+}
+@font-face {
+  font-family: "Geist Variable";
+  font-style: italic;
+  font-display: swap;
+  font-weight: 100 900;
+  src: url("./files/geist-latin-wght-italic.woff2") format("woff2-variations");
+}
+@font-face {
+  font-family: "Geist Mono Variable";
+  font-style: normal;
+  font-display: swap;
+  font-weight: 100 900;
+  src: url("./files/geist-mono-latin-wght-normal.woff2") format("woff2-variations");
+}
+@font-face {
+  font-family: "Geist Mono Variable";
+  font-style: italic;
+  font-display: swap;
+  font-weight: 100 900;
+  src: url("./files/geist-mono-latin-wght-italic.woff2") format("woff2-variations");
+}
+
 :root {
   --surface-1: oklch(99% 0.003 90);
   --surface-2: oklch(100% 0 0);
@@ -308,6 +337,12 @@ main {
   font-weight: 650;
   color: var(--content-primary);
 }
+.toc-group:not([hidden]) {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
 .toc a {
   padding: 3px 0 3px 12px;
   font-size: 13px;
@@ -414,6 +449,15 @@ ul,
 ol {
   margin: 0 0 16px;
   padding-left: 22px;
+}
+/* Tailwind's preflight is loaded on docs that contain live previews and removes
+ * native list markers. Restore markers for rendered Markdown, while leaving
+ * component-owned lists inside the preview stage untouched. */
+main ul:not(.demo-stage *) {
+  list-style-type: disc;
+}
+main ol:not(.demo-stage *) {
+  list-style-type: decimal;
 }
 li {
   margin: 5px 0;
@@ -569,6 +613,12 @@ main > .lede {
   margin: 0 0 24px;
   max-width: 70ch;
 }
+.hub-count {
+  color: var(--content-tertiary);
+  font-size: 0.72em;
+  font-weight: 500;
+  letter-spacing: 0;
+}
 .intro {
   max-width: 74ch;
 }
@@ -628,6 +678,667 @@ main > .lede {
 .tile p code {
   font-size: 12px;
   padding: 0 4px;
+}
+
+/* Components and patterns share a specimen shelf: each card starts with a small,
+ * theme-aware diagram of the UI part or workflow instead of a brittle screenshot. */
+.tiles--specimens {
+  grid-template-columns: repeat(auto-fill, minmax(272px, 1fr));
+  gap: 20px;
+}
+.tile--specimen {
+  display: flex;
+  min-height: 300px;
+  padding: 0;
+  overflow: hidden;
+  border-left-width: 1px;
+  border-color: var(--line-default);
+  flex-direction: column;
+  transition:
+    border-color 120ms ease,
+    box-shadow 120ms ease,
+    transform 120ms ease;
+}
+.tile--specimen:hover {
+  border-left-color: var(--line-strong);
+  box-shadow: 0 10px 30px color-mix(in oklch, var(--content-primary) 7%, transparent);
+}
+.tile--specimen .tile-copy {
+  display: flex;
+  flex: 1;
+  padding: 17px 18px 19px;
+  flex-direction: column;
+}
+.tile--specimen .tile-heading {
+  display: flex;
+  margin-bottom: 7px;
+  gap: 12px;
+  align-items: baseline;
+  justify-content: space-between;
+}
+.tile--specimen .tile-heading h3 {
+  margin: 0;
+}
+.tile--specimen .tile-copy > p {
+  display: -webkit-box;
+  overflow: hidden;
+  overflow-wrap: anywhere;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 4;
+}
+.tile--specimen .tile-copy > p code {
+  white-space: normal;
+}
+.tile-arrow {
+  color: var(--content-tertiary);
+  font-size: 17px;
+  line-height: 1;
+  transition:
+    color 120ms ease,
+    transform 120ms ease;
+}
+.tile--specimen:hover .tile-arrow {
+  color: var(--primary);
+  transform: translateX(3px);
+}
+
+.tile-visual {
+  position: relative;
+  height: 148px;
+  overflow: hidden;
+  flex: 0 0 auto;
+  background-color: var(--surface-3);
+  background-image:
+    linear-gradient(var(--line-subtle) 1px, transparent 1px),
+    linear-gradient(90deg, var(--line-subtle) 1px, transparent 1px);
+  background-size: 24px 24px;
+  border-bottom: 1px solid var(--line-subtle);
+}
+.specimen-label {
+  position: absolute;
+  z-index: 2;
+  top: 10px;
+  left: 12px;
+  padding: 2px 5px;
+  color: var(--content-tertiary);
+  background: var(--surface-2);
+  border: 1px solid var(--line-subtle);
+  border-radius: var(--radius-sm);
+  font-family: var(--font-mono);
+  font-size: 9px;
+  font-weight: 600;
+  line-height: 1.3;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.specimen-canvas {
+  position: absolute;
+  top: 28px;
+  right: 12%;
+  bottom: 15px;
+  left: 12%;
+  display: flex;
+  min-width: 0;
+  gap: 9px;
+  align-items: center;
+  justify-content: center;
+}
+.specimen-canvas :is(i, b, em, strong) {
+  display: block;
+  font-style: normal;
+}
+
+.mini-button {
+  display: inline-flex;
+  height: 28px;
+  padding: 0 12px;
+  color: var(--content-secondary);
+  background: var(--surface-2);
+  border: 1px solid var(--line-default);
+  border-radius: var(--radius-sm);
+  box-shadow: 0 1px 2px color-mix(in oklch, var(--content-primary) 8%, transparent);
+  font-size: 10px;
+  font-weight: 600;
+  align-items: center;
+}
+.mini-button--primary {
+  color: var(--surface-2);
+  background: var(--primary);
+  border-color: var(--primary);
+}
+.mini-chart {
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+.mini-chart-grid {
+  fill: none;
+  stroke: var(--line-default);
+  stroke-width: 1;
+}
+.mini-chart-area {
+  fill: var(--primary-tint);
+}
+.mini-chart-line {
+  fill: none;
+  stroke: var(--primary);
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 2.5;
+}
+
+.foundation-svg {
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  font-family: var(--font-sans);
+}
+.foundation-svg .f-surface {
+  fill: var(--surface-2);
+  stroke: var(--line-default);
+  stroke-width: 1;
+}
+.foundation-svg .f-primary {
+  fill: var(--primary);
+  stroke: var(--primary);
+  stroke-width: 1;
+}
+.foundation-svg .f-tint {
+  fill: var(--primary-tint);
+  stroke: var(--line-default);
+  stroke-width: 1;
+}
+.foundation-svg .f-muted {
+  fill: var(--line-default);
+}
+.foundation-svg .f-ink {
+  fill: var(--content-primary);
+}
+.foundation-svg .f-line,
+.foundation-svg .f-measure,
+.foundation-svg .f-motion-path,
+.foundation-svg .f-icon {
+  fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.foundation-svg .f-line {
+  stroke: var(--line-strong);
+  stroke-width: 1.5;
+}
+.foundation-svg .f-measure {
+  stroke: var(--content-tertiary);
+  stroke-width: 1;
+}
+.foundation-svg .f-type-xl {
+  fill: var(--content-primary);
+  font-size: 38px;
+  font-weight: 650;
+  letter-spacing: -0.04em;
+}
+.foundation-svg .f-type-md {
+  fill: var(--content-primary);
+  font-size: 13px;
+  font-weight: 620;
+}
+.foundation-svg .f-type-code {
+  fill: var(--content-tertiary);
+  font-family: var(--font-mono);
+  font-size: 9px;
+}
+.foundation-svg .f-shadow {
+  filter: drop-shadow(0 5px 5px color-mix(in oklch, var(--content-primary) 16%, transparent));
+}
+.foundation-svg .f-dark-line {
+  fill: var(--surface-3);
+  opacity: 0.7;
+}
+.foundation-svg .f-motion-path {
+  stroke: var(--primary);
+  stroke-width: 2.5;
+}
+.foundation-svg .f-icon {
+  stroke: var(--primary);
+  stroke-width: 2.5;
+}
+.foundation-svg .f-focus {
+  fill: none;
+  stroke: var(--line-focus);
+  stroke-width: 3;
+}
+.foundation-svg .f-contrast {
+  fill: var(--surface-2);
+  font-size: 14px;
+  font-weight: 650;
+  text-anchor: middle;
+}
+
+.tile-visual--collection .specimen-canvas,
+.tile-visual--data .specimen-canvas,
+.tile-visual--feedback .specimen-canvas,
+.tile-visual--form .specimen-canvas,
+.tile-visual--structure .specimen-canvas {
+  flex-direction: column;
+  align-items: stretch;
+}
+.mini-toolbar,
+.mini-row,
+.mini-data-head,
+.mini-data-row {
+  display: flex;
+  width: 100%;
+  align-items: center;
+}
+.mini-toolbar {
+  height: 25px;
+  padding: 0 7px;
+  background: var(--surface-2);
+  border: 1px solid var(--line-default);
+  border-radius: var(--radius-sm);
+  gap: 6px;
+}
+.mini-toolbar i {
+  width: 58%;
+  height: 6px;
+  background: var(--line-default);
+  border-radius: 9px;
+}
+.mini-toolbar b {
+  width: 22px;
+  height: 12px;
+  margin-left: auto;
+  background: var(--primary-tint);
+  border: 1px solid var(--line-default);
+  border-radius: 8px;
+}
+.mini-row,
+.mini-data-row {
+  height: 16px;
+  padding: 0 5px;
+  border-bottom: 1px solid var(--line-subtle);
+  gap: 8px;
+}
+.mini-row i,
+.mini-row b,
+.mini-row em,
+.mini-data-head i,
+.mini-data-head b,
+.mini-data-head em,
+.mini-data-row i,
+.mini-data-row b,
+.mini-data-row em {
+  height: 4px;
+  background: var(--line-default);
+  border-radius: 6px;
+}
+.mini-row i,
+.mini-data-row i,
+.mini-data-head i {
+  width: 38%;
+}
+.mini-row b,
+.mini-data-row b,
+.mini-data-head b {
+  width: 25%;
+}
+.mini-row em,
+.mini-data-row em,
+.mini-data-head em {
+  width: 18%;
+  margin-left: auto;
+}
+.mini-data-head {
+  height: 18px;
+  padding: 0 5px;
+  background: var(--surface-hover);
+  border-bottom: 1px solid var(--line-default);
+  gap: 8px;
+}
+.mini-data-head :is(i, b, em) {
+  background: var(--content-tertiary);
+}
+
+.mini-alert,
+.mini-toast {
+  display: flex;
+  width: 100%;
+  padding: 8px;
+  background: var(--surface-2);
+  border: 1px solid var(--line-default);
+  border-radius: var(--radius-sm);
+  align-items: center;
+  gap: 7px;
+}
+.mini-alert {
+  border-left: 3px solid var(--primary);
+}
+.mini-alert i {
+  display: inline-flex;
+  width: 16px;
+  height: 16px;
+  color: var(--primary);
+  background: var(--primary-tint);
+  border-radius: 50%;
+  font-size: 9px;
+  font-weight: 700;
+  align-items: center;
+  justify-content: center;
+}
+.mini-alert b,
+.mini-toast b {
+  width: 52%;
+  height: 5px;
+  background: var(--content-tertiary);
+  border-radius: 8px;
+}
+.mini-alert em {
+  width: 22%;
+  height: 5px;
+  margin-left: auto;
+  background: var(--line-default);
+  border-radius: 8px;
+}
+.mini-toast {
+  width: 72%;
+  margin-left: auto;
+  box-shadow: 0 5px 14px color-mix(in oklch, var(--content-primary) 10%, transparent);
+}
+.mini-toast i {
+  width: 8px;
+  height: 8px;
+  background: var(--primary);
+  border-radius: 50%;
+}
+
+.mini-label {
+  width: 34%;
+  height: 5px;
+  background: var(--content-tertiary);
+  border-radius: 8px;
+}
+.mini-field {
+  display: flex;
+  width: 100%;
+  height: 30px;
+  padding: 0 9px;
+  color: var(--content-tertiary);
+  background: var(--surface-2);
+  border: 1px solid var(--line-default);
+  border-radius: var(--radius-sm);
+  font-size: 9px;
+  align-items: center;
+}
+.mini-field b {
+  margin-left: auto;
+  font-size: 11px;
+}
+.mini-check {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+.mini-check i {
+  display: inline-flex;
+  width: 14px;
+  height: 14px;
+  color: var(--surface-2);
+  background: var(--primary);
+  border-radius: 3px;
+  font-size: 9px;
+  align-items: center;
+  justify-content: center;
+}
+.mini-check b {
+  width: 43%;
+  height: 5px;
+  background: var(--line-default);
+  border-radius: 8px;
+}
+
+.mini-avatar {
+  display: inline-flex;
+  width: 54px;
+  height: 54px;
+  color: var(--primary);
+  background: var(--primary-tint);
+  border: 1px solid var(--line-default);
+  border-radius: 50%;
+  font-size: 15px;
+  font-weight: 650;
+  align-items: center;
+  justify-content: center;
+}
+.mini-identity-copy {
+  display: flex;
+  width: 52%;
+  gap: 8px;
+  flex-direction: column;
+}
+.mini-identity-copy i,
+.mini-identity-copy b,
+.mini-identity-copy em {
+  height: 6px;
+  background: var(--line-default);
+  border-radius: 8px;
+}
+.mini-identity-copy i {
+  width: 76%;
+  background: var(--content-tertiary);
+}
+.mini-identity-copy b {
+  width: 100%;
+}
+.mini-identity-copy em {
+  width: 61%;
+}
+
+.mini-shell,
+.mini-nav,
+.mini-backdrop,
+.mini-dialog {
+  position: relative;
+  display: block;
+}
+.mini-shell {
+  width: 100%;
+  height: 82px;
+  overflow: hidden;
+  background: var(--surface-2);
+  border: 1px solid var(--line-default);
+  border-radius: var(--radius-sm);
+}
+.mini-shell i {
+  position: absolute;
+  width: 25%;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  background: var(--surface-hover);
+  border-right: 1px solid var(--line-default);
+}
+.mini-shell b {
+  position: absolute;
+  height: 16px;
+  top: 0;
+  right: 0;
+  left: 25%;
+  border-bottom: 1px solid var(--line-default);
+}
+.mini-shell em,
+.mini-shell strong {
+  position: absolute;
+  top: 29px;
+  bottom: 11px;
+  background: var(--surface-3);
+  border: 1px solid var(--line-subtle);
+  border-radius: 3px;
+}
+.mini-shell em {
+  right: 45%;
+  left: 33%;
+}
+.mini-shell strong {
+  right: 8%;
+  left: 60%;
+}
+.tile-visual--navigation .specimen-canvas {
+  justify-content: flex-start;
+}
+.mini-nav {
+  width: 38%;
+  height: 88px;
+  padding: 11px 8px;
+  background: var(--surface-2);
+  border: 1px solid var(--line-default);
+  border-radius: var(--radius-sm);
+}
+.mini-nav :is(i, b, em, strong) {
+  width: 100%;
+  height: 7px;
+  margin-bottom: 8px;
+  background: var(--line-default);
+  border-radius: 2px;
+}
+.mini-nav b {
+  background: var(--primary-tint);
+  border-left: 2px solid var(--primary);
+}
+.mini-page-lines {
+  display: flex;
+  width: 52%;
+  gap: 10px;
+  flex-direction: column;
+}
+.mini-page-lines :is(i, b, em) {
+  height: 6px;
+  background: var(--line-default);
+  border-radius: 8px;
+}
+.mini-page-lines i {
+  width: 72%;
+  background: var(--content-tertiary);
+}
+.mini-page-lines b {
+  width: 100%;
+}
+.mini-page-lines em {
+  width: 84%;
+}
+
+.tile-visual--overlay .specimen-canvas {
+  position: absolute;
+}
+.mini-backdrop {
+  position: absolute;
+  width: 100%;
+  height: 82px;
+  background: var(--surface-hover);
+  border: 1px solid var(--line-default);
+  border-radius: var(--radius-sm);
+}
+.mini-backdrop i,
+.mini-backdrop b {
+  position: absolute;
+  height: 5px;
+  top: 13px;
+  left: 10px;
+  background: var(--line-default);
+  border-radius: 8px;
+}
+.mini-backdrop i {
+  width: 36%;
+}
+.mini-backdrop b {
+  width: 24%;
+  top: 26px;
+}
+.mini-dialog {
+  width: 58%;
+  height: 66px;
+  padding: 12px;
+  background: var(--surface-2);
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius-md);
+  box-shadow: 0 8px 20px color-mix(in oklch, var(--content-primary) 15%, transparent);
+}
+.mini-dialog i,
+.mini-dialog b {
+  height: 5px;
+  margin-bottom: 8px;
+  background: var(--line-default);
+  border-radius: 8px;
+}
+.mini-dialog i {
+  width: 61%;
+  background: var(--content-tertiary);
+}
+.mini-dialog b {
+  width: 88%;
+}
+.mini-dialog em {
+  width: 34%;
+  height: 13px;
+  margin-top: 10px;
+  margin-left: auto;
+  background: var(--primary);
+  border-radius: 3px;
+}
+
+.mini-accordion {
+  display: flex;
+  width: 100%;
+  min-height: 23px;
+  border-bottom: 1px solid var(--line-default);
+  align-items: center;
+}
+.mini-accordion i {
+  width: 64%;
+  height: 5px;
+  background: var(--line-default);
+  border-radius: 8px;
+}
+.mini-accordion b {
+  margin-left: auto;
+  color: var(--content-tertiary);
+  font-size: 10px;
+}
+
+.mini-flow {
+  display: flex;
+  width: 100%;
+  align-items: center;
+}
+.mini-flow i {
+  display: inline-flex;
+  width: 34px;
+  height: 34px;
+  flex: 0 0 auto;
+  color: var(--content-secondary);
+  background: var(--surface-2);
+  border: 1px solid var(--line-default);
+  border-radius: 50%;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 650;
+  align-items: center;
+  justify-content: center;
+}
+.mini-flow i:first-child {
+  color: var(--surface-2);
+  background: var(--primary);
+  border-color: var(--primary);
+}
+.mini-flow b {
+  height: 1px;
+  flex: 1;
+  background: var(--line-strong);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tile--specimen,
+  .tile-arrow {
+    transition: none;
+  }
 }
 /* ── Landing page ────────────────────────────────────────────── */
 
@@ -966,7 +1677,7 @@ main > .lede {
   margin-top: 0;
 }
 
-/* A tab with no h3s has an empty rail, and an "On this page" heading with
+/* A tab with no section headings has an empty rail, and an "On this page" heading with
  * nothing under it reads as broken. Let the rail disappear instead. */
 .toc.tabbed:not(:has(.toc-group:not([hidden]))) {
   display: none;

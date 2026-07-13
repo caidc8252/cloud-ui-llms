@@ -10,6 +10,8 @@
     "preview:install": "npm i --no-save ./cloud-ui-0.0.1.tgz"
   },
   "dependencies": {
+    "@fontsource-variable/geist": "^5.2.9",
+    "@fontsource-variable/geist-mono": "^5.2.8",
     "marked": "^15.0.7"
   },
   "devDependencies": {

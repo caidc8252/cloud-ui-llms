@@ -139,6 +139,8 @@ Compilable page templates. Start from one and adapt it inside your module — th
 
 ## Foundations
 
+The shared visual rules and core principles behind every `@cloud/ui` component and pattern.
+
 - [Design tokens](foundations/design-tokens.md): The CSS-variable → Tailwind-utility → component-prop chain. **Consume the key (`bg-surface-2`), never the value (`bg-[oklch(...)]`)** — the value is allowed to change under you, and the arbitrary-value lint blocks it anyway.
 - [Colors](foundations/colors.md): Read before writing any colour. **There is no literal colour at a call site** — surface, content, line, status, category, and chart all have semantic roles. `content-disabled` means disabled; never borrow it to look subtle.
 - [Spacing](foundations/spacing.md): Read before writing any gap or padding. **Every step says where it is used**, and the half steps (`gap-1.5`, `gap-2.5`) carry meaning: they say two things are one thing.

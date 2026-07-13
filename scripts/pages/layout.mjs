@@ -11,7 +11,7 @@
  */
 
 import { basename } from "node:path";
-import { esc, slug } from "../lib/read.mjs";
+import { createSlugger, esc } from "../lib/read.mjs";
 
 let MODEL = null;
 /** The shell needs the index to draw the nav; the build hands it over once. */
@@ -48,14 +48,17 @@ function sidebar(up, section, activeMd, onIndex = false) {
 
 export function toc(md) {
   const rows = [];
+  const headingSlug = createSlugger();
   let fenced = false;
   for (const line of md.split("\n")) {
     if (/^```/.test(line)) fenced = !fenced;
     if (fenced) continue;
-    const m = line.match(/^(#{2,3})\s+(.+)$/);
+    const m = line.match(/^(#{1,6})\s+(.+)$/);
     if (!m) continue;
+    const id = headingSlug(m[2]);
+    if (m[1].length < 2 || m[1].length > 3) continue;
     const text = m[2].replace(/`/g, "").replace(/\*\*/g, "").trim();
-    rows.push({ level: m[1].length, text, id: slug(m[2]) });
+    rows.push({ level: m[1].length, text, id });
   }
   if (rows.length < 2) return "";
   const links = rows
@@ -98,6 +101,7 @@ export function page({ title, body, rel, section, tocHtml, home = false, raw, on
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>${esc(title)} · @cloud/ui</title>
+<link rel="preload" href="${up}/assets/files/geist-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="${up}/assets/docs.css">
 ${body.includes("data-preview") ? `<link rel="stylesheet" href="${up}/assets/ui.css">` : ""}
 <script>

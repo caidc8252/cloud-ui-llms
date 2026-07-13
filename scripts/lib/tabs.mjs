@@ -1,5 +1,14 @@
 import { esc, slug } from "./read.mjs";
 
+const plainText = (html) =>
+  html
+    .replace(/<[^>]+>/g, "")
+    .replace(/&quot;/g, '"')
+    .replace(/&#39;/g, "'")
+    .replace(/&lt;/g, "<")
+    .replace(/&gt;/g, ">")
+    .replace(/&amp;/g, "&");
+
 /**
  * Split a rendered doc into tabs, one per `## ` section.
  *
@@ -21,7 +30,7 @@ export function splitTabs(html) {
   const tabs = parts.map((part) => {
     const m = part.match(/^<h2 id="([^"]+)">(.*?)<\/h2>/s);
     const id = m?.[1] ?? slug(part.slice(0, 40));
-    const title = (m?.[2] ?? "").replace(/<[^>]+>/g, "");
+    const title = plainText(m?.[2] ?? "");
     const label = title.replace(/\s+guidelines$/i, "");
     // The h2 is the tab; printing it again at the top of its own panel is noise.
     const body = part.replace(/^<h2 id="[^"]+">.*?<\/h2>\n?/s, "");
@@ -55,9 +64,11 @@ ${t.body}</section>`,
 export function tabsToc(tabs) {
   return tabs
     .map((t, i) => {
-      const rows = [...t.body.matchAll(/<h3 id="([^"]+)">(.*?)<\/h3>/gs)].map(
-        ([, id, text]) =>
-          `<a href="#${id}" class="l3" data-id="${id}">${esc(text.replace(/<[^>]+>/g, ""))}</a>`,
+      const rows = [
+        ...t.body.matchAll(/<h([23]) id="([^"]+)">(.*?)<\/h\1>/gs),
+      ].map(
+        ([, level, id, text]) =>
+          `<a href="#${id}" class="l${level}" data-id="${id}">${esc(plainText(text))}</a>`,
       );
       /* Only the opening tab's group shows. Emitting them all visible and
        * waiting for the script to hide them lists headings the reader cannot

@@ -5,6 +5,18 @@ import { dirname, join } from "node:path";
 
 const require = createRequire(import.meta.url);
 
+/** Geist belongs to the docs shell as well as the live component previews. */
+export async function buildFontAssets(out) {
+  const files = join(out, "assets", "files");
+  await mkdir(files, { recursive: true });
+  for (const pkg of ["geist", "geist-mono"]) {
+    const packageRoot = dirname(
+      require.resolve(`@fontsource-variable/${pkg}`),
+    );
+    await cp(join(packageRoot, "files"), files, { recursive: true });
+  }
+}
+
 /**
  * The assets a live preview needs.
  *
@@ -73,19 +85,4 @@ export async function buildPreviewAssets(out) {
     logLevel: "error",
   });
 
-  /* Geist. The compiled CSS points at ./files/*.woff2, relative to itself, so the
-   * fonts have to land beside it. Without them the previews fall back to a system
-   * face — and a design system whose own docs render its components in the wrong
-   * typeface is showing you something that is not the product. */
-  const files = join(assets, "files");
-  await mkdir(files, { recursive: true });
-  for (const pkg of ["geist", "geist-mono"]) {
-    await cp(
-      join("node_modules", `@fontsource-variable/${pkg}`, "files"),
-      files,
-      {
-        recursive: true,
-      },
-    );
-  }
 }
