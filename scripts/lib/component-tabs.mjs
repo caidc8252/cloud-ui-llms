@@ -1,5 +1,6 @@
 import { esc } from "./read.mjs";
 import { loadProps } from "./props.mjs";
+import { styleTab } from "./style-tab.mjs";
 
 /**
  * A component page as Cloudscape shapes one: Playground / API / Style / Usage.
@@ -57,19 +58,13 @@ export async function componentTabs({ title, usageHtml }) {
     tabs.push({ id: "api", label: "API", body: apiTable(props) });
   }
 
-  tabs.push({
-    id: "style",
-    label: "Style",
-    body: `<p class="note-inline">There is no style API. A ${esc(title)} is styled
-by its <code>variant</code> and <code>size</code>, and by nothing else — the design
-system does not open a hole for arbitrary CSS, and the docs say so in as many
-words: never put <code>buttonVariants()</code> on some other element's
-<code>className</code>. If a surface needs an appearance the variants do not
-carry, that is a system decision, not a local one.</p>
-<p class="note-inline">The tokens behind those variants are in
-<a href="../foundations/design-tokens.html">Design tokens</a> and
-<a href="../foundations/colors.html">Colors</a>.</p>`,
-  });
+  /* Cloudscape's Style tab is a `style` prop — a typed escape hatch for
+   * overriding background, colour and border per state. There is no such prop
+   * here, and that is the design. So the tab answers the question the reader
+   * came with — "what decides how this looks?" — with the system's real answer:
+   * the variant does, and here is what each one resolves to. */
+  const style = await styleTab(title, props);
+  if (style) tabs.push({ id: "style", label: "Style", body: style });
 
   tabs.push({ id: "usage", label: "Usage", body: usageHtml });
 
