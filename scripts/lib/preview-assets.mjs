@@ -48,7 +48,6 @@ export async function buildPreviewAssets(out) {
     ],
     { encoding: "utf8" },
   );
-
   if (css.error || css.status !== 0) {
     /* Say what actually went wrong. The first version printed the stderr of a
      * process that had never started — `undefined` — and told you nothing. */
