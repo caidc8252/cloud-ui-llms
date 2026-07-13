@@ -6,9 +6,17 @@
   "scripts": {
     "build": "node scripts/build.mjs",
     "serve": "npm run build && node scripts/serve.mjs",
-    "preview": "npm run serve"
+    "preview": "npm run serve",
+    "preview:install": "npm i --no-save ./cloud-ui-0.0.1.tgz"
   },
   "dependencies": {
     "marked": "^15.0.7"
+  },
+  "devDependencies": {
+    "@tailwindcss/cli": "^4.3.2",
+    "esbuild": "^0.28.1",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "tailwindcss": "^4.3.2"
   }
 }

@@ -1,5 +1,7 @@
 import { marked } from "marked";
 import { esc, slug } from "./read.mjs";
+import { compileExample } from "./preview.mjs";
+import { previewsAvailable } from "./preview-available.mjs";
 
 /* marked injects `this.parser` at parse time, so these must be plain functions —
  * an arrow, or anything pre-bound, loses it. */
@@ -23,6 +25,17 @@ const renderer = {
     const t = title ? ` title="${esc(title)}"` : "";
     return `<a href="${to}"${t}${internal ? "" : ' target="_blank" rel="noopener"'}>${text}</a>`;
   },
+};
+
+/* A tsx example gets a live preview above it — the same component the reader is
+ * about to copy, rendered from the same package the app imports. The code that
+ * cannot run keeps its block and nothing else changes. */
+renderer.code = function ({ text, lang }) {
+  const body = `<pre><code class="language-${esc(lang ?? "")}">${esc(text)}</code></pre>`;
+  if (lang !== "tsx" || !previewsAvailable) return body;
+  const js = compileExample(text);
+  if (!js) return body;
+  return `<div class="demo"><div class="demo-stage" data-preview="${encodeURIComponent(js)}"></div>${body}</div>`;
 };
 
 marked.use({ gfm: true, renderer });

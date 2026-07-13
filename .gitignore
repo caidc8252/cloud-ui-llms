@@ -1,2 +1,7 @@
 node_modules/
 _site/
+
+# @cloud/ui is vendored locally for the live previews and must never be
+# committed — it is a private package and this repo is public. The build treats
+# the previews as optional: without it you still get the whole docs site.
+*.tgz
