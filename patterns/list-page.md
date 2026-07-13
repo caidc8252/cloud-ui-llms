@@ -52,7 +52,7 @@ Every quick `Select` needs an `items` map (value → label) on its **root**, or 
 
 #### C. Filter state
 
-`useListFilters({ initial, onApply })` supplies `draft`, `setDraft`, `apply`, `applied`, `clearField`, `clearAll`, `reset`, `countActive`, and `hasApplied`. The page provides only the field shape and the fetch; the hook owns the state machine.
+`useListFilters({ initial, onApply })` supplies `draft`, `setDraft`, `apply`, `applied`, `clearField`, `clearAll`, `reset`, `countActive`, and `hasApplied`. The page provides only the field shape and the fetch; the hook owns the state machine. **Full signature and semantics: [useListFilters](../components/use-list-filters.md)** — read it before wiring the band. Two things it is easy to get wrong from the member list alone: `setDraft` is `(key, value)`, one field at a time, not a patch object; and `initial` is the unfiltered baseline that everything else is measured against, captured on the first render and never re-read.
 
 #### D. Results container
 

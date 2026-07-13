@@ -60,6 +60,7 @@ Each entry states the condition that selects it, and names the component to use 
 - [List applied filters](components/applied-filters.md): The row of applied filter chips, with a "clear all".
 - [List condition band](components/list-condition-band.md): The list page's filter band — the quick bar over the applied-chip row. Leave `sticky` off on a standard list page; dock the summary bar and table header instead.
 - [List filter chip](components/filter-chip.md): One applied filter, with a remove button.
+- [List filter state](components/use-list-filters.md): The `useListFilters` hook — the **draft/applied** state machine every list page's filters run on. Read it before wiring the band or the sheet: `setDraft` is `(key, value)`, the list queries `applied` and never `draft`, and `reset` (draft only) is not `clearAll` (draft **and** applied).
 - [List search input](components/search-input.md): The quick bar's search field. Enter runs the search.
 - [List summary bar](components/list-summary-bar.md): The result count and low-chrome actions between the card's top edge and the table. **Everything here is `ghost`** — see [Action weight](patterns/action-weight.md).
 - [Load more](components/load-more.md): Append-on-click pagination. **When anything sits below the list, use this rather than scroll-driven loading**, which makes the footer unreachable. For scroll loading, use `VirtualTable`'s `onReachEnd` or the `useInfiniteScroll` hook.

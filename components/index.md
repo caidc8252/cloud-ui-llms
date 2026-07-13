@@ -2,7 +2,7 @@
 
 Components are built with React and implement the design tokens and patterns of `@cloud/ui`. They are grouped into primitives (single-purpose building blocks), recipes (composed, opinionated assemblies), layout (the page shell), the list-filter family (the quick bar and advanced filter sheet), and charts. All of them import from `@cloud/ui` — **except the `Chart*` family, which lives only at `@cloud/ui/components/chart`** and is deliberately kept out of the root barrel, because Recharts' `Tooltip` / `Legend` would collide with the ones exported there.
 
-Headings use the exported name, so the heading is what you type in the import. The package also exports hooks (`useTheme`, `useIsMobile`, `useSidebar`, `useListFilters`, `useInfiniteScroll`, `useCarousel`), the `cn` class merger, and the `ThemeProvider` / `SidebarProvider` / `TooltipProvider` context providers, which are not listed here.
+Headings use the exported name, so the heading is what you type in the import. The package also exports hooks (`useTheme`, `useIsMobile`, `useSidebar`, `useInfiniteScroll`, `useCarousel`), the `cn` class merger, and the `ThemeProvider` / `SidebarProvider` / `TooltipProvider` context providers, which are not listed here. The one hook that *is* listed is `useListFilters`: the list-filter family is built on its state machine, so it carries a contract of its own.
 
 ### Accordion
 
@@ -549,6 +549,12 @@ The status vocabulary shared by every status-bearing component: `neutral`, `succ
 Short text hint shown on hover or focus.
 
 [View Documentation](./tooltip.md)
+
+### useListFilters
+
+The draft/applied state machine every list page's filters run on. `setDraft` is `(key, value)`; the list queries `applied`, never `draft`; `reset` rolls back the draft alone, while `clearAll` clears draft **and** applied.
+
+[View Documentation](./use-list-filters.md)
 
 ### VirtualTable
 

@@ -41,7 +41,7 @@ import "@cloud/ui/globals.css";             // second
 
 ## Hooks, theme, and utilities
 
-These have no component doc — they are the whole of their own API.
+These are the whole of their own API and have no component doc — with one exception: `useListFilters` has [a doc of its own](components/use-list-filters.md), because the entire list-filter family is built on its state machine.
 
 | Export | Use it to |
 | --- | --- |
@@ -51,7 +51,7 @@ These have no component doc — they are the whole of their own API.
 | `SIDEBAR_COOKIE` | the persisted sidebar-state key, when server and client must agree on it |
 | `useIsMobile` | respond to the mobile breakpoint in **behaviour**, where CSS alone cannot. Prefer CSS for layout. |
 | `useInfiniteScroll`, `UseInfiniteScrollOptions`, `UseInfiniteScrollResult` | load incremental results from an observed sentinel — on a list that is **not** a table. For a table, use `VirtualTable`'s `onReachEnd`. |
-| `useListFilters`, `ListFilters`, `UseListFiltersOptions` | manage separate **draft** and **applied** filter state, which is what makes deferred apply work. See [Advanced filtering](patterns/advanced-filtering.md). |
+| `useListFilters`, `ListFilters`, `UseListFiltersOptions` | manage separate **draft** and **applied** filter state, which is what makes deferred apply work. **Full signature: [useListFilters](components/use-list-filters.md).** See also [Advanced filtering](patterns/advanced-filtering.md). |
 
 ## Localization
 
@@ -65,11 +65,13 @@ The components ship their own default strings in **`en`**, **`zh-CN`**, and **`j
 
 **Types:** `AccordionTriggerProps`, `BadgeShape`, `BadgeTone`, `CardStripItem`, `CardStripProps`, `CarouselApi`, `ComboboxOption`, `ComboboxProps`, `DatePickerProps`, `DateRange`, `DateRangePickerProps`, `DateRangePreset`, `DateTimePickerProps`, `DropzoneProps`, `EmptyProps`, `FieldProps`, `FileRowProps`, `FileStatus`, `KeyValueProps`, `KpiTileProps`, `KvGridProps`, `LoadMoreProps`, `LogConsoleProps`, `LogLevel`, `LogLine`, `MenuItemProps`, `ModalProps`, `ObjectTileProps`, `PaginationProps`, `ProgressProps`, `ProgressTone`, `RichPaginationProps`, `SortDir`, `SpinnerProps`, `StatCardProps`, `StatCardTone`, `StatCardTrend`, `StatTrendDirection`, `StatusCardProps`, `StatusCardSize`, `StepIndicatorProps`, `StepIndicatorStep`, `StepperProps`, `TableColumn`, `TableProps`, `TimePickerProps`, `TimelineEntry`, `TimelineProps`, `TimelineTone`, `ToggleCheckboxProps`, `ToggleGroupProps`, `ToggleProps`, `ToggleRadioGroupProps`, `ToggleRadioProps`, `ToggleSwitchProps`, `Tone`, `VirtualTableProps`
 
-## `@cloud/ui/components/layout` — 12 values, 7 types
+## `@cloud/ui/components/layout` — 12 values, 8 types
 
 `ActionFooter`, `AppHeader`, `Breadcrumbs`, `ContentHeader`, `Layout`, `PAGE_BODY_CLASS_NAME`, `PAGE_BODY_PADDING_CLASS_NAME`, `PageBody`, `PageHeader`, `PageHeaderBand`, `Sidebar`, `SidebarTrigger`
 
-**Types:** `ActionFooterProps`, `BreadcrumbsItem`, `SidebarBrand`, `SidebarNavItem`, `SidebarProps`, `SidebarSection`, `SidebarSubItem`
+**Types:** `ActionFooterProps`, `BreadcrumbsItem`, `HeaderAction`, `SidebarBrand`, `SidebarNavItem`, `SidebarProps`, `SidebarSection`, `SidebarSubItem`
+
+`HeaderAction` is the descriptor type behind both bands' `actions` prop. It is declared once and re-exported by `PageHeader` and `PageHeaderBand`, so it reaches this barrel — and the root — under one name. Its `variant` union has **no exported type name**: write the union inline, as [PageHeader](components/page-header.md) does.
 
 ## `@cloud/ui/components/list-filter` — 10 values
 
