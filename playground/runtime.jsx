@@ -49,13 +49,21 @@ function evaluate(code) {
 
 /* The playground mounts where the build left a spec for it. */
 for (const host of document.querySelectorAll("[data-playground]")) {
-  const { component, props } = JSON.parse(
+  /* `children` here is the recipe's, not React's — it says what a live example of
+   * this component should contain, and `false` means it takes none. Passing it
+   * through the JSX `children` prop would let React swallow it, so it is named. */
+  const { component, props, children, fixed } = JSON.parse(
     decodeURIComponent(host.dataset.playground),
   );
   createRoot(host).render(
     <UI.ThemeProvider>
       <UI.TooltipProvider>
-        <Playground component={component} props={props} />
+        <Playground
+          component={component}
+          props={props}
+          slot={children}
+          fixed={fixed}
+        />
       </UI.TooltipProvider>
     </UI.ThemeProvider>,
   );
@@ -65,7 +73,8 @@ for (const host of document.querySelectorAll("[data-preview]")) {
   const code = decodeURIComponent(host.dataset.preview);
   try {
     const el = evaluate(code);
-    if (el === undefined || el === null) throw new Error("example produced no element");
+    if (el === undefined || el === null)
+      throw new Error("example produced no element");
     createRoot(host).render(
       <UI.ThemeProvider>
         <UI.TooltipProvider>{el}</UI.TooltipProvider>

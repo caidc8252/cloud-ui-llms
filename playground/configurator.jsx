@@ -20,45 +20,61 @@ const NODE_CHOICES = {
 
 const codeFor = (name, props, children) => {
   const attrs = Object.entries(props)
-    .filter(([, v]) => v !== undefined && v !== false && v !== "" && v !== "none")
+    .filter(
+      ([, v]) => v !== undefined && v !== false && v !== "" && v !== "none",
+    )
     .map(([k, v]) =>
       typeof v === "boolean" ? ` ${k}` : ` ${k}=${JSON.stringify(v)}`,
     )
     .join("");
-  return `<${name}${attrs}>${children}</${name}>`;
+  /* A component that takes no children is self-closing — and it is not a stylistic
+   * choice. `<Input>text</Input>` is a React error, because `input` is a void
+   * element: it "must neither have children nor use dangerouslySetInnerHTML". The
+   * code sample has to show what actually compiles. */
+  return children === false
+    ? `<${name}${attrs} />`
+    : `<${name}${attrs}>${children}</${name}>`;
 };
 
-export function Playground({ component, props: spec }) {
+/**
+ * `slot` is the recipe's children — the text a live example of this component should
+ * contain, or `false` if it takes none. It is not React's `children`, and must not be
+ * named that: React would treat it as the playground's own subtree.
+ */
+export function Playground({ component, props: spec, slot, fixed }) {
   const Component = UI[component];
+  const takesChildren = slot !== false;
   const [state, setState] = useState(() =>
     Object.fromEntries(
       spec.map((p) => [
         p.name,
-        p.default ?? (p.type === "boolean" ? false : p.type === "node" ? "none" : ""),
+        p.default ??
+          (p.type === "boolean" ? false : p.type === "node" ? "none" : ""),
       ]),
     ),
   );
-  const [label, setLabel] = useState(component);
+  const [label, setLabel] = useState(takesChildren ? slot : "");
   const [copied, setCopied] = useState(false);
 
   const live = useMemo(() => {
-    const out = {};
+    const out = { ...fixed };
     for (const p of spec) {
       const v = state[p.name];
       if (v === "" || v === "none" || v === false) continue;
       out[p.name] = p.type === "node" ? NODE_CHOICES[v] : v;
     }
     return out;
-  }, [state, spec]);
+  }, [state, spec, fixed]);
 
   const code = codeFor(
     component,
     Object.fromEntries(
-      spec
-        .map((p) => [p.name, state[p.name]])
-        .filter(([, v]) => v !== "" && v !== "none" && v !== false),
+      Object.entries({
+        ...fixed,
+        ...Object.fromEntries(spec.map((p) => [p.name, state[p.name]])),
+      }).filter(([, v]) => v !== "" && v !== "none" && v !== false),
     ),
-    label,
+    takesChildren ? label : false,
   );
 
   const set = (name, value) => setState((s) => ({ ...s, [name]: value }));
@@ -68,10 +84,12 @@ export function Playground({ component, props: spec }) {
       <div className="pg-controls">
         <h3>Configuration</h3>
 
-        <label className="pg-field">
-          <span>children</span>
-          <input value={label} onChange={(e) => setLabel(e.target.value)} />
-        </label>
+        {takesChildren && (
+          <label className="pg-field">
+            <span>children</span>
+            <input value={label} onChange={(e) => setLabel(e.target.value)} />
+          </label>
+        )}
 
         {spec.map((p) => (
           <label className="pg-field" key={p.name}>
@@ -119,7 +137,11 @@ export function Playground({ component, props: spec }) {
         <div className="pg-preview">
           <h3>Preview</h3>
           <div className="pg-stage">
-            <Component {...live}>{label}</Component>
+            {takesChildren ? (
+              <Component {...live}>{label}</Component>
+            ) : (
+              <Component {...live} />
+            )}
           </div>
         </div>
 
@@ -134,7 +156,11 @@ export function Playground({ component, props: spec }) {
                 setTimeout(() => setCopied(false), 1400);
               }}
             >
-              {copied ? <Check className="size-4" /> : <Copy className="size-4" />}
+              {copied ? (
+                <Check className="size-4" />
+              ) : (
+                <Copy className="size-4" />
+              )}
               {copied ? "Copied" : "Copy"}
             </button>
           </h3>

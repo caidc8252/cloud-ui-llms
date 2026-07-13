@@ -1830,6 +1830,48 @@ main > .lede {
   max-width: 72ch;
 }
 
+/* ── API table ───────────────────────────────────────────────── */
+
+/* The last column is the author's own sentence about the prop, lifted out of the
+ * .d.ts. It is prose, so it gets the room prose needs; the three columns before it
+ * are all short. */
+.tab-panel table td:last-child {
+  color: var(--content-secondary);
+  font-size: 13.5px;
+  min-width: 22ch;
+}
+
+/* A deprecated prop still has to be listed — it compiles, and someone will meet it
+ * in existing code — but it must not read as an option. */
+.row-dep > td {
+  opacity: 0.62;
+}
+.row-dep code {
+  text-decoration: line-through;
+}
+.dep {
+  color: var(--warning-strong);
+  font-weight: 600;
+}
+
+.req {
+  margin-left: 6px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: var(--warning-strong);
+  text-transform: uppercase;
+}
+
+/* One table per prop that carries appearance, so the Style tab needs headings. */
+.tab-panel h3 {
+  margin: 26px 0 8px;
+  font-size: 14px;
+}
+.tab-panel h3:first-child {
+  margin-top: 0;
+}
+
 @media (max-width: 1100px) {
   .pg {
     grid-template-columns: minmax(0, 1fr);
