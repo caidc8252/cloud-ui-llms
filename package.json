@@ -1,0 +1,14 @@
+{
+  "name": "cloud-ui-llms",
+  "private": true,
+  "type": "module",
+  "description": "Documentation for @cloud/ui. The markdown is the source; the HTML is a view of it.",
+  "scripts": {
+    "build": "node scripts/build-html.mjs",
+    "serve": "npm run build && node scripts/serve.mjs",
+    "preview": "npm run serve"
+  },
+  "dependencies": {
+    "marked": "^15.0.7"
+  }
+}
