@@ -14,6 +14,7 @@ import React from "react";
 import { createRoot } from "react-dom/client";
 import * as UI from "@cloud/ui";
 import * as Icons from "lucide-react";
+import { Playground } from "./configurator.jsx";
 
 /* A value that survives being called, spread, mapped over, or read from. */
 const stub = new Proxy(function () {}, {
@@ -44,6 +45,20 @@ function evaluate(code) {
     `with (__scope) { return (function () { ${code} })(); }`,
   );
   return fn(scopeProxy);
+}
+
+/* The playground mounts where the build left a spec for it. */
+for (const host of document.querySelectorAll("[data-playground]")) {
+  const { component, props } = JSON.parse(
+    decodeURIComponent(host.dataset.playground),
+  );
+  createRoot(host).render(
+    <UI.ThemeProvider>
+      <UI.TooltipProvider>
+        <Playground component={component} props={props} />
+      </UI.TooltipProvider>
+    </UI.ThemeProvider>,
+  );
 }
 
 for (const host of document.querySelectorAll("[data-preview]")) {

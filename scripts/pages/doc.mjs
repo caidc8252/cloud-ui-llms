@@ -1,36 +1,48 @@
 import { basename } from "node:path";
 import { render } from "../lib/markdown.mjs";
-import { splitTabs, renderTabs, tabsToc } from "../lib/tabs.mjs";
+import { componentTabs } from "../lib/component-tabs.mjs";
+import { renderTabs, tabsToc } from "../lib/tabs.mjs";
 import { page, toc } from "./layout.mjs";
 
 /**
  * A document page.
  *
- * Component docs are tabbed. They share one house structure — Development /
- * General / Features / Writing / Accessibility, in 92 of 92 — so the `## `
- * headings are the tab bar, derived, with nothing to configure. Everything else
- * (patterns, foundations) scrolls, because their shape is not the same and
- * pretending otherwise would put the reader in a tab that means nothing.
+ * A component the package describes gets Cloudscape's shape — Playground / API /
+ * Style / Usage — where only Usage is written by hand: it is the markdown,
+ * unchanged. Everything else is derived from the .d.ts that ships in the tarball.
+ *
+ * A component the package does not describe, and every pattern and foundation,
+ * scrolls as it always did. Adding a playground must not make a doc without one
+ * any worse.
  */
-export function docPage({ rel, md, section }) {
+export async function docPage({ rel, md, section }) {
   const title = (md.match(/^#\s+(.+)$/m) || [, basename(rel, ".md")])[1].trim();
   const html = render(md);
 
-  const tabbed = section?.title === "Components" ? splitTabs(html) : null;
-  if (!tabbed) {
+  const tabs =
+    section?.title === "Components"
+      ? await componentTabs({ title, usageHtml: html })
+      : null;
+
+  if (!tabs) {
     return page({ title, body: html, rel, section, tocHtml: toc(md) });
   }
 
+  /* The title and the lede sit ABOVE the tab bar, as they do on cloudscape: they
+   * are the two things that are true whichever tab you are in. Pulling them out
+   * of Usage is what stops the page saying its own name twice. */
+  const head = html.match(/^<h1[^>]*>[\s\S]*?<\/h1>\n?(<p>[\s\S]*?<\/p>)?/)?.[0] ?? "";
+  const usage = tabs.find((t) => t.id === "usage");
+  if (usage && head) usage.body = usage.body.replace(head, "");
+
   return page({
     title,
-    body: renderTabs(tabbed),
+    body: renderTabs({ lead: head, tabs }),
     rel,
     section,
-    // The rail follows the active tab: listing headings the reader cannot scroll
-    // to is worse than listing none.
     tocHtml: `<nav class="toc tabbed" aria-label="On this page">
   <h2>On this page</h2>
-  ${tabsToc(tabbed.tabs)}
+  ${tabsToc(tabs)}
 </nav>`,
   });
 }
