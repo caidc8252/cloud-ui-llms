@@ -827,3 +827,36 @@ main > .lede {
     padding: 0 20px;
   }
 }
+
+/* ── Live preview ────────────────────────────────────────────── */
+
+/* The example above its code — the same component, from the same package the
+ * app imports. Not a screenshot and not a re-implementation: if the button
+ * changes, this changes, because there is nothing here to keep in sync. */
+.demo {
+  margin: 0 0 20px;
+  border: 1px solid var(--line-default);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+}
+.demo-stage {
+  padding: 28px 20px;
+  background: var(--surface-2);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+  min-height: 84px;
+}
+/* Until the runtime mounts, the stage is empty — don't flash an empty box. */
+.demo-stage:not(.live) {
+  display: none;
+}
+.demo-stage.live + pre {
+  border-top: 1px solid var(--line-subtle);
+}
+.demo pre {
+  margin: 0;
+  border: 0;
+  border-radius: 0;
+}

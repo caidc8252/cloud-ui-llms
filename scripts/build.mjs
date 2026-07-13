@@ -26,6 +26,7 @@ import { useIndex } from "./pages/layout.mjs";
 import { docPage } from "./pages/doc.mjs";
 import { hubPage } from "./pages/hub.mjs";
 import { homePage } from "./pages/home.mjs";
+import { buildPreviewAssets } from "./lib/preview-assets.mjs";
 
 const ROOT = process.cwd();
 const OUT = join(ROOT, "_site");
@@ -85,6 +86,12 @@ for (const section of index.sections) {
 await write("index.html", homePage(index));
 
 await cp(join(ROOT, "assets"), join(OUT, "assets"), { recursive: true });
+
+/* ── The live-preview assets ─────────────────────────────────────────────────
+ * Only built when something needs them. They are heavy — a Tailwind pass over
+ * @cloud/ui plus a React bundle — and a docs page with no tsx example should not
+ * pay for either. */
+await buildPreviewAssets(OUT);
 
 const pages = await verify(OUT);
 console.log(

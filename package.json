@@ -9,6 +9,14 @@
     "preview": "npm run serve"
   },
   "dependencies": {
-    "marked": "^15.0.7"
+    "@cloud/ui": "file:vendor-cloud-ui-0.0.1.tgz",
+    "marked": "^15.0.7",
+    "react": "^19.2.7",
+    "react-dom": "^19.2.7"
+  },
+  "devDependencies": {
+    "@tailwindcss/cli": "^4.3.2",
+    "esbuild": "^0.28.1",
+    "tailwindcss": "^4.3.2"
   }
 }
