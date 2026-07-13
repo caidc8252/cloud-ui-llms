@@ -1,0 +1,398 @@
+/* @cloud/ui docs — the HTML view of the markdown.
+ *
+ * Every token below is copied from packages/ui/src/components/styles/index.css.
+ * They are the same values the components render with, so a code sample in this
+ * page and the component it describes agree. Do not tune them here — if a value
+ * is wrong, it is wrong in the design system, and that is where it gets fixed.
+ */
+
+:root {
+  /* Surfaces */
+  --surface-1: oklch(99% 0.003 90);
+  --surface-2: oklch(100% 0 0);
+  --surface-3: oklch(97.2% 0.004 90);
+  --surface-hover: oklch(95.8% 0.005 90);
+
+  /* Content */
+  --content-primary: oklch(18% 0.01 270);
+  --content-secondary: oklch(42% 0.008 270);
+  --content-tertiary: oklch(58% 0.006 270);
+
+  /* Lines */
+  --line-subtle: oklch(93% 0.005 90);
+  --line-default: oklch(89% 0.005 90);
+  --line-strong: oklch(80% 0.006 90);
+  --line-focus: oklch(40% 0.14 262);
+
+  /* Brand + accent */
+  --primary: oklch(24% 0.06 262);
+  --primary-tint: oklch(97% 0.012 262);
+  --accent: oklch(58% 0.22 270);
+
+  /* Status */
+  --warning-bg: oklch(96.5% 0.04 80);
+  --warning-strong: oklch(56% 0.15 60);
+  --error-strong: oklch(46% 0.19 25);
+  --info-bg: oklch(96% 0.03 230);
+
+  /* Radius */
+  --radius-sm: 4px;
+  --radius-md: 10px;
+  --radius-lg: 12px;
+
+  /* Type */
+  --font-sans:
+    "Geist Variable", "Geist", "Inter", -apple-system, BlinkMacSystemFont,
+    "Segoe UI", system-ui, sans-serif;
+  --font-mono:
+    "Geist Mono Variable", "Geist Mono", "JetBrains Mono", ui-monospace,
+    "SF Mono", Menlo, monospace;
+
+  color-scheme: light;
+}
+
+:root[data-theme="dark"] {
+  --surface-1: oklch(14% 0.003 260);
+  --surface-2: oklch(17% 0.004 260);
+  --surface-3: oklch(11% 0.003 260);
+  --surface-hover: oklch(22% 0.006 260);
+
+  --content-primary: oklch(94% 0.003 260);
+  --content-secondary: oklch(66% 0.005 260);
+  --content-tertiary: oklch(50% 0.005 260);
+
+  --line-subtle: oklch(20% 0.006 260);
+  --line-default: oklch(24% 0.008 260);
+  --line-strong: oklch(32% 0.01 260);
+  --line-focus: oklch(70% 0.13 262);
+
+  --primary: oklch(88% 0.004 260);
+  --primary-tint: oklch(20% 0.005 260);
+  --accent: oklch(70% 0.13 264);
+
+  --warning-bg: oklch(26% 0.06 70);
+  --warning-strong: oklch(84% 0.11 70);
+  --error-strong: oklch(78% 0.14 25);
+  --info-bg: oklch(24% 0.05 235);
+
+  color-scheme: dark;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --surface-1: oklch(14% 0.003 260);
+    --surface-2: oklch(17% 0.004 260);
+    --surface-3: oklch(11% 0.003 260);
+    --surface-hover: oklch(22% 0.006 260);
+    --content-primary: oklch(94% 0.003 260);
+    --content-secondary: oklch(66% 0.005 260);
+    --content-tertiary: oklch(50% 0.005 260);
+    --line-subtle: oklch(20% 0.006 260);
+    --line-default: oklch(24% 0.008 260);
+    --line-strong: oklch(32% 0.01 260);
+    --line-focus: oklch(70% 0.13 262);
+    --primary: oklch(88% 0.004 260);
+    --primary-tint: oklch(20% 0.005 260);
+    --accent: oklch(70% 0.13 264);
+    --warning-bg: oklch(26% 0.06 70);
+    --warning-strong: oklch(84% 0.11 70);
+    --error-strong: oklch(78% 0.14 25);
+    --info-bg: oklch(24% 0.05 235);
+    color-scheme: dark;
+  }
+}
+
+/* ── Reset ───────────────────────────────────────────────────── */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+body {
+  margin: 0;
+}
+
+/* ── Shell ───────────────────────────────────────────────────── */
+
+body {
+  background: var(--surface-1);
+  color: var(--content-primary);
+  font-family: var(--font-sans);
+  font-size: 15px;
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+}
+
+.bar {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  height: 56px; /* --spacing-control h-14, the shell's header height */
+  padding: 0 24px;
+  background: var(--surface-2);
+  border-bottom: 1px solid var(--line-subtle);
+}
+
+.bar a.home {
+  font-weight: 600;
+  color: var(--content-primary);
+  text-decoration: none;
+  letter-spacing: -0.01em;
+}
+.bar .sep {
+  color: var(--content-tertiary);
+}
+.bar .crumb {
+  color: var(--content-secondary);
+  font-size: 14px;
+}
+.bar .spacer {
+  flex: 1;
+}
+
+.bar button,
+.bar a.raw {
+  height: 28px; /* h-control-sm */
+  padding: 0 10px; /* px-cx-sm */
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font: inherit;
+  font-size: 13px;
+  color: var(--content-secondary);
+  background: transparent;
+  border: 1px solid var(--line-default);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  text-decoration: none;
+}
+.bar button:hover,
+.bar a.raw:hover {
+  background: var(--surface-hover);
+  color: var(--content-primary);
+}
+.bar button:focus-visible,
+.bar a.raw:focus-visible {
+  outline: 2px solid var(--line-focus);
+  outline-offset: 1px;
+}
+
+main {
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 40px 24px 96px;
+}
+
+/* ── Prose ───────────────────────────────────────────────────── */
+
+h1,
+h2,
+h3,
+h4 {
+  line-height: 1.25;
+  letter-spacing: -0.015em;
+  scroll-margin-top: 72px;
+}
+h1 {
+  font-size: 32px;
+  font-weight: 650;
+  margin: 0 0 8px;
+}
+h2 {
+  font-size: 22px;
+  font-weight: 600;
+  margin: 48px 0 12px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--line-subtle);
+}
+h3 {
+  font-size: 17px;
+  font-weight: 600;
+  margin: 32px 0 8px;
+}
+h4 {
+  font-size: 15px;
+  font-weight: 600;
+  margin: 24px 0 4px;
+  color: var(--content-secondary);
+}
+
+/* The line under the title: [Related](x.md) | [Other](y.md) */
+h1 + p {
+  color: var(--content-secondary);
+  font-size: 16px;
+}
+
+p {
+  margin: 0 0 16px;
+}
+strong {
+  font-weight: 620;
+  color: var(--content-primary);
+}
+em {
+  color: var(--content-secondary);
+}
+
+a {
+  color: var(--primary);
+  text-decoration: none;
+  border-bottom: 1px solid color-mix(in oklch, var(--primary) 30%, transparent);
+}
+a:hover {
+  border-bottom-color: var(--primary);
+}
+a:focus-visible {
+  outline: 2px solid var(--line-focus);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+ul,
+ol {
+  margin: 0 0 16px;
+  padding-left: 22px;
+}
+li {
+  margin: 4px 0;
+}
+li > p {
+  margin: 0 0 8px;
+}
+
+hr {
+  border: 0;
+  border-top: 1px solid var(--line-subtle);
+  margin: 40px 0;
+}
+
+blockquote {
+  margin: 16px 0;
+  padding: 12px 16px;
+  background: var(--warning-bg);
+  border-left: 3px solid var(--warning-strong);
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+}
+blockquote p:last-child {
+  margin: 0;
+}
+
+/* ── Code ────────────────────────────────────────────────────── */
+
+code {
+  font-family: var(--font-mono);
+  font-size: 0.875em;
+  padding: 1px 5px;
+  background: var(--surface-3);
+  border: 1px solid var(--line-subtle);
+  border-radius: var(--radius-sm);
+  color: var(--content-primary);
+  white-space: nowrap;
+}
+
+pre {
+  margin: 0 0 20px;
+  padding: 16px;
+  background: var(--surface-3);
+  border: 1px solid var(--line-subtle);
+  border-radius: var(--radius-md);
+  overflow-x: auto;
+}
+pre code {
+  padding: 0;
+  background: none;
+  border: 0;
+  white-space: pre;
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+/* ── Tables ──────────────────────────────────────────────────── */
+
+.table-scroll {
+  overflow-x: auto;
+  margin: 0 0 20px;
+  border: 1px solid var(--line-default);
+  border-radius: var(--radius-md);
+}
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+thead {
+  background: var(--surface-3);
+}
+th {
+  text-align: left;
+  font-weight: 600;
+  color: var(--content-secondary);
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--line-default);
+  white-space: nowrap;
+}
+td {
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--line-subtle);
+  vertical-align: top;
+}
+tbody tr:last-child td {
+  border-bottom: 0;
+}
+tbody tr:hover {
+  background: var(--surface-hover);
+}
+td code {
+  white-space: nowrap;
+}
+
+/* ── Landing page (the rendered llms.txt) ────────────────────── */
+
+.home-index h2 {
+  margin-top: 40px;
+}
+.home-index ul {
+  list-style: none;
+  padding: 0;
+}
+.home-index li {
+  padding: 12px 14px;
+  margin: 6px 0;
+  background: var(--surface-2);
+  border: 1px solid var(--line-subtle);
+  border-radius: var(--radius-md);
+  color: var(--content-secondary);
+  font-size: 14px;
+}
+.home-index li:hover {
+  border-color: var(--line-strong);
+}
+.home-index li > a:first-child {
+  font-weight: 600;
+  font-size: 15px;
+  color: var(--content-primary);
+  border-bottom: 0;
+}
+/* The index's own summary line is a description, not a warning — the amber
+ * callout treatment belongs to the `>` blocks inside the docs, not here. */
+.home-index > blockquote {
+  background: var(--surface-3);
+  border-left-color: var(--line-strong);
+  color: var(--content-secondary);
+}
+
+footer {
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 24px;
+  border-top: 1px solid var(--line-subtle);
+  color: var(--content-tertiary);
+  font-size: 13px;
+}
+footer a {
+  color: var(--content-secondary);
+}
