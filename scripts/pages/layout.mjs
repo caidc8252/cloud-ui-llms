@@ -19,7 +19,7 @@ export const useIndex = (model) => (MODEL = model);
 
 function topNav(up, current) {
   return MODEL.sections
-    .filter((s) => s.items.length)
+    .filter((s) => s.items.length && !/get started/i.test(s.title))
     .map((s) => {
       const to = s.indexHref ?? s.items[0].md.replace(/\.md$/, ".html");
       const on = s === current ? ' class="on"' : "";
