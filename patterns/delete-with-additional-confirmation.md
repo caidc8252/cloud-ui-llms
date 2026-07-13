@@ -24,9 +24,11 @@ A user deleting the ninth role today will confirm the tenth without reading. Mak
 
 _This cannot be undone_ is not the warning. The warning is **who or what is affected, counted**: _Eleven users will lose the permissions this role grants._ A number the user recognises as too large is the only thing that reliably stops the wrong delete. If you cannot count the affected records, you do not understand the cascade well enough to ship the button.
 
-### `AlertDialog`, because there is no accidental exit
+### The gate is what makes this tier 3 — not the dialog
 
-`AlertDialog` has no close affordance — no X, no backdrop dismiss. The user leaves through _Cancel_ or through the act, deliberately, and cannot fumble halfway. That is why tier 3 uses it and tier 2 does not: at tier 2 the escape hatch is a courtesy, at tier 3 an accidental dismiss mid-read is a user who never finished reading.
+Tier 2 and tier 3 are the same `AlertDialog`: no close affordance, no backdrop dismiss, the user leaving through _Cancel_, Escape, or the act. What tier 3 adds is **a confirm that stays `disabled` until the record's name is typed exactly**. That gate is the whole of the tier — do not go looking for a different dialog to express it.
+
+The gate is a `disabled` prop on the confirm, never a hand-rolled button. `AlertDialogAction` accepts it and it lands on the real `<button>` — but that part closes the dialog on click, so it only serves a confirm that does not wait on the server. A real delete does wait, so the confirm here is a plain `Button` carrying **both** `disabled` (the gate) and `loading` (the in-flight state), with `open` driven from state exactly as at tier 2. See [AlertDialog → Gated confirm and Async confirm](../components/alert-dialog.md).
 
 ### The match is exact, and the confirm stays disabled until it is
 
@@ -61,7 +63,7 @@ A `Field` whose label states exactly what to type — _Type **Regional Admin** t
 - Compute the tier from the record's reach at render time, not from its type.
 - State the blast radius as a count: _Eleven users will lose the permissions this role grants._
 - Require an exact match, trimmed. Keep the confirm disabled until it matches.
-- Use `AlertDialog`, so there is no accidental dismiss.
+- Use `AlertDialog`, and put the gate on the confirm — that is what separates this tier from tier 2.
 - Assert the permission and the party scope on the server, independently of the dialog.
 - Fall back to tier 2 when the same record has no reach — an unassigned role does not deserve this friction.
 
@@ -72,7 +74,7 @@ A `Field` whose label states exactly what to type — _Type **Regional Admin** t
 - Don't let the user press a confirm that will reject the typed name. Disable it instead.
 - Don't apply this tier to every delete in a module. Friction everywhere is friction nowhere — the user learns to type the name without reading it, and you are back to tier 2 with extra steps.
 - Don't assert _This cannot be undone_ in place of a count. Say who is affected.
-- Don't use `Modal` or `ConfirmModal` here. Both can be dismissed by accident mid-read.
+- Don't use `Modal` here. It can be dismissed by an outside click, mid-read. And don't reach for `ConfirmModal`: **there is no such export.**
 
 ## Writing guidelines
 

@@ -44,8 +44,9 @@ A render-time predicate on the record — `role.holderCount > 0`, `user.isLastAd
 
 #### C. The dialog
 
-`ConfirmModal` for tier 2, `AlertDialog` for tier 3. Tier 1 has no dialog.
-`ConfirmModal` is an application component (`@/lib/confirm-modal`), not a `@cloud/ui` export — see [Delete with confirmation](delete-with-confirmation.md).
+`AlertDialog` for tier 2 **and** tier 3 — it is the only confirm dialog. Tier 1 has no dialog.
+
+The two tiers differ in **the gate on the confirm**, not in the dialog: at tier 2 the confirm is live as soon as the dialog opens; at tier 3 it stays `disabled` until the user types the record's name. Either way, drive `open` from state and put a plain `Button` in the footer rather than `AlertDialogAction`, which closes on click and cannot survive an async delete — see [Delete with confirmation](delete-with-confirmation.md).
 
 #### D. The feedback
 
@@ -69,7 +70,8 @@ A render-time predicate on the record — `role.holderCount > 0`, `user.isLastAd
 - Don't use type-to-confirm as an authorisation check. It stops autopilot, not attackers.
 - Don't hide the action on an un-deletable record. Disable it and explain.
 - Don't paint a neutral button red. Use `variant="danger"` or `variant="ghost-danger"`.
-- Don't put a bare `Modal` around a confirmation. Use `ConfirmModal`, which owns the in-flight state.
+- Don't put a bare `Modal` around a confirmation. It can be dismissed by an outside click; use `AlertDialog`.
+- Don't reach for `ConfirmModal`. **There is no such export.**
 
 ## Writing guidelines
 
@@ -116,4 +118,4 @@ A render-time predicate on the record — `role.holderCount > 0`, `user.isLastAd
 - [Action weight](action-weight.md) — which button variant the trigger takes in each slot.
 - [Permission gating](permission-gating.md) — the guard the dialog is not.
 - [Errors and validation](errors-and-validation.md) — where a failed delete surfaces.
-- Components: `ConfirmModal`, `AlertDialog`, `Button`, `Toaster`.
+- Components: [`AlertDialog`](../components/alert-dialog.md), `Button`, `Toaster`.

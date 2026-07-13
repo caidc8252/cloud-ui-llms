@@ -16,7 +16,7 @@ Dismissal is configurable and independent: `closeOnOverlay` (default `true`), `c
 
 ### Do
 
-- Use a modal for a focused task or confirmation that interrupts the current flow.
+- Use a modal for a focused task that interrupts the current flow — a form, a preview, a picker. For a confirmation, and for anything destructive, use [`AlertDialog`](alert-dialog.md): a modal can be dismissed by an outside click, which a confirmation must not be.
 - Give it a `title`, and a `footer` with the actions.
 - Pick a `size` that fits the content without becoming a page.
 - Set `closeOnEscape={false}` and `closeOnOverlay={false}` for flows that must not be lost to a stray dismissal, such as a multi-step form or an in-flight submit.

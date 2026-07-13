@@ -8,17 +8,25 @@ One dialog, one confirm. **The default delete tier — use it unless the record 
 
 ### This is the default, and defaults should be boring
 
-Tier 2 covers the long middle: the record cannot be recreated with a click, but destroying it changes nothing outside itself. Cancelling a pending invitation. Deleting a role nobody holds. Removing a webhook. The user is asked once, in a dismissable dialog, and the act proceeds.
+Tier 2 covers the long middle: the record cannot be recreated with a click, but destroying it changes nothing outside itself. Cancelling a pending invitation. Deleting a role nobody holds. Removing a webhook. The user is asked once, and the act proceeds.
 
 Reach for tier 1 only when you can prove both of its conditions, and for tier 3 only when the blast radius genuinely leaves the record. Everything else lands here.
 
-### `ConfirmModal`, not a bare `Modal`
+### `AlertDialog`, not a bare `Modal`
 
-`ConfirmModal` owns the part that is easy to get wrong: it disables the confirm and shows a spinner while the request is in flight, it refuses an accidental backdrop dismiss mid-flight, and it closes **only on a successful result** — so a failed delete leaves the dialog open with the error visible instead of dumping the user back to a list that still shows the record.
+A confirmation is a decision, so it gets the dialog that demands one. `AlertDialog` has no close affordance and no backdrop dismiss: the user leaves through _Cancel_, through Escape, or through the act — never by fumbling a click outside it. `Modal` would hand back exactly the accidental exit you do not want on a delete.
 
-A hand-rolled `Modal` with two buttons reproduces none of that, and the double-submit it permits will delete twice. `AlertDialog` is the wrong tool in the other direction: it has no close affordance at all, which is correct for tier 3 and needless friction here.
+Tier 2 and tier 3 use the same dialog. What separates them is **the gate on the confirm**, not the way out: at tier 2 the confirm is live the moment the dialog opens; at tier 3 it stays `disabled` until the user has typed the record's name. See [Delete with additional confirmation](delete-with-additional-confirmation.md).
 
-> **Where it lives.** `ConfirmModal` is an **application** component today — `@/lib/confirm-modal`, built on `@cloud/ui`'s `Modal`. It is not a `@cloud/ui` export yet; promoting it into the package is pending. Import it from the app, and do not reach for a `@cloud/ui` export that is not there.
+### Drive `open` yourself, because the delete is async
+
+`AlertDialogAction` closes the dialog on click. That makes it wrong for any confirm that waits on the server — it would close the dialog while the request is still on the wire, hiding whatever comes back. So a real delete drives `open` from state and puts a plain `Button` in the footer, which buys the three things that are easy to get wrong:
+
+- **`loading` on the confirm**, which spins **and** disables it. A double-click cannot delete twice.
+- **Close only on success.** A failure leaves the dialog open with the error visible, instead of returning the user to a list that still shows the record.
+- **An inert Escape while in flight** — `onOpenChange` ignores the close request until the request settles, so the user cannot yank the dialog out from under a delete that is already running.
+
+The code for this is in [AlertDialog → Async confirm](../components/alert-dialog.md). Do not reach for a `ConfirmModal`: no such export exists.
 
 ### The body names the record, the title names the act
 
@@ -36,31 +44,38 @@ The phrase is load-bearing. If it appears on every dialog including the recovera
 
 #### B. Dialog
 
-`ConfirmModal` with `title`, `confirmLabel`, `loadingLabel`, and `confirmVariant="danger"`.
+`AlertDialog` with `open` / `onOpenChange` driven from state, an `AlertDialogTitle` carrying the verb, and an `AlertDialogCancel` for the way out.
 
 #### C. Body
 
 A short paragraph naming the record in `<strong>` and stating the consequence.
 
-#### D. Result
+#### D. Confirm
 
-`onConfirm` resolves `true` on success — the dialog closes and a `toast.success` names what went away. It resolves `false` on failure, leaving the dialog open with the error surfaced.
+A plain `Button variant="danger"` in the `AlertDialogFooter` — **not** `AlertDialogAction`, which would close on click — carrying `loading` while the request is in flight.
+
+#### E. Result
+
+On success the dialog closes and a `toast.success` names what went away. On failure it stays open with the error surfaced in an `Alert`.
 
 ## General guidelines
 
 ### Do
 
-- Use `ConfirmModal`. It owns the in-flight state, the double-submit guard, and the close-on-success contract.
-- Set `confirmVariant="danger"` and give `loadingLabel` a present participle — _Deleting…_.
+- Use `AlertDialog`, so a stray click outside the dialog cannot dismiss a delete.
+- Drive `open` from state and put a plain `Button` in the footer, so the dialog can outlive the click.
+- Give the confirm `loading` while the request is in flight — it spins and disables in one prop.
+- Ignore the close request from `onOpenChange` while the delete is in flight.
 - Name the record in bold in the body.
-- Resolve `false` from `onConfirm` on failure so the dialog stays open and the user sees why.
+- Keep the dialog open on failure so the user sees why.
 - Put the destructive verb on the confirm button — _Delete role_.
 - Assert the permission and the party scope on the server. The dialog is not the guard.
 
 ### Don't
 
-- Don't hand-roll the dialog from `Modal` and two buttons. You will lose the in-flight guard and permit a double delete.
-- Don't use `AlertDialog` here. Removing the escape hatch is tier 3's job, and it is friction without benefit at this tier.
+- Don't reach for `ConfirmModal`. **There is no such export** — the confirm dialog is `AlertDialog`.
+- Don't hand-roll the dialog from `Modal` and two buttons. `Modal` can be dismissed by an outside click, and two bare buttons lose the in-flight guard and permit a double delete.
+- Don't use `AlertDialogAction` for an async confirm. It closes on click, so the dialog vanishes before the server answers.
 - Don't write _Are you sure?_ as the title. Name the act.
 - Don't say _This cannot be undone_ on a recoverable record. The phrase must keep its meaning.
 - Don't close the dialog before the request settles. An optimistic close hides the failure.
@@ -101,7 +116,8 @@ A short paragraph naming the record in `<strong>` and stating the consequence.
 - Focus moves into the dialog on open and returns to the trigger on close.
 - The confirm button is not the initially-focused control. A stray Enter must not delete.
 - The dialog is labelled by its title, so a screen reader announces the act on open.
-- While the request is in flight the confirm is disabled and its `loadingLabel` is announced — a spinner alone is silent.
+- Escape closes the dialog and counts as cancel — never hang the destructive branch off the close path.
+- While the request is in flight the confirm is disabled and announces its state in words — a spinner alone is silent.
 
 ## Related patterns and components
 
@@ -109,4 +125,4 @@ A short paragraph naming the record in `<strong>` and stating the consequence.
 - [One-click delete](one-click-delete.md) — when the record is recreatable and the delete is soft.
 - [Delete with additional confirmation](delete-with-additional-confirmation.md) — when the reach crosses records or people.
 - [Action weight](action-weight.md) — `danger` on a detail page, `ghost-danger` in a row.
-- Components: `ConfirmModal`, `Button`, `Toaster`.
+- Components: [`AlertDialog`](../components/alert-dialog.md), `Button`, `Alert`, `Toaster`.

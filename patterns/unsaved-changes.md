@@ -1,6 +1,6 @@
 # Unsaved changes
 
-Catch the user before a dirty form is thrown away. **Required on every create and edit page — and the guard is partial, so know which exits it does not cover.**
+Catch the user before a dirty form is thrown away. **Required on every create and edit form, in a page or an overlay — and on a page the guard is partial, so know which exits it does not cover.**
 
 [Create form](create-form.md) | [Edit resource](edit-resource.md) | [Binding rules](../../../../.claude/team-rule/coding-rules/ui_ui-and-pages.md)
 
@@ -12,7 +12,13 @@ The same comparison — draft against the pristine record — drives the commit 
 
 Derive it from values, never from "the user has typed": a field typed and untyped is clean, and a guard that fires on a form the user has restored by hand trains them to dismiss it.
 
-### The guard is partial, and pretending otherwise loses data
+### In an overlay, every exit is catchable — so catch all three
+
+A form in a `Modal` or `Sheet` is not navigating anywhere, so none of the holes below apply to it. Its exits are the escape button, the close affordance, and `Esc` — three, all of them yours, all of them catchable. Route every one through the same dismiss handler and have that handler consult the dirty flag. There is no excuse for a dropped draft here.
+
+`Esc` is the one that gets forgotten, because it never appears in the JSX. A `Modal` that guards its _Cancel_ button and lets `Esc` through has a guard in name only.
+
+### On a page the guard is partial, and pretending otherwise loses data
 
 There is no single hook that catches every exit. What the guard actually covers:
 
@@ -40,7 +46,7 @@ The dialog offers three things, and the default must not be the destructive one:
 - **Discard changes** — `variant="danger"`. The user is throwing away work.
 - **Save and leave** — offer it only when the form is valid. A save that fails validation from inside the leave-dialog leaves the user nowhere.
 
-Use `ConfirmModal`. Discarding work is a dismissable confirmation — tier 2's shape — not a forced choice; the user must always be able to get back to the form.
+Use `AlertDialog`. The user has been stopped on their way out and genuinely must pick one of the three — so the dialog offers no outside-click dismissal, which here would be a fourth, silent outcome that resolves nothing. _Keep editing_ is the way back to the form, and Escape means the same thing, so nothing is ever trapped.
 
 ### Say what is lost, not that something is lost
 
@@ -62,7 +68,7 @@ A `beforeunload` listener, registered while `dirty` and removed when clean.
 
 #### D. Leave dialog
 
-`ConfirmModal` with a `danger` _Discard changes_, a _Keep editing_ escape, and — when the form is valid — a _Save and leave_.
+`AlertDialog` with a `danger` _Discard changes_, an `AlertDialogCancel` carrying _Keep editing_, and — when the form is valid — a _Save and leave_. _Save and leave_ awaits the server, so it is a plain `Button` with `loading`, not an `AlertDialogAction`; see [AlertDialog → Async confirm](../components/alert-dialog.md).
 
 #### E. The pending destination
 
@@ -130,5 +136,5 @@ The href the user tried to reach, held while the dialog is open, and navigated t
 
 - [Edit resource](edit-resource.md) — where the dirty flag is defined, and the commit it gates.
 - [Create form](create-form.md) — the other page that needs this guard.
-- [Delete patterns](delete-patterns.md) — the other place `ConfirmModal` carries a `danger` verb.
-- Components: `ConfirmModal` (an application component, `@/lib/confirm-modal` — not a `@cloud/ui` export), `Button`.
+- [Delete patterns](delete-patterns.md) — the other place `AlertDialog` carries a `danger` verb.
+- Components: [`AlertDialog`](../components/alert-dialog.md), `Button`.
