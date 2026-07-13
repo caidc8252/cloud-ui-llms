@@ -54,7 +54,11 @@ const renderer = {
   link({ href, title, tokens }) {
     const text = this.parser.parseInline(tokens);
     const internal = !/^(https?:|mailto:|#)/.test(href);
-    const to = internal ? href.replace(/\.md(?=$|#)/, ".html") : href;
+    // Links that escape the site root (the .claude/team-rule ones) are already a
+    // 404 for every reader. Don't also mangle their extension — leave them exactly
+    // as the markdown wrote them, so the pending decision about them stays visible.
+    const offSite = href.includes("/.claude/");
+    const to = internal && !offSite ? href.replace(/\.md(?=$|#)/, ".html") : href;
     const t = title ? ` title="${esc(title)}"` : "";
     return `<a href="${to}"${t}${internal ? "" : ' target="_blank" rel="noopener"'}>${text}</a>`;
   },
@@ -73,21 +77,29 @@ const wrapTables = (html) =>
 const llms = await readFile(join(ROOT, "llms.txt"), "utf8");
 
 const sections = [];
+const tagline = (llms.match(/^>\s*(.+)$/m) || [, ""])[1].trim();
+
 for (const line of llms.split("\n")) {
   const h2 = line.match(/^##\s+(.+)$/);
   if (h2) {
-    sections.push({ title: h2[1].trim(), items: [] });
+    sections.push({ title: h2[1].trim(), intro: "", items: [] });
     continue;
   }
+  if (!sections.length) continue;
+  const here = sections[sections.length - 1];
+
   const item = line.match(/^-\s+\[([^\]]+)\]\(([^)]+)\)/);
-  if (item && sections.length) {
-    const [, name, href] = item;
+  if (item) {
+    const [, name, href, ] = item;
     if (/^https?:/.test(href) || href.startsWith("../")) continue; // off-site: not navigable
-    sections.push(sections.pop()); // no-op, keeps intent readable
-    sections[sections.length - 1].items.push({
-      name,
-      md: href.replace(/#.*$/, ""),
-    });
+    const rest = line.slice(line.indexOf(")") + 1).replace(/^:\s*/, "");
+    here.items.push({ name, md: href.replace(/#.*$/, ""), blurb: rest });
+    continue;
+  }
+  // The paragraph under a `## ` heading is that section's own description — it
+  // orients an agent, and it is what the landing page's module card says.
+  if (!here.items.length && /^[A-Za-z`]/.test(line)) {
+    here.intro += (here.intro ? " " : "") + line.trim();
   }
 }
 
@@ -152,10 +164,10 @@ function toc(md) {
 </nav>`;
 }
 
-function page({ title, body, rel, section, tocHtml, home = false }) {
+function page({ title, body, rel, section, tocHtml, home = false, raw }) {
   const depth = rel.split(sep).length - 1;
   const up = depth === 0 ? "." : Array(depth).fill("..").join("/");
-  const raw = basename(rel);
+  raw = raw ?? basename(rel);
   const crumbs = home
     ? ""
     : `<nav class="crumbs" aria-label="Breadcrumb">
@@ -270,15 +282,82 @@ for (const file of await walk(ROOT)) {
   n++;
 }
 
-// The landing page IS llms.txt, rendered. One source, two views — there is no
-// second index to drift out of sync with the one agents read.
+/* ── Landing page ────────────────────────────────────────────────────────────
+ * A hero and one card per section, both generated from llms.txt. Rendering the
+ * whole index as a flat list — which is what the first pass did — gives a wall
+ * of 130 rows and no way in. A landing page's job is to be a door, not a dump.
+ *
+ * The cards still come from the index, so a new section appears here on its own
+ * and a section that is not in llms.txt does not exist anywhere. */
+
+const nav = sections.filter((s) => s.items.length);
+
+const cards = nav
+  .map((s) => {
+    const first = s.items[0].md.replace(/\.md$/, ".html");
+    const n = s.items.length;
+    // A few real entries, so the card shows what is actually inside it.
+    const peek = s.items
+      .slice(0, 4)
+      .map(
+        (i) =>
+          `<a href="${i.md.replace(/\.md$/, ".html")}">${esc(i.name)}</a>`,
+      )
+      .join("");
+    return `<article class="card">
+      <h3><a href="${first}">${esc(s.title)}</a></h3>
+      <p>${marked.parseInline(s.intro || "")}</p>
+      <div class="peek">${peek}${n > 4 ? `<a class="more" href="${first}">+${n - 4} more</a>` : ""}</div>
+      <span class="count">${n} ${n === 1 ? "doc" : "docs"}</span>
+    </article>`;
+  })
+  .join("");
+
+const getStarted = (nav.find((s) => /get started/i.test(s.title)) ?? nav[0])
+  .items[0].md.replace(/\.md$/, ".html");
+const componentsHref = (nav.find((s) => /components/i.test(s.title)) ?? nav[0])
+  .items[0].md.replace(/\.md$/, ".html");
+
+const homeBody = `
+<section class="hero">
+  <div class="hero-in">
+    <h1>@cloud/ui</h1>
+    <p class="lede">The design system for Cloud applications — written to be read by an agent first.</p>
+    <p class="sub">${marked.parseInline(tagline)}</p>
+    <div class="cta">
+      <a class="primary" href="${getStarted}">Get started</a>
+      <a class="ghost" href="${componentsHref}">Browse components</a>
+      <a class="ghost" href="llms.txt">llms.txt</a>
+    </div>
+  </div>
+</section>
+
+<section class="cards">${cards}</section>
+
+<section class="note">
+  <h2>The markdown is the source</h2>
+  <p>
+    Every page here is a view of a <code>.md</code> file. Agents read those files directly,
+    starting from <a href="llms.txt">llms.txt</a> — the same index this page is built from,
+    so the two can never drift apart.
+  </p>
+  <p>
+    That direction matters. A docs site that builds HTML and converts it <em>back down</em> to
+    markdown for LLMs ships a degraded copy: the images go, the previews go, and table cells that
+    held visual swatches come out empty. Here nothing can be lost, because the markdown is what
+    was written.
+  </p>
+</section>
+`;
+
 await mkdir(OUT, { recursive: true });
 await writeFile(
   join(OUT, "index.html"),
   page({
     title: "Documentation",
-    body: wrapTables(marked.parse(llms)),
+    body: homeBody,
     rel: "index.md",
+    raw: "llms.txt", // the landing page's source IS the index; there is no index.md
     section: null,
     tocHtml: "",
     home: true,
