@@ -4,6 +4,8 @@
 
 ## Get Started
 
+What you can import, from where, and in what order the stylesheets load.
+
 - [API surface](api-surface.md): **Every importable name and the entry point it comes from** — plus the CSS import order, and the hooks, theme helpers, and utilities (`cn`, `useTheme`, `useIsMobile`, `useInfiniteScroll`, `useListFilters`, `SidebarProvider`) that have no component doc of their own. Charts are a deliberate exception: they live only at `@cloud/ui/components/chart`, never the root barrel and never `recharts`.
 
 ## Components
@@ -130,9 +132,13 @@ Each entry states the condition that selects it. Read the conditions here and pi
 
 ## Demos
 
+Compilable page templates. Start from one and adapt it inside your module — they are references to copy from, not components to import.
+
 - [Demos](demos/index.md): Compilable `@cloud/ui` page and chart examples. Start here to select a template, then adapt it to the application module.
 
 ## Foundations
+
+Colour, spacing, layout, typography, iconography, motion. The decisions every component already inherits, and the ones you must not re-make locally.
 
 - [Design tokens](foundations/design-tokens.md): Connect CSS variables, Tailwind utilities, and component props, and select tokens by semantic intent.
 - [Colors](foundations/colors.md): Apply surface, content, line, status, category, and chart colors without hardcoded values.
@@ -147,6 +153,8 @@ Each entry states the condition that selects it. Read the conditions here and pi
 - [Layout](foundations/layout.md): **Read before composing any page.** The page type picks the shell — a table maps list / create / wizard / detail / dashboard to its header, its body, and the demo to start from. `PageBody` owns the page padding and the block gap, so you almost never write either; `ActionFooter` is its **sibling**, never its child. The sidebar is one tree — `Layout` already renders it in a `Sheet` on mobile.
 
 ## Code Snippets
+
+The demo templates again, as source to copy.
 
 - [List page source](demos/list-page.md): Copy and adapt the standard list composition.
 - [Advanced-filter list source](demos/advanced-filter-list.md): Copy and adapt the advanced filtering composition.
