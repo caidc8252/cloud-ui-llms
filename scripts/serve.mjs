@@ -33,7 +33,7 @@ function rebuild(reason) {
   if (building) return;
   building = true;
   const t = Date.now();
-  const p = spawn(process.execPath, ["scripts/build-html.mjs"], { cwd: ROOT });
+  const p = spawn(process.execPath, ["scripts/build.mjs"], { cwd: ROOT });
   let err = "";
   p.stderr.on("data", (d) => (err += d));
   p.on("close", (code) => {
@@ -56,7 +56,7 @@ for (const dir of ["components", "demos", "foundations", "patterns"]) {
     /* directory may not exist; not fatal for a preview */
   }
 }
-for (const file of ["llms.txt", "api-surface.md", "assets/docs.css"]) {
+for (const file of ["llms.txt", "api-surface.md", "assets/docs.css", "assets/docs.js"]) {
   try {
     watch(join(ROOT, file), () => {
       clearTimeout(timer);

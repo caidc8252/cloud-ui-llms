@@ -4,7 +4,7 @@
   "type": "module",
   "description": "Documentation for @cloud/ui. The markdown is the source; the HTML is a view of it.",
   "scripts": {
-    "build": "node scripts/build-html.mjs",
+    "build": "node scripts/build.mjs",
     "serve": "npm run build && node scripts/serve.mjs",
     "preview": "npm run serve"
   },
