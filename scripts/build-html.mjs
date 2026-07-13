@@ -13,7 +13,28 @@
  * which is exactly the signal you want.
  */
 
-import { readFile, writeFile, mkdir, readdir, cp } from "node:fs/promises";
+import {
+  readFile as _readFile,
+  writeFile,
+  mkdir,
+  readdir,
+  cp,
+} from "node:fs/promises";
+
+/* Read a text file with its line endings normalised.
+ *
+ * On a Windows checkout git hands these files back with CRLF, and that quietly
+ * destroys the parsing: in a JS regex `.` does not match `\r` (it is a line
+ * terminator) and a non-multiline `$` demands the true end of the string — so
+ * `/^##\s+(.+)$/` simply fails on "## Components\r", every section comes back
+ * empty, and the build dies on `nav[0].items`. The heading scan behind the
+ * on-this-page rail fails the same way, but silently: the rail just comes out
+ * empty and nobody notices.
+ *
+ * Normalising once, here, is the fix — the parsers below then only ever see \n.
+ */
+const readFile = async (p, enc = "utf8") =>
+  (await _readFile(p, enc)).replace(/^\uFEFF/, "").replace(/\r\n?/g, "\n");
 import { join, dirname, relative, basename, sep } from "node:path";
 import { marked } from "marked";
 
