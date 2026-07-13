@@ -131,10 +131,6 @@ Each entry states the condition that selects it. Read the conditions here and pi
 - [Timestamps](patterns/timestamps.md): Read when a time is stored, rendered, or entered. Integer seconds in storage; absolute or relative at the render edge, chosen deliberately.
 - **Portal page rules** — the team's binding rules are **not in this package**. They live in the consuming app repo at `.claude/team-rule/coding-rules/ui_ui-and-pages.md`, and bind page composition, density, action hierarchy, lists, forms, details, colour, and typography. **Two things to know before you use them.** First, **where they disagree with the `@cloud/ui` implementation, the implementation wins** — their page-header section is currently stale: it routes create pages to `PageHeader`, while the component ships `PageHeaderBand` with a built-in back button for every level-2 page (see [Layout](foundations/layout.md)). Second, the **deviation gate**: leave a SHOULD default only when all four hold — the task genuinely differs from ordinary CRUD; the default would hurt scanning, entry, or operation; the deviation still uses primitives, semantic tokens, and the existing size/density scale; and anything affecting reuse is noted in a comment beside the component.
 
-## Demos
-
-- [Demos](demos/index.md): Prose walkthroughs of the standard page compositions — **no code**. They restate a pattern's composition in shorter form; the pattern is the fuller account and the authority. **Runnable code lives in `components/*.md`**, next to the component it exercises.
-
 ## Foundations
 
 The shared visual rules and core principles behind every `@cloud/ui` component and pattern.
