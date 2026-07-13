@@ -124,6 +124,26 @@ for (const line of llms.split("\n")) {
   }
 }
 
+/* A section earns an index page when its docs share one directory and there is
+ * more than one of them. A one-doc section (Get Started, Demos) has nothing to
+ * be an index OF — the doc is the index. Code Snippets shares demos/ with the
+ * Demos section, so it cannot own that directory's index either. */
+for (const s of sections) {
+  const dirs = new Set(
+    s.items.map((i) => (i.md.includes("/") ? i.md.split("/")[0] : "")),
+  );
+  const dir = dirs.size === 1 ? [...dirs][0] : "";
+  s.dir = dir;
+  s.indexHref = dir && s.items.length > 1 ? `${dir}/index.html` : null;
+}
+// Two sections cannot claim the same directory's index. First one wins.
+const claimed = new Set();
+for (const s of sections) {
+  if (!s.indexHref) continue;
+  if (claimed.has(s.dir)) s.indexHref = null;
+  else claimed.add(s.dir);
+}
+
 /** Which section does this file belong to, and which item is it? */
 function locate(rel) {
   for (const s of sections) {
@@ -139,15 +159,18 @@ function topNav(up, current) {
   return sections
     .filter((s) => s.items.length)
     .map((s) => {
-      const first = s.items[0].md.replace(/\.md$/, ".html");
+      const to = s.indexHref ?? s.items[0].md.replace(/\.md$/, ".html");
       const on = s === current ? ' class="on"' : "";
-      return `<a href="${up}/${first}"${on}>${esc(s.title)}</a>`;
+      return `<a href="${up}/${to}"${on}>${esc(s.title)}</a>`;
     })
     .join("");
 }
 
-function sidebar(up, section, activeMd) {
+function sidebar(up, section, activeMd, onIndex = false) {
   if (!section) return "";
+  const overview = section.indexHref
+    ? `<a href="${up}/${section.indexHref}"${onIndex ? ' class="on" aria-current="page"' : ""}>Overview</a>`
+    : "";
   const links = section.items
     .map((i) => {
       const on = i.md === activeMd ? ' class="on" aria-current="page"' : "";
@@ -156,6 +179,7 @@ function sidebar(up, section, activeMd) {
     .join("");
   return `<nav class="side" aria-label="${esc(section.title)}">
   <h2>${esc(section.title)}</h2>
+  ${overview}
   ${links}
 </nav>`;
 }
@@ -185,15 +209,20 @@ function toc(md) {
 </nav>`;
 }
 
-function page({ title, body, rel, section, tocHtml, home = false, raw }) {
+function page({ title, body, rel, section, tocHtml, home = false, raw, onIndex = false }) {
   const depth = rel.split(sep).length - 1;
   const up = depth === 0 ? "." : Array(depth).fill("..").join("/");
   raw = raw ?? basename(rel);
+  // On a section's own hub the section name IS the title — don't say it twice.
+  const trail =
+    section && !onIndex
+      ? `<span>›</span><a href="${up}/${section.indexHref ?? section.items[0].md.replace(/\.md$/, ".html")}">${esc(section.title)}</a>`
+      : "";
   const crumbs = home
     ? ""
     : `<nav class="crumbs" aria-label="Breadcrumb">
       <a href="${up}/index.html">@cloud/ui</a>
-      ${section ? `<span>›</span><span>${esc(section.title)}</span>` : ""}
+      ${trail}
       <span>›</span><span class="here">${esc(title)}</span>
     </nav>`;
 
@@ -221,8 +250,8 @@ function page({ title, body, rel, section, tocHtml, home = false, raw }) {
 </header>
 <div class="rule"></div>
 
-<div class="shell">
-  ${sidebar(up, section, rel)}
+<div class="shell${tocHtml ? "" : " no-toc"}">
+  ${sidebar(up, section, rel, onIndex)}
   <main>
     ${crumbs}
     ${body}
@@ -301,6 +330,73 @@ for (const file of await walk(ROOT)) {
     }),
   );
   n++;
+}
+
+/* ── Section index pages ─────────────────────────────────────────────────────
+ * A hub for each section: what it is, then a card per doc. Cloudscape's
+ * /foundation/ shape — introduction, then "browse".
+ *
+ * The cards are the section's llms.txt entries, and the text on them is the
+ * blurb the index already carries. That blurb is the decision rule — "use this
+ * when…, otherwise use that" — so the hub tells you which doc you want before
+ * you open any of them. Writing separate card copy would mean maintaining the
+ * same sentence twice, and the two would drift.
+ */
+
+for (const sec of sections) {
+  if (!sec.indexHref) continue;
+
+  // If the directory ships a hand-written index.md, its prose (everything above
+  // the first item heading) becomes the introduction. Its own list is dropped —
+  // the grid below is generated from llms.txt and cannot fall out of date.
+  let intro = "";
+  const ownIndex = join(ROOT, sec.dir, "index.md");
+  try {
+    const raw = await readFile(ownIndex);
+    const body = raw.replace(/^#\s+.*$/m, "").split(/^###\s+/m)[0].trim();
+    if (body) intro = `<div class="intro">${marked.parse(body)}</div>`;
+  } catch {
+    /* no index.md — the section's llms.txt paragraph is introduction enough */
+  }
+
+  /* The whole tile is the link, so the blurb cannot keep its own anchors — an <a>
+   * inside an <a> is invalid HTML and the browser will tear the outer link apart.
+   * Their hrefs would be wrong here anyway: they are written relative to llms.txt
+   * at the repo root, not to this directory. Keep the words, drop the anchors. */
+  const flatten = (md) =>
+    marked.parseInline(md || "").replace(/<a\b[^>]*>(.*?)<\/a>/g, "$1");
+
+  const cards = sec.items
+    .map(
+      (i) => `<a class="tile" href="${basename(i.md).replace(/\.md$/, ".html")}">
+      <h3>${esc(i.name)}</h3>
+      <p>${flatten(i.blurb)}</p>
+    </a>`,
+    )
+    .join("");
+
+  const body = `
+<h1>${esc(sec.title)}</h1>
+<p class="lede">${marked.parseInline(sec.intro || "")}</p>
+${intro}
+<h2 id="browse">Browse ${esc(sec.title.toLowerCase())}</h2>
+<div class="tiles">${cards}</div>
+`;
+
+  const out = join(OUT, sec.dir, "index.html");
+  await mkdir(dirname(out), { recursive: true });
+  await writeFile(
+    out,
+    page({
+      title: sec.title,
+      body,
+      rel: `${sec.dir}/index.md`,
+      raw: "../llms.txt",
+      section: sec,
+      tocHtml: "",
+      onIndex: true,
+    }),
+  );
 }
 
 /* ── Landing page ────────────────────────────────────────────────────────────

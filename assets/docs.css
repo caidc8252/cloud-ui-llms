@@ -209,6 +209,13 @@ body {
   align-items: start;
 }
 
+/* A hub has no on-this-page rail, so it should not reserve the column for one —
+ * the tiles get the width instead. */
+.shell.no-toc {
+  grid-template-columns: var(--side-w) minmax(0, 1fr);
+  max-width: 1240px;
+}
+
 .side {
   position: sticky;
   top: calc(var(--top-h) + 3px);
@@ -470,6 +477,75 @@ main > footer {
   border-top: 1px solid var(--line-subtle);
   font-size: 13px;
   color: var(--content-tertiary);
+}
+
+/* ── Section index (the hub for a section) ───────────────────── */
+
+main > .lede {
+  font-size: 17px;
+  color: var(--content-secondary);
+  margin: 0 0 24px;
+  max-width: 70ch;
+}
+.intro {
+  max-width: 74ch;
+}
+.intro > :last-child {
+  margin-bottom: 0;
+}
+
+.tiles {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(258px, 1fr));
+  gap: 14px;
+  margin-top: 4px;
+}
+
+/* A tile is the whole card, not a title with a link in it — the entire surface
+ * is the target, which is what a hub is for. */
+.tile {
+  display: block;
+  padding: 16px 18px;
+  background: var(--surface-2);
+  border: 1px solid var(--line-subtle);
+  border-left: 3px solid var(--line-default);
+  border-radius: var(--radius-md);
+  text-decoration: none;
+  transition:
+    border-color 120ms ease,
+    transform 120ms ease;
+}
+.tile:hover {
+  border-color: var(--line-strong);
+  border-left-color: var(--primary);
+  text-decoration: none;
+  transform: translateY(-1px);
+}
+.tile:focus-visible {
+  outline: 2px solid var(--line-focus);
+  outline-offset: 2px;
+}
+.tile h3 {
+  margin: 0 0 6px;
+  font-size: 16px;
+  font-weight: 620;
+  color: var(--content-primary);
+}
+.tile p {
+  margin: 0;
+  font-size: 13.5px;
+  line-height: 1.55;
+  color: var(--content-secondary);
+}
+/* The blurb carries the decision rule, so its emphasis is the point — keep the
+ * bold and the code chips, just quiet them down to card scale. */
+.tile p strong {
+  color: var(--content-primary);
+  font-weight: 620;
+}
+.tile p code {
+  font-size: 12px;
+  padding: 0 4px;
 }
 
 /* ── Landing page ────────────────────────────────────────────── */
