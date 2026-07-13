@@ -35,7 +35,8 @@ import {
  */
 const readFile = async (p, enc = "utf8") =>
   (await _readFile(p, enc)).replace(/^\uFEFF/, "").replace(/\r\n?/g, "\n");
-import { join, dirname, relative, basename, sep } from "node:path";
+import { join, dirname, relative, basename, resolve, sep } from "node:path";
+import { existsSync } from "node:fs";
 import { marked } from "marked";
 
 const ROOT = process.cwd();
@@ -210,7 +211,12 @@ function toc(md) {
 }
 
 function page({ title, body, rel, section, tocHtml, home = false, raw, onIndex = false }) {
-  const depth = rel.split(sep).length - 1;
+  /* `rel` is always slash-separated — see the render loop, which normalises it.
+   * Splitting on the platform separator would therefore find nothing on Windows
+   * (sep is "\\"), depth would come out 0 for every page, and `up` would be "."
+   * from inside foundations/ — so the stylesheet, the nav and every crumb would
+   * 404 and the whole site would render unstyled. Split on "/" and only "/". */
+  const depth = rel.split("/").length - 1;
   const up = depth === 0 ? "." : Array(depth).fill("..").join("/");
   raw = raw ?? basename(rel);
   // On a section's own hub the section name IS the title — don't say it twice.
@@ -482,6 +488,42 @@ await writeFile(
 );
 
 await cp(join(ROOT, "assets"), join(OUT, "assets"), { recursive: true });
+
+/* Every page's relative paths must actually resolve. This is not paranoia: the
+ * depth calculation split a slash-separated path on the platform separator, so on
+ * Windows every page came out at depth 0, `up` was ".", and the stylesheet, the
+ * nav and every breadcrumb 404'd — the site rendered as unstyled text and the
+ * build said nothing. A build that cannot see that is not finished. */
+{
+  const pages = [];
+  const collect = async (dir) => {
+    for (const e of await readdir(dir, { withFileTypes: true })) {
+      const f = join(dir, e.name);
+      if (e.isDirectory()) await collect(f);
+      else if (e.name.endsWith(".html")) pages.push(f);
+    }
+  };
+  await collect(OUT);
+
+  let broken = 0;
+  for (const f of pages) {
+    const html = await _readFile(f, "utf8");
+    for (const [, href] of html.matchAll(/(?:href|src)="([^"#]+)"/g)) {
+      if (/^(https?:|mailto:|\/)/.test(href)) continue;
+      if (href.includes("/.claude/")) continue; // known: escapes the site, pending
+      if (/\.(md|txt)$/.test(href)) continue; // published beside the html, not by it
+      if (!existsSync(resolve(dirname(f), href))) {
+        if (broken < 6) console.error(`  broken: ${relative(OUT, f)} -> ${href}`);
+        broken++;
+      }
+    }
+  }
+  if (broken) {
+    console.error(`\n${broken} broken reference(s) in the built site.`);
+    process.exit(1);
+  }
+}
+
 console.log(
   `rendered ${n} docs + index — ${sections.filter((s) => s.items.length).length} nav sections`,
 );
