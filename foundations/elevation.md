@@ -1,6 +1,6 @@
 # Elevation
 
-Elevation uses the shared shadow ladder to show surface depth, interaction, and focus without page-local shadow values. The definitions are in the [global stylesheet](design-tokens.md); the public Card mapping is in [Card](../components/card.md), and application constraints are in the [portal page-style rule](../../../../.claude/team-rule/coding-rules/ui_ui-and-pages.md).
+Elevation uses the shared shadow ladder to show surface depth, interaction, and focus without page-local shadow values. The definitions are in the [global stylesheet](design-tokens.md); the public Card mapping is in [Card](../components/card.md), and application constraints are in the portal page-style rule (app repo: `.claude/team-rule/coding-rules/ui_ui-and-pages.md`).
 
 ## Overview
 

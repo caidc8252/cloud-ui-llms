@@ -2,7 +2,7 @@
 
 Catch the user before a dirty form is thrown away. **Required on every create and edit form, in a page or an overlay — and on a page the guard is partial, so know which exits it does not cover.**
 
-[Create form](create-form.md) | [Edit resource](edit-resource.md) | [Binding rules](../../../../.claude/team-rule/coding-rules/ui_ui-and-pages.md)
+[Create form](create-form.md) | [Edit resource](edit-resource.md) | Binding rules (app repo: `.claude/team-rule/coding-rules/ui_ui-and-pages.md`)
 
 ## Key UX concepts
 

@@ -46,7 +46,9 @@ Dropdown for choosing one value from a list of options.
 >
 > A width that moves with the value hides exactly the errors you most need to see: mis-wire `items` as well, and the box collapses to the width of an id, so a **data** bug arrives disguised as a **layout** bug.
 
-Use `Select` when the options are few enough to scan and the user picks exactly one. When the user needs to type to narrow a long list, use `Combobox`. When there are only two or three mutually exclusive options that benefit from being visible at once, use `RadioGroup` or `ToggleGroup`. For multiple selection, use a set of `Checkbox`es or a filter component.
+Use `Select` when the options are few enough to scan and the user picks exactly one. When the user needs to type to narrow a long list, use `Combobox`. When there are only two or three mutually exclusive options that benefit from being visible at once, use `RadioGroup` or `ToggleGroup`.
+
+**`Select` does not do multiple selection — `Combobox` does.** Pass `multiple` and its `value` becomes a `string[]`, the picked options render as removable chips in the trigger, and `maxChips` caps how many show. Reach for a set of `Checkbox`es only when every option must stay visible at once.
 
 ## General guidelines
 
@@ -66,6 +68,7 @@ Use `Select` when the options are few enough to scan and the user picks exactly 
 - Don't reach for `min-w-*` in a filter band; the band's own bounds override it. Pass a `w-*`.
 - Don't use a select for a long list the user would rather search. Use `Combobox`.
 - Don't use a select for two or three options that should stay visible. Use `RadioGroup`.
+- Don't try to make a select multi-select. Use `Combobox multiple`, which gives you the chips and the `string[]`.
 - Don't put actions in a select. It sets a value; use `DropdownMenu` for commands.
 
 ## Features

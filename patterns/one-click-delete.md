@@ -2,7 +2,7 @@
 
 Delete without a dialog, and offer _Undo_ in the toast. **Use it only when the record is low-risk and the server soft-deletes.**
 
-[Delete patterns](delete-patterns.md) | [Binding rules](../../../../.claude/team-rule/coding-rules/ui_ui-and-pages.md)
+[Delete patterns](delete-patterns.md) | Binding rules (app repo: `.claude/team-rule/coding-rules/ui_ui-and-pages.md`)
 
 ## Key UX concepts
 

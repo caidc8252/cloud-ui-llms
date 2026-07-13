@@ -2,7 +2,7 @@
 
 The left menu. It is not written by hand anywhere — it is **projected** from what the current session is actually allowed to see, out of declarations each module makes about itself.
 
-[Binding rules](../../../../.claude/team-rule/coding-rules/ui_ui-and-pages.md) | [CoC declaration](../../../../.claude/team-rule/coding-rules/coc_coc-declaration.md)
+Binding rules (app repo: `.claude/team-rule/coding-rules/ui_ui-and-pages.md`) | CoC declaration (app repo: `.claude/team-rule/coding-rules/coc_coc-declaration.md`)
 
 ## Key UX concepts
 

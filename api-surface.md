@@ -2,7 +2,7 @@
 
 What is importable, and from which entry point. **Names and types only** — for what a component does and when to use it, open its doc.
 
-[Components index](components/index.md) | [Design tokens](foundations/design-tokens.md)
+[Component index](llms.txt) | [Design tokens](foundations/design-tokens.md)
 
 ## Entry points
 

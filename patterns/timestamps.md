@@ -2,7 +2,7 @@
 
 Every time value in the system is an integer count of **seconds**. It stays that way from the database column to the client state, and becomes a human-readable string only at the moment it is painted.
 
-[Binding rules](../../../../.claude/team-rule/coding-rules/cross-cutting_time.md)
+Binding rules (app repo: `.claude/team-rule/coding-rules/cross-cutting_time.md`)
 
 ## Key UX concepts
 

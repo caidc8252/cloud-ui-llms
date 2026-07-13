@@ -2,7 +2,7 @@
 
 The user types the record's name to unlock the confirm. **Use it when the delete reaches past the record — other rows change, or other people lose something.**
 
-[Delete patterns](delete-patterns.md) | [Binding rules](../../../../.claude/team-rule/coding-rules/ui_ui-and-pages.md)
+[Delete patterns](delete-patterns.md) | Binding rules (app repo: `.claude/team-rule/coding-rules/ui_ui-and-pages.md`)
 
 ## Key UX concepts
 

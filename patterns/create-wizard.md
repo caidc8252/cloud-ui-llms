@@ -2,7 +2,7 @@
 
 A staged create flow: a step indicator, one step of fields at a time, a review step, and a sticky bottom navigation. Use it only when the flow is genuinely staged.
 
-[Style template](../demos/create-wizard.md) | [Binding rules](../../../../.claude/team-rule/coding-rules/ui_ui-and-pages.md)
+[Style template](../demos/create-wizard.md) | Binding rules (app repo: `.claude/team-rule/coding-rules/ui_ui-and-pages.md`)
 
 ## Key UX concepts
 

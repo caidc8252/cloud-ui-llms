@@ -2,7 +2,7 @@
 
 How to choose a button variant. The rule is one sentence: **the variant follows the slot, not the verb.**
 
-[Binding rules](../../../../.claude/team-rule/coding-rules/ui_ui-and-pages.md) | [Button](../components/button.md)
+Binding rules (app repo: `.claude/team-rule/coding-rules/ui_ui-and-pages.md`) | [Button](../components/button.md)
 
 ## Key UX concepts
 

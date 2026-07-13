@@ -31,8 +31,8 @@ Even-number steps only. There is no 11px and no 13px in the scale.
 
 | Token      | Size | Use                                                                                                                                                            |
 | ---------- | ---- | -------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `text-2xs` | 10px | Dense overline, sub-caption, the second line of a two-line cell.                                                                                               |
-| `text-xs`  | 12px | Caption, hint, meta, helper text.                                                                                                                              |
+| `text-2xs` | 12px | **Deprecated — it is not 10px.** The 10px step was dropped, so `2xs` now aliases `xs` exactly, on both size and line-height. Kept defined only so a stray reference resolves instead of breaking. Write `text-xs`. |
+| `text-xs`  | 12px | Caption, hint, meta, helper text. **The smallest rung there is.**                                                                                              |
 | `text-sm`  | 14px | **Deprecated.** The 13px step was dropped, so `sm` now aliases `md`. It exists only so a stray reference resolves to 14px instead of breaking. Don't write it. |
 | `text-md`  | 14px | Body. The default, and by a wide margin the most-used size in the codebase.                                                                                    |
 | `text-lg`  | 16px | Emphasized body, small headings.                                                                                                                               |
@@ -42,12 +42,14 @@ Even-number steps only. There is no 11px and no 13px in the scale.
 | `text-4xl` | 36px | Large display, KPI values.                                                                                                                                     |
 | `text-5xl` | 48px | Largest display.                                                                                                                                               |
 
+**Three rungs are off the ladder and the lint errors on them** (`type-boundary/no-deprecated-text-scale`): `text-sm` and `text-2xs` — the deprecated aliases above, exact duplicates of `text-md` and `text-xs` — and `text-base`, which is Tailwind's own rung and was never ours. Each rung declares its own line-height, so a call site writes `text-md` and nothing else; a `leading-*` marks a deliberate departure, never a repair.
+
 ### Heading styles
 
 - **Page / detail title** — `text-2xl font-semibold tracking-tight`.
 - **Block card title** — `text-md`, which is `CardTitle`'s default. A card title is not a heading in the type scale; it is body-sized and carries its weight from `font-semibold`.
 - **Body / row title** — the body size, with `font-medium`.
-- **Sub / overline** — `text-xs` or `text-2xs`, optionally with `tracking-overline` (0.06em).
+- **Sub / overline** — `text-xs`, optionally with `tracking-overline` (0.06em). Not `text-2xs`; it is the same 12px and it is deprecated.
 
 ### Body styles
 

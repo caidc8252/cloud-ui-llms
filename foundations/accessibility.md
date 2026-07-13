@@ -1,6 +1,6 @@
 # Accessibility
 
-`@cloud/ui` primitives preserve common semantic controls and their visible focus treatment. This reference covers the public behavior in the [Field](../components/field.md), [Input](../components/input.md), [Button](../components/button.md), and [Modal](../components/modal.md), alongside the portal [UI and page rules](../../../../.claude/team-rule/coding-rules/ui_ui-and-pages.md).
+`@cloud/ui` primitives preserve common semantic controls and their visible focus treatment. This reference covers the public behavior in the [Field](../components/field.md), [Input](../components/input.md), [Button](../components/button.md), and [Modal](../components/modal.md), alongside the portal UI and page rules (app repo: `.claude/team-rule/coding-rules/ui_ui-and-pages.md`).
 
 ## Overview
 

@@ -2,7 +2,7 @@
 
 Where an error is thrown, how it becomes a response, and where the user finally sees it. One schema, one code, one place per failure.
 
-[Binding rules](../../../../.claude/team-rule/coding-rules/server_error-handling.md)
+Binding rules (app repo: `.claude/team-rule/coding-rules/server_error-handling.md`)
 
 ## Key UX concepts
 

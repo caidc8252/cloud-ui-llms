@@ -4,7 +4,7 @@ A single-step form for creating or editing a resource. The default create shape 
 
 **Container:** a one-section form goes in an overlay (`Modal`, or `Sheet` when it needs room) — a whole page for a handful of fields is too heavy. A form of more than one section card, or one that must be deep-linkable, gets its own page. Create and edit share the container; see [Edit resource](edit-resource.md), which owns this rule. The blocks below describe the page shape — in an overlay, the `Modal`'s own title and footer stand in for the header band and the `ActionFooter`.
 
-[Style template](../demos/create-form.md) | [Binding rules](../../../../.claude/team-rule/coding-rules/ui_ui-and-pages.md)
+[Style template](../demos/create-form.md) | Binding rules (app repo: `.claude/team-rule/coding-rules/ui_ui-and-pages.md`)
 
 ## Key UX concepts
 

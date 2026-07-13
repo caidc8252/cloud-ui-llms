@@ -1,6 +1,6 @@
 # RadioGroup
 
-Mutually exclusive option group. Prefer `ToggleRadioGroup` for labeled radio fields.
+Mutually exclusive option group. A standalone setting with inline labels takes `ToggleRadioGroup`; a form control takes `Field` + a bare `RadioGroup`.
 
 `RadioGroup` is a client component built on `@base-ui/react`'s `RadioGroup` and `Radio`. It is a pair of components — `RadioGroup` (the group) and `RadioGroupItem` (each option). Import them from `@cloud/ui` or `@cloud/ui/components/ui`.
 
@@ -8,7 +8,7 @@ Mutually exclusive option group. Prefer `ToggleRadioGroup` for labeled radio fie
 
 `RadioGroup` lays its items in a full-width grid (`grid w-full gap-2`), one item per row unless you override the columns. Each `RadioGroupItem` is a bare 16px radio dot — a real `<button>` from the Base UI `Radio` primitive, so a `Label` with `htmlFor` pointing at its `id` associates correctly.
 
-For labeled radio fields, prefer the `ToggleRadioGroup` and `ToggleRadio` recipes, which pair each dot with its label and hit area for you. Use these primitives directly only in custom layouts.
+**Which wrapper it takes depends on where it sits, and the two do not mix:** a **standalone setting** — inline labels beside each dot, no hint and no validation — takes the `ToggleRadioGroup` / `ToggleRadio` recipes, which pair each dot with its label and hit area for you. A **form control** — a group label above, a hint, an error — takes a `Field` wrapping the bare `RadioGroup`. **Do not put a `ToggleRadioGroup` inside a `Field`**; the recipe brings its own labels and the two fight. Use these primitives directly in custom layouts.
 
 Give every item a `value`, and control the selection with the Base UI `value` and `onValueChange` props on the group, or leave it uncontrolled with `defaultValue`. The group also takes `name` for form submission and `disabled` for the whole set.
 
@@ -19,7 +19,7 @@ The dot carries an **invisible hit area** that extends 12px horizontally and 8px
 ### Do
 
 - Use a radio group for a single choice among a small, fixed set of options.
-- Prefer `ToggleRadioGroup` for labeled fields.
+- Use `ToggleRadioGroup` for a standalone setting with inline labels; use `Field` + a bare `RadioGroup` inside a form. Never nest the two.
 - Give each item a distinct `value` and an accessible label.
 
 ### Don't
@@ -65,7 +65,7 @@ The dot carries an **invisible hit area** that extends 12px horizontally and 8px
 
 - #### Labeled fields
 
-  In a form row, reach for the `ToggleRadioGroup` / `ToggleRadio` recipes rather than assembling `RadioGroupItem` + `Label` by hand: they own the label, the spacing, and the hit area.
+  For a standalone setting, reach for the `ToggleRadioGroup` / `ToggleRadio` recipes rather than assembling `RadioGroupItem` + `Label` by hand: they own the label, the spacing, and the hit area. Inside a `Field`, use the bare primitives — the recipe's own labels would fight the field's.
 
 ### States
 

@@ -1,12 +1,17 @@
 # Switch
 
-Binary toggle switch. Prefer `ToggleSwitch` for fields that need an inline label.
+Binary toggle switch. A standalone setting with an inline label takes `ToggleSwitch`; a form control takes `Field` + a bare `Switch`.
 
 `Switch` is a client component built on `@base-ui/react`'s `Switch`. Import it from `@cloud/ui` or `@cloud/ui/components/ui`.
 
 ## Development guidelines
 
-`Switch` is a bare on/off toggle — it has no `label` prop of its own. For a labeled form row, prefer the `ToggleSwitch` recipe, which takes a `label` alongside `checked` / `defaultChecked` / `onCheckedChange` / `disabled` / `size` and wires the label to the control. Use `Switch` directly in custom layouts.
+`Switch` is a bare on/off toggle — it has no `label` prop of its own. **Which wrapper it takes depends on where it sits, and the two do not mix:**
+
+- **A standalone setting** — "Enable two-factor auth", an inline label beside the switch, no hint and no validation — takes the `ToggleSwitch` recipe, which takes a `label` alongside `checked` / `defaultChecked` / `onCheckedChange` / `disabled` / `size` and wires the label to the control.
+- **A form control** — a label above, a hint, an error — takes a `Field` wrapping the bare `Switch`. **Do not put a `ToggleSwitch` inside a `Field`**; the recipe brings its own label and the two fight.
+
+Use `Switch` directly in custom layouts.
 
 Use a switch for a setting that takes effect immediately, such as enabling a feature. Use a `Checkbox` when the choice is part of a form the user submits later.
 
@@ -17,7 +22,7 @@ Use a switch for a setting that takes effect immediately, such as enabling a fea
 ### Do
 
 - Use a switch for an immediate on/off setting.
-- Prefer `ToggleSwitch` for a labeled field.
+- Use `ToggleSwitch` for a standalone setting with an inline label; use `Field` + a bare `Switch` inside a form. Never nest the two.
 - Keep the "on" state as the affirmative, enabled option.
 
 ### Don't

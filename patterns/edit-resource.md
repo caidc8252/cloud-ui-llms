@@ -11,7 +11,7 @@ The same shape as the create form, pre-filled and dirty-tracked, in one of two s
 
 The rule is decidable from the field list alone, so create and edit land in the same container and two authors reading this page reach the same answer. Everything below applies to both containers unless it names one.
 
-[Create form](create-form.md) | [Style template](../demos/create-form.md) | [Binding rules](../../../../.claude/team-rule/coding-rules/ui_ui-and-pages.md)
+[Create form](create-form.md) | [Style template](../demos/create-form.md) | Binding rules (app repo: `.claude/team-rule/coding-rules/ui_ui-and-pages.md`)
 
 ## Key UX concepts
 

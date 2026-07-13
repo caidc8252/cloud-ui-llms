@@ -2,7 +2,7 @@
 
 How to choose a delete tier. The rule is one sentence: **the tier follows the blast radius, not the resource.**
 
-[Binding rules](../../../../.claude/team-rule/coding-rules/ui_ui-and-pages.md) | [Errors and validation](errors-and-validation.md)
+Binding rules (app repo: `.claude/team-rule/coding-rules/ui_ui-and-pages.md`) | [Errors and validation](errors-and-validation.md)
 
 ## Key UX concepts
 

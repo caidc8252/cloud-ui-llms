@@ -275,7 +275,7 @@ Even-number steps only. There is no 11px and no 13px step.
 
 | Name         | Description                                                                                                                                                                 | Utility    | Value  |
 | ------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------- | ------ |
-| `--text-2xs` | Dense overline and sub-caption, one step below `xs` for meta rows                                                                                                           | `text-2xs` | `10px` |
+| `--text-2xs` | **Deprecated.** The 10px step was dropped, so `2xs` now aliases `xs` exactly. Kept defined only so a stray reference resolves instead of breaking. Do not use it in new code | `text-2xs` | `12px` |
 | `--text-xs`  | Caption, hint, and helper text                                                                                                                                              | `text-xs`  | `12px` |
 | `--text-sm`  | **Deprecated.** The 13px step was dropped, so `sm` now aliases `md`. Kept defined only so a stray reference resolves to 14px instead of breaking. Do not use it in new code | `text-sm`  | `14px` |
 | `--text-md`  | Body text. The default for components                                                                                                                                       | `text-md`  | `14px` |

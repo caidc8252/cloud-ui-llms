@@ -2,7 +2,7 @@
 
 One dialog, one confirm. **The default delete tier — use it unless the record is trivially recreatable (tier 1) or its reach crosses records and people (tier 3).**
 
-[Delete patterns](delete-patterns.md) | [Binding rules](../../../../.claude/team-rule/coding-rules/ui_ui-and-pages.md)
+[Delete patterns](delete-patterns.md) | Binding rules (app repo: `.claude/team-rule/coding-rules/ui_ui-and-pages.md`)
 
 ## Key UX concepts
 

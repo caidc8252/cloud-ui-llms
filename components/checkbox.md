@@ -6,7 +6,12 @@ Binary form control for independent options. Supports an indeterminate state.
 
 ## Development guidelines
 
-`Checkbox` is a bare box. For a form row that needs an inline label, prefer the `ToggleCheckbox` recipe, which pairs the box with a label and hit area. Reach for `Checkbox` directly in custom layouts and in the selection gutter of a data table.
+`Checkbox` is a bare box. **Which wrapper it takes depends on where it sits, and the two do not mix:**
+
+- **A standalone setting** — an inline label sitting beside the box, no hint and no validation — takes the `ToggleCheckbox` recipe, which pairs the box with its label and hit area for you.
+- **A form control** — a label above, a hint, a required mark, an error — takes a `Field` wrapping the bare `Checkbox`. **Do not put a `ToggleCheckbox` inside a `Field`**; the recipe brings its own label and the two fight.
+
+Reach for `Checkbox` directly in custom layouts and in the selection gutter of a data table.
 
 Pass Base UI's `indeterminate` prop for a tri-state "select all" header: the box fills with the primary color and shows a minus dash instead of the check.
 
@@ -17,7 +22,7 @@ Pass Base UI's `indeterminate` prop for a tri-state "select all" header: the box
 ### Do
 
 - Use a checkbox for an independent on/off choice, or several that can be selected at once.
-- Prefer `ToggleCheckbox` for a labeled form field.
+- Use `ToggleCheckbox` for a standalone setting with an inline label; use `Field` + a bare `Checkbox` inside a form. Never nest the two.
 - Use `indeterminate` for a "select all" header that reflects a partial selection.
 - Use `size="sm"` only in a dense data-table select column.
 

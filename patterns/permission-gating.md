@@ -2,7 +2,7 @@
 
 Showing a user only what they can act on, while the server independently enforces that they may. The client hides; the server decides. These are not the same job and they are never done by the same code.
 
-[Binding rules](../../../../.claude/team-rule/coding-rules/auth_auth-guards.md)
+Binding rules (app repo: `.claude/team-rule/coding-rules/auth_auth-guards.md`)
 
 ## Key UX concepts
 
