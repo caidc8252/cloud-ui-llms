@@ -66,7 +66,7 @@ for (const file of await walk(ROOT)) {
   const md = await readText(file);
   await write(
     rel.replace(/\.md$/, ".html"),
-    docPage({ rel, md, section: index.locate(rel) }),
+    await docPage({ rel, md, section: index.locate(rel) }),
   );
   docs++;
 }
