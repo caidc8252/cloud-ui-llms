@@ -44,8 +44,14 @@
     "SF Mono", Menlo, monospace;
 
   --top-h: 56px;
-  --side-w: 268px;
-  --toc-w: 232px;
+  /* Measured off cloudscape.design: a 281px rail flush to the viewport edge, a
+   * 280px on-this-page column, and a content column that stops growing at
+   * 1000px. The cap is the point — prose past ~90 characters per line is harder
+   * to read, and without it the column just keeps stretching on a wide screen. */
+  --side-w: 281px;
+  --toc-w: 280px;
+  --content-max: 1000px;
+  --gutter: 24px;
 
   color-scheme: light;
 }
@@ -199,21 +205,46 @@ body {
 
 /* ── Three-column shell ──────────────────────────────────────── */
 
+/* The sidebar is flush to the viewport edge and the content column is capped, so
+ * the two flexible columns are *gutters*: they take the slack, which centres the
+ * content and the rail in whatever space is left of the sidebar. At 1440 they
+ * collapse to the 24px minimum and the content gets 831px; at 1920 the content
+ * stops at 1000px and the gutters grow to ~180px each. Those are cloudscape's
+ * own numbers.
+ *
+ * No max-width on the shell: capping the whole thing would pull the sidebar in
+ * from the edge, which is the thing that makes a docs site look like a page. */
 .shell {
   display: grid;
-  grid-template-columns: var(--side-w) minmax(0, 1fr) var(--toc-w);
-  gap: 40px;
-  max-width: 1440px;
-  margin: 0 auto;
-  padding: 0 24px;
+  grid-template-columns:
+    var(--side-w)
+    minmax(var(--gutter), 1fr)
+    minmax(0, var(--content-max))
+    var(--toc-w)
+    minmax(var(--gutter), 1fr);
   align-items: start;
 }
+.side {
+  grid-column: 1;
+}
+main {
+  grid-column: 3;
+}
+.toc {
+  grid-column: 4;
+}
 
-/* A hub has no on-this-page rail, so it should not reserve the column for one —
- * the tiles get the width instead. */
+/* A hub has no rail, so it should not reserve the column for one — the tiles
+ * take the width, and the gutters still centre them. */
 .shell.no-toc {
-  grid-template-columns: var(--side-w) minmax(0, 1fr);
-  max-width: 1240px;
+  grid-template-columns:
+    var(--side-w)
+    minmax(var(--gutter), 1fr)
+    minmax(0, var(--content-max))
+    minmax(var(--gutter), 1fr);
+}
+.shell.no-toc main {
+  grid-column: 3;
 }
 
 .side {
@@ -221,7 +252,8 @@ body {
   top: calc(var(--top-h) + 3px);
   max-height: calc(100vh - var(--top-h) - 3px);
   overflow-y: auto;
-  padding: 28px 16px 40px 0;
+  /* Flush to the edge now, so it owns the left padding the shell used to give it. */
+  padding: 28px 16px 40px var(--gutter);
   border-right: 1px solid var(--line-subtle);
   display: flex;
   flex-direction: column;
@@ -265,7 +297,7 @@ main {
   top: calc(var(--top-h) + 3px);
   max-height: calc(100vh - var(--top-h) - 3px);
   overflow-y: auto;
-  padding: 28px 0 40px;
+  padding: 28px 0 40px 32px;
   display: flex;
   flex-direction: column;
   gap: 2px;
@@ -753,9 +785,19 @@ main > .lede {
     display: none;
   }
 
-  .shell {
+  .shell,
+  .shell.no-toc {
     grid-template-columns: minmax(0, 1fr);
     padding: 0 20px;
+  }
+  /* The explicit placements above are for the three-column shell. Below md the
+   * shell is one column, so they must be released or main lands in an implicit
+   * third column and the grid grows one it was never given. */
+  .side,
+  main,
+  .shell.no-toc main,
+  .toc {
+    grid-column: 1;
   }
   .side {
     display: none;
