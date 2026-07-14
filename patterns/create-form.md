@@ -1,16 +1,28 @@
 # Create form
 
-A single-step form for creating or editing a resource. The default create shape — use it unless the flow genuinely has stages.
+A single-page form for creating or editing a resource. The default for simple to medium-complex creation.
 
-**Container:** a one-section form goes in an overlay (`Modal`, or `Sheet` when it needs room) — a whole page for a handful of fields is too heavy. A form of more than one section card, or one that must be deep-linkable, gets its own page. Create and edit share the container; see [Edit resource](edit-resource.md), which owns this rule. The blocks below describe the page shape — in an overlay, the `Modal`'s own title and footer stand in for the header band and the `ActionFooter`.
+**Container:** for creation, use a `Modal` for about one simple primary field, this dedicated single page for about 2–15 primary fields or up to five setting groups, and a [Create wizard](create-wizard.md) for a long, complex, or interrelated flow. `Sheet` is not the middle size; [Secondary panels](secondary-panels.md) permits it only when creation is a supplementary sub-task of the current page. The blocks below describe the page shape — in an overlay, `Modal` or `Sheet` owns the title, content, and footer instead of `PageHeaderBand`, `PageBody`, and `ActionFooter`.
 
 [Style template](../demos/create-form.md)
 
 ## Key UX concepts
 
-### Single step is the default
+### Choose the create pattern
 
-Many fields is not a reason to make a wizard. A wizard is for **staged** flows: a later step depends on an earlier answer, the flow branches, there is a review gate, or an external process runs between steps. Fields that are merely numerous but independent stay on one page, split into section cards. See [Create wizard](create-wizard.md) for the other side of that test.
+| Pattern | Length baseline | Complexity and recovery |
+|---|---|---|
+| **Modal create** | About one simple primary field. | The value can be corrected after creation and errors can be resolved without leaving the trigger page. Example: create an API key when the only input is its name. |
+| **Single-page create** | About 2–15 primary fields, or up to five coherent setting groups. | The form is simple to medium complexity, the values remain editable, and no concept needs its own page. |
+| **Multipage create** | More than about 16 primary fields, or more than five setting groups. | The configuration is long or complex, tasks are interrelated, a concept needs its own page, or errors must be resolved step by step and checked again at review. |
+
+These counts are design baselines, not API limits. Count required fields without a good default and fields most users need to inspect to succeed. Put less common fields under additional configuration with useful defaults. For a conditional flow, count the longest possible path.
+
+Creating a sub-resource while a parent create remains the primary context is a supplementary task, not a fourth create size. It may use `Sheet` only when it remains one focused continuous flow; otherwise route to its own page and preserve the parent draft.
+
+### Single page is the simple-to-medium default
+
+Keep a create flow on one page when it has about 2–15 primary fields or up to five coherent setting groups and no concept needs a page of its own. Move to a wizard when the longest path is larger, the configuration is complex, or the tasks are interrelated. Dependency, branching, step-level validation, immutable choices, and a consequential review are strong wizard signals. See [Create wizard](create-wizard.md) for the other side of that test.
 
 ### On a page: the exit lives in the header, the commit lives in the footer
 
@@ -65,7 +77,7 @@ Field-level errors surface through `Field`'s `error` prop. A failure affecting t
 
 ### Don't
 
-- Don't reach for a wizard just because the form is long.
+- Don't keep a long or complex configuration on one page solely because its fields are independent; apply the length and complexity tests in [Create wizard](create-wizard.md).
 - Don't put actions in the reduced header. The header's job is to let the user leave.
 - Don't hand-build the header's back button, and don't use `ContentHeader` as the page header.
 - Don't cap the form's width with a `max-w-*`. Width belongs to the field, not to the page.
@@ -120,8 +132,9 @@ Field-level errors surface through `Field`'s `error` prop. A failure affecting t
 
 ## Related patterns and components
 
-- [Create wizard](create-wizard.md) — the staged alternative, and the test for when to use it.
+- [Create wizard](create-wizard.md) — the multipage alternative for long, complex, or interrelated creation.
 - [Edit resource](edit-resource.md) — this same shape, pre-filled, and the three things that differ.
+- [Secondary panels](secondary-panels.md) — the narrow case in which creation is a supplementary page task.
 - [Unsaved changes](unsaved-changes.md) — the exit behaviour this form needs.
 - [Detail page](detail-page.md) — where a successful create lands.
 - [Errors and validation](errors-and-validation.md) — which feedback surface each error uses.

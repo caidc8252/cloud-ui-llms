@@ -12,20 +12,26 @@ Choose the width with `size`: `sm` (360px), `md` (480px, default), `lg` (640px),
 
 Dismissal is configurable and independent: `closeOnOverlay` (default `true`), `closeOnEscape` (default `true`), and `showCloseButton` (default `true`). For a dialog that must not be dismissed casually — a forced decision — use `AlertDialog` instead.
 
+Use `Modal` for one compact, focused task that is subordinate to the current page and must block that page until the user completes or cancels it. For creation, the baseline is one simple primary field; for editing, use it for one property or a small, tightly related group. Examples include _Edit user name_, _Assign role_ when it is one select, and _Create API key_ when only a name is required.
+
+`Sheet` is not the next size up: use it when content is supplementary to the current page. Use a dedicated page when the task is the primary destination, edits several properties, contains sections or stages, or needs URL/history and substantial recovery. Apply [Create form](../patterns/create-form.md) for creation, [Edit resource](../patterns/edit-resource.md) for editing, and [Secondary panels](../patterns/secondary-panels.md) before choosing `Sheet`.
+
 ## General guidelines
 
 ### Do
 
-- Use a modal for a focused task that interrupts the current flow — a form, a preview, a picker. For a confirmation, and for anything destructive, use [`AlertDialog`](alert-dialog.md): a modal can be dismissed by an outside click, which a confirmation must not be.
+- Use a modal for a focused task that interrupts and blocks the current flow — a compact form, preview, or picker. For a confirmation, and for anything destructive, use [`AlertDialog`](alert-dialog.md): a modal can be dismissed by an outside click, which a confirmation must not be.
+- Keep the task compact: one small field group or one short action, without sub-navigation.
 - Give it a `title`, and a `footer` with the actions.
 - Pick a `size` that fits the content without becoming a page.
-- Set `closeOnEscape={false}` and `closeOnOverlay={false}` for flows that must not be lost to a stray dismissal, such as a multi-step form or an in-flight submit.
+- Set `closeOnEscape={false}` and `closeOnOverlay={false}` while an in-flight submit must not be interrupted.
 
 ### Don't
 
 - Don't use a modal for a forced, un-dismissable choice. Use `AlertDialog`.
 - Don't stack modals. Finish or close one before opening another.
-- Don't put a whole page of content in a modal; use a route or a `Sheet`.
+- Don't put a whole page of content in a modal; use a route. Use `Sheet` only when the content is supplementary to the current page.
+- Don't choose a modal for several business sections, a staged flow, an independent URL, or a task that requires long-distance scrolling.
 - Don't remove every dismissal affordance while leaving it a `Modal`; that is what `AlertDialog` is for.
 
 ## Features
@@ -72,7 +78,7 @@ Dismissal is configurable and independent: `closeOnOverlay` (default `true`), `c
 
 ### Component-specific guidelines
 
-- Title: name the task, such as `Rename project` or `Delete user`.
+- Title: name the task, such as `Rename project` or `Assign role`.
 - Footer actions: use concrete verbs, and keep one primary action.
 - Don't restate the title as the first line of the body.
 

@@ -1,21 +1,24 @@
 # Create wizard
 
-A staged create flow: a step indicator, one step of fields at a time, a review step, and persistent bottom navigation. Use it only when the flow is genuinely staged.
+A multipage create flow: a step indicator, one step of fields at a time, a review step, and persistent bottom navigation. Use it for long or complex configurations and series of interrelated tasks.
 
 [Style template](../demos/create-wizard.md)
 
 ## Key UX concepts
 
-### The test for using a wizard at all
+### The test for using a wizard
 
 A wizard is justified when at least one of these is true:
 
+- **Length** — the longest path has more than about 16 primary fields or more than five coherent setting groups.
+- **Conceptual complexity** — a concept needs in-depth interaction, explanation, or validation that benefits from its own page.
 - **Dependency** — a later step's fields depend on an earlier step's answer.
 - **Branching** — an earlier answer changes which steps exist.
 - **Review** — the commit is consequential enough to deserve a confirmation step that shows what is about to happen.
+- **Recovery** — important choices cannot be corrected after creation, or errors must be resolved in the step where they occur and checked again in a summary.
 - **External processing** — something runs between steps (a validation call, an upload, a provisioning check).
 
-"The form is long" is not on that list. Many independent fields stay a [create form](create-form.md) with more section cards. Splitting independent fields across steps makes the user pay for navigation they didn't need.
+These are design baselines, not API limits. Count fields that are required without a useful default or that most users must inspect to succeed, and evaluate the longest conditional path. A shorter simple-to-medium flow stays on one [create form](create-form.md); do not split it merely to make each page look sparse.
 
 ### The step indicator is a map, not a progress bar
 
@@ -63,7 +66,7 @@ A centered confirmation card with the outcome and the onward action (view the re
 
 ### Do
 
-- Apply the four-part test before choosing a wizard. If none of them holds, build a form.
+- Apply the length, complexity, dependency, recovery, and processing tests before choosing a wizard. If none holds, build a single-page form.
 - Keep one draft object for the whole flow so Back never loses input.
 - Show a review step before a consequential commit, listing exactly what will be created.
 - Validate each step on Continue, not at the end. Discovering a step-1 error on step 4 is the failure mode wizards are supposed to prevent.
@@ -72,7 +75,7 @@ A centered confirmation card with the outcome and the onward action (view the re
 
 ### Don't
 
-- Don't use a wizard to break up a long list of independent fields.
+- Don't use a wizard to break up a simple-to-medium list of independent fields merely to make each step shorter.
 - Don't make the header back button and the footer Back do the same thing.
 - Don't hand-write a header back button — the band has one — and don't hand-write the step indicator's frame; pass `framed`.
 - Don't ship a footer button without its icon. _Continue_ with no chevron is the tell of a hand-assembled footer.
@@ -119,6 +122,6 @@ A centered confirmation card with the outcome and the onward action (view the re
 
 ## Related patterns and components
 
-- [Create form](create-form.md) — the single-step default, and the first thing to try.
+- [Create form](create-form.md) — the single-page default for simple to medium creation.
 - [Errors and validation](errors-and-validation.md) — per-step validation and the commit's error path.
 - Components: `StepIndicator`, `Field`, `Card`, `PageHeaderBand`, `PageBody`, `ActionFooter`, `Button`, `KvGrid`. (`Stepper` is a numeric step control, not a step indicator — it has no place in a wizard's chrome.)

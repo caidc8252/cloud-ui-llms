@@ -36,7 +36,7 @@ Use `KvGrid` (which applies the `grid-auto-fit-kv` class) with `KeyValue` childr
 
 ### Editing leaves the read-only surface
 
-An edit on a detail page opens a modal or moves to the edit form. After a successful edit, the detail view reflects the saved values. Detail pages do not turn their own read-only fields into inline form controls.
+An edit of one property or a small, tightly related group may open a modal; editing several properties moves to the dedicated edit form. After a successful edit, the detail view reflects the saved values. Detail pages do not turn their own read-only fields into inline form controls, and they do not use `Sheet` as a larger edit modal.
 
 ## Building blocks
 

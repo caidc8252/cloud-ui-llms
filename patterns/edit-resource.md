@@ -1,15 +1,18 @@
 # Edit resource
 
-The same shape as the create form, pre-filled and dirty-tracked, in one of two sanctioned containers. **There is no inline edit and no split-board edit, in either container.**
+The create form's fields, pre-filled and dirty-tracked. Edit several properties on a dedicated page; reserve `Modal` for one property or a small, tightly related group. **There is no inline edit and no split-board edit in this system.**
 
-### Pick the container by the form's size, not by taste
+### Choose the edit pattern
 
 | | Use it when |
 |---|---|
-| **Overlay** — `Modal`, or `Sheet` when it needs room | One section of fields, no sub-navigation, and the user does not need the page behind it. **This is the default: most edits are a handful of fields, and a whole page for them is too heavy.** |
-| **Dedicated page** | More than one section card, or a multi-step wizard; or the edit must be deep-linkable; or the form is long enough that the commit needs an `ActionFooter` below the scrolling `PageBody` to stay reachable. |
+| **Modal** | One property or a small, tightly related group that the user can understand and commit as one blocking action. |
+| **Sheet** | A genuinely ancillary, page-scoped configuration. It supplements the current page; it is not the larger option for a resource edit. |
+| **Dedicated page** | Several properties, especially when they are interdependent; or any edit with sections, an independent URL, a long session, recovery needs, sub-navigation, or several business regions. |
 
-The rule is decidable from the field list alone, so create and edit land in the same container and two authors reading this page reach the same answer. Everything below applies to both containers unless it names one.
+Start with page edit when the user is editing several properties of one resource. Use a modal only for a compact property-level edit, and a sheet only when the configuration is supplementary to the page rather than the user's primary edit task. Field count is a supporting signal; task scope and property dependency decide. See [Secondary panels](secondary-panels.md) for the sheet boundary.
+
+An inline-edit pattern would suit one independent property across multiple resources, but this system has no inline-edit primitive or contract. `Modal` is not a way to simulate table-cell editing: it is a blocking property-level task with a title, validation, commit, and cancel path.
 
 [Create form](create-form.md) | [Style template](../demos/create-form.md)
 
@@ -19,7 +22,7 @@ The rule is decidable from the field list alone, so create and edit land in the 
 
 Edit is create with the record loaded into it. Same `Field`s, same order, same hints. Share the field components between the two — one form, two entry points — so a field added to create cannot silently go missing from edit. Everything in [Create form](create-form.md) applies here unless this page says otherwise.
 
-On a page: the reduced header, one column of section cards in the scrolling `PageBody`, and an `ActionFooter` below it. In an overlay: the `Modal`'s own title and footer carry the title verb and the commit — do not nest an `ActionFooter` inside a `Modal`.
+On a page: the reduced header, one column of section cards in the scrolling `PageBody`, and an `ActionFooter` below it. In an overlay: `Modal` or `Sheet` owns the title, content, and footer — never nest an `ActionFooter` inside either overlay.
 
 Three things differ, and only three: the title verb, the commit verb, and the dirty gate.
 
@@ -59,7 +62,7 @@ The create form's blocks, unchanged — see [Create form](create-form.md) for A 
 
 #### A. Container
 
-`Modal` (or `Sheet`) for a one-section form; a page for a multi-section one. Decide from the field list before you build either, and give create the same container — a create overlay whose edit is a page is two designs for one form.
+Use a dedicated page for several properties or interdependent settings. Use `Modal` for one property or a small, tightly related group. Use `Sheet` only for ancillary page-scoped configuration, never because the edit is too large for a modal. Apply [Secondary panels](secondary-panels.md) before placing edit controls in a sheet.
 
 #### B. Loaded draft
 
@@ -67,7 +70,7 @@ The record's initial displayed values become the pristine baseline. The editable
 
 #### C. Dirty gate
 
-`disabled={!dirty || saving}` on the commit — the page's `ActionFooter` button, or the `Modal`'s footer button. `dirty` is a value comparison against the pristine copy, not a "has been touched" flag.
+`disabled={!dirty || saving}` on the commit — the page's `ActionFooter` button or the overlay footer button. `dirty` is a value comparison against the pristine copy, not a "has been touched" flag.
 
 #### D. Header actions — page only
 
@@ -77,8 +80,9 @@ The record's state transitions — _Lock_, _Reset password_, _Delete_ — as `se
 
 ### Do
 
-- Pick the container from the field list: one section of fields is an overlay, more than one is a page.
-- Give create and edit the same container.
+- Use page edit for several properties, especially when their meanings or validation depend on one another.
+- Use a modal for one property or a small, tightly related group.
+- Use a sheet only for ancillary page-scoped configuration, not as the larger edit container.
 - Share the field components with the create page. One form, two entry points.
 - Disable the commit while the draft equals the loaded record.
 - Recompute `dirty` by comparing values, so an edit that is typed and untyped goes back to clean.
@@ -89,8 +93,9 @@ The record's state transitions — _Lock_, _Reset password_, _Delete_ — as `se
 
 ### Don't
 
-- Don't spend a whole page on a form of a handful of fields. That is what the overlay is for.
-- Don't nest an `ActionFooter` inside a `Modal` — the modal's footer already carries the commit.
+- Don't put a property-level edit on a whole page when one compact modal action is sufficient.
+- Don't move a multi-property edit into a sheet merely because the panel scrolls.
+- Don't nest an `ActionFooter` inside a `Modal` or `Sheet` — the overlay's footer already carries the commit.
 - Don't put state transitions in an edit overlay's footer. They are not the draft's commit.
 - Don't let `Esc` or the close affordance skip the unsaved-changes guard.
 - Don't build an inline editor from a table cell or a key-value row. There is no primitive, and no contract.
@@ -143,4 +148,5 @@ The record's state transitions — _Lock_, _Reset password_, _Delete_ — as `se
 - [Detail page](detail-page.md) — where the user came from, and where a successful save returns them.
 - [Delete patterns](delete-patterns.md) — the destructive state transitions and their tiers.
 - [Action weight](action-weight.md) — the variant a header action takes.
-- Components: `Field`, `Input`, `Textarea`, `Select`, `Combobox`, `Card`, `Button`; `Modal` or `Sheet` for the overlay container; `PageBody` and `ActionFooter` for the page container.
+- [Secondary panels](secondary-panels.md) — the authoritative boundary for ancillary page-scoped configuration.
+- Components: `Field`, `Input`, `Textarea`, `Select`, `Combobox`, `Card`, `Button`; `Modal` or `Sheet` for an overlay; `PageHeaderBand`, `PageBody`, and `ActionFooter` for a page.
