@@ -16,7 +16,7 @@ Once a value is set, a clear (×) button appears in the trigger and resets it to
 
 `minDate` and `maxDate` bound the calendar; both are normalized to the start and end of their day, so an intraday timestamp doesn't disable the boundary day. `size` is `sm`, `md` (default), or `lg`; `invalid` gives the trigger the destructive border and ring plus `aria-invalid`, matching `Input` and `Select`. `name`, `required`, and `id` wire it into a form and to a `Field` label (via the field's `htmlFor`).
 
-Note there is no `disabledDays` here — if you need to block individual days as well as bound the window, that's `DatePicker`. And when the time doesn't matter, don't ask for it: use `DatePicker`. When the *date* doesn't matter, use `TimePicker`.
+Note there is no `disabledDays` here — if you need to block individual days as well as bound the window, that's `DatePicker`. And when the time doesn't matter, don't ask for it: use `DatePicker`. When the _date_ doesn't matter, use `TimePicker`.
 
 ## General guidelines
 
@@ -41,9 +41,16 @@ Note there is no `disabledDays` here — if you need to block individual days as
   One `Date | null` carries both the day and the time.
 
   ```tsx
+  import { useState } from "react";
   import { DateTimePicker } from "@cloud/ui";
 
-  <DateTimePicker value={runAt} onValueChange={setRunAt} placeholder={t("schedule.placeholder")} />;
+  const [runAt, setRunAt] = useState<Date | undefined>();
+
+  <DateTimePicker
+    value={runAt}
+    onValueChange={setRunAt}
+    placeholder={t("schedule.placeholder")}
+  />;
   ```
 
 - #### Format

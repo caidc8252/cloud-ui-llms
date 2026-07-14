@@ -40,9 +40,16 @@ For a range, use `DateRangePicker`. When a time comes with the date, use `DateTi
   The value is `Date | null`.
 
   ```tsx
+  import { useState } from "react";
   import { DatePicker } from "@cloud/ui";
 
-  <DatePicker value={date} onValueChange={setDate} placeholder={t("settlement.datePlaceholder")} />;
+  const [date, setDate] = useState<Date | undefined>();
+
+  <DatePicker
+    value={date}
+    onValueChange={setDate}
+    placeholder={t("settlement.datePlaceholder")}
+  />;
   ```
 
 - #### Bounds
