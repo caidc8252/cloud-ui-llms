@@ -42,11 +42,13 @@ Structure the body with the two helpers:
 - #### The sheet
 
   ```tsx
+  import { useState } from "react";
   import {
     AdvancedFilterField,
     AdvancedFilterGroup,
     AdvancedFilterSheet,
     DateRangePicker,
+    type DateRange,
     Select,
     SelectContent,
     SelectItem,
@@ -56,6 +58,7 @@ Structure the body with the two helpers:
   } from "@cloud/ui";
 
   const SHEET_KEYS = ["status", "region"] as const;
+  const [range, setRange] = useState<DateRange | undefined>();
   const filters = useListFilters({
     initial: { q: "", status: "all", region: "all" },
     onApply: () => setPage(1),
@@ -92,7 +95,10 @@ Structure the body with the two helpers:
     </AdvancedFilterGroup>
 
     <AdvancedFilterGroup label={t("filters.activity")}>
-      <AdvancedFilterField label={t("filters.dateRange")} className="sm:col-span-2">
+      <AdvancedFilterField
+        label={t("filters.dateRange")}
+        className="sm:col-span-2"
+      >
         <DateRangePicker
           value={range}
           onValueChange={setRange}
