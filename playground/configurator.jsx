@@ -18,6 +18,56 @@ const NODE_CHOICES = {
   Search: <Search className="size-4" />,
 };
 
+function CopyButton({ text }) {
+  const [copied, setCopied] = useState(false);
+  return (
+    <button
+      type="button"
+      onClick={() => {
+        navigator.clipboard?.writeText(text);
+        setCopied(true);
+        setTimeout(() => setCopied(false), 1400);
+      }}
+    >
+      {copied ? <Check className="size-4" /> : <Copy className="size-4" />}
+      {copied ? "Copied" : "Copy"}
+    </button>
+  );
+}
+
+/**
+ * A playground with no controls: the component, and the code that makes it.
+ *
+ * Most components do not have a props panel, because what a *configurable* demo of a
+ * Table or a Sheet looks like is a judgement no type can make. That was being used as
+ * a reason to give them no playground at all — and it is not one. The doc already has
+ * an example that renders; it was just buried in Usage, under a heading, three
+ * scrolls down.
+ *
+ * So this answers the two questions someone opens a component page with, and stops:
+ * what does it look like, and what do I type to get it.
+ */
+export function Example({ render, source }) {
+  return (
+    <div className="pg pg-flat">
+      <div className="pg-preview">
+        <h3>Preview</h3>
+        <div className="pg-stage">{render()}</div>
+      </div>
+
+      <div className="pg-code">
+        <h3>
+          Code
+          <CopyButton text={source} />
+        </h3>
+        <pre>
+          <code>{source}</code>
+        </pre>
+      </div>
+    </div>
+  );
+}
+
 const codeFor = (name, props, children) => {
   const attrs = Object.entries(props)
     .filter(

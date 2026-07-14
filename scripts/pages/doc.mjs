@@ -25,7 +25,7 @@ export async function docPage({ rel, md, section }) {
 
   const tabs =
     section?.title === "Components"
-      ? await componentTabs({ title, usageHtml: html })
+      ? componentTabs({ title, md, usageHtml: html })
       : null;
 
   if (!tabs) {

@@ -6,7 +6,7 @@ The header family's shared title block — a heading, optional subtext, and a fl
 
 ## Development guidelines
 
-**Never use `ContentHeader` on its own as a page header.** This is a hard rule. It is the *title block* the header bands are built from — a bare `flex items-center justify-between` row with an `<h1>`, a muted description and a flush-right `children` cluster. It has **no band chrome of its own**: no padding, no background, no bottom border, no sticky, no back button. Standing alone at the top of a page it reads as an unfinished skeleton.
+**Never use `ContentHeader` on its own as a page header.** This is a hard rule. It is the _title block_ the header bands are built from — a bare `flex items-center justify-between` row with an `<h1>`, a muted description and a flush-right `children` cluster. It has **no band chrome of its own**: no padding, no background, no bottom border, no sticky, no back button. Standing alone at the top of a page it reads as an unfinished skeleton.
 
 There are exactly two legal ways to use it:
 
@@ -50,14 +50,11 @@ When a band builds the `ContentHeader`, the action slot is fed from `HeaderActio
     <PageHeader
       title={t("merchants.title")}
       description={t("merchants.description")}
-      actions={[
-        {
-          label: t("merchants.create"),
-          icon: <Plus size={16} />,
-          to: "/merchants/new",
-          variant: "primary",
-        },
-      ]}
+      actions={
+        <Button variant="primary" iconLeft={<Plus className="size-4" />}>
+          {t("merchants.create")}
+        </Button>
+      }
       sticky
     />
     <PageBody>
@@ -74,7 +71,10 @@ When a band builds the `ContentHeader`, the action slot is fed from `HeaderActio
   import { PageBody, ContentHeader, Button, Card } from "@cloud/ui";
 
   <PageBody>
-    <ContentHeader title={t("settings.integrations")} description={t("settings.integrationsHint")}>
+    <ContentHeader
+      title={t("settings.integrations")}
+      description={t("settings.integrationsHint")}
+    >
       <Button variant="secondary">{t("settings.addIntegration")}</Button>
     </ContentHeader>
     <Card>…</Card>

@@ -57,13 +57,20 @@ The scroll area is **full-width and unpadded**: pages own their own padding. Tha
   <SidebarProvider pathname={pathname}>
     <Layout
       sidebar={<AppSidebar />}
-      header={<AppHeader leading={<SidebarTrigger />} breadcrumbs={<Breadcrumbs items={items} />} />}
+      header={
+        <AppHeader
+          leading={<SidebarTrigger />}
+          breadcrumbs={<Breadcrumbs items={items} />}
+        />
+      }
     >
       <PageHeader
         title={t("merchants.title")}
-        actions={[
-          { label: t("merchants.create"), icon: <Plus size={16} />, to: "/merchants/new", variant: "primary" },
-        ]}
+        actions={
+          <Button variant="primary" iconLeft={<Plus className="size-4" />}>
+            {t("merchants.create")}
+          </Button>
+        }
         sticky
       />
       <PageBody>{content}</PageBody>
@@ -80,10 +87,21 @@ The scroll area is **full-width and unpadded**: pages own their own padding. Tha
   A page with a footer is a form page, so its band is a `PageHeaderBand` — and every button in the footer carries an icon.
 
   ```tsx
-  import { Layout, AppHeader, SidebarTrigger, PageHeaderBand, PageBody, ActionFooter, Button } from "@cloud/ui";
+  import {
+    Layout,
+    AppHeader,
+    SidebarTrigger,
+    PageHeaderBand,
+    PageBody,
+    ActionFooter,
+    Button,
+  } from "@cloud/ui";
   import { X, Save } from "lucide-react";
 
-  <Layout sidebar={<AppSidebar />} header={<AppHeader leading={<SidebarTrigger />} />}>
+  <Layout
+    sidebar={<AppSidebar />}
+    header={<AppHeader leading={<SidebarTrigger />} />}
+  >
     <PageHeaderBand title={title} backTo="/merchants" />
     <PageBody>{form}</PageBody>
     <ActionFooter>
