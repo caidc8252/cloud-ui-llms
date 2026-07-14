@@ -1,4 +1,5 @@
 import { esc } from "./read.mjs";
+import { exportNamed } from "./package-graph.mjs";
 import { loadProps } from "./props.mjs";
 import { styleTab } from "./style-tab.mjs";
 
@@ -78,7 +79,12 @@ bury the ones that are actually this component's.</p>`;
 }
 
 export function componentTabs({ title, usageHtml }) {
-  const props = loadProps(title);
+  /* The doc's H1 is usually the export name, but not always — chart.md is titled
+   * "Chart container" and the export is ChartContainer. */
+  const name = exportNamed(title);
+  if (!name) return null;
+
+  const props = loadProps(name);
   /* No props of its own means no table worth reading. Several components here are
    * genuine pass-throughs — Select, Tooltip and Sheet add nothing to the Base UI
    * primitive they re-export — and a page of empty tabs would say that badly. They
@@ -87,13 +93,13 @@ export function componentTabs({ title, usageHtml }) {
 
   const tabs = [];
 
-  const recipe = PLAYGROUND[title];
+  const recipe = PLAYGROUND[name];
   if (recipe)
     tabs.push({
       id: "playground",
       label: "Playground",
       body: `<div data-playground="${encodeURIComponent(
-        JSON.stringify({ component: title, props, ...recipe }),
+        JSON.stringify({ component: name, props, ...recipe }),
       )}"></div>`,
     });
 
@@ -102,7 +108,7 @@ export function componentTabs({ title, usageHtml }) {
   /* Cloudscape's Style tab is a `style` prop — a typed escape hatch. There is none
    * here, and that is the design. So the tab answers the question the reader came
    * with — "what decides how this looks?" — with the system's real answer. */
-  const style = styleTab(title, props);
+  const style = styleTab(name, props);
   if (style) tabs.push({ id: "style", label: "Style", body: style });
 
   tabs.push({ id: "usage", label: "Usage", body: usageHtml });
