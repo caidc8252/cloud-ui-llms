@@ -21,7 +21,7 @@ When using icons, prefer lucide icons with explicit size classes, such as `class
 ### Do
 
 - Use buttons for actions that perform work in the current interface.
-- Use one `variant="primary"` action per task surface whenever possible.
+- Use one `variant="primary"` action per active surface whenever possible.
 - Keep `size="md"` (the `default`) unless the surface genuinely calls for a denser or larger control.
 - Pass `render` with your router's link when a button-looking control has to navigate.
 - Use `variant="secondary"` for ordinary secondary actions, such as search, edit, retry, or refresh.
@@ -35,7 +35,7 @@ When using icons, prefer lucide icons with explicit size classes, such as `class
 
 - Don't put `buttonVariants()` on the `className` of a raw element. It bypasses `cn()`/tailwind-merge and silently drops `secondary`'s border. Render `Button` and use `render` to change the element.
 - Don't reach for a plain anchor styled like a button when the target is a page. Use `<Button render={<Link … />}>`.
-- Don't use multiple competing primary buttons in the same page, modal, form, or workflow step.
+- Don't use multiple competing primary buttons on the same active surface. A modal and its inert background page are separate surfaces and may each retain one.
 - Don't use `danger` for reversible or low-impact actions.
 - Don't rely on icon-only buttons for uncommon or ambiguous actions.
 - Don't remove focus-visible styles when adding custom classes.
@@ -48,7 +48,7 @@ When using icons, prefer lucide icons with explicit size classes, such as `class
 
   There are six button variants, and `primary` is the default:
 
-  - `primary` is the main recommended action on a page, modal, form, or workflow step. It uses primary brand fill and CTA shadow. It is what you get when `variant` is omitted.
+  - `primary` is the main recommended action on the active surface — a page, modal, form, or workflow step. It uses primary brand fill and CTA shadow. It is what you get when `variant` is omitted.
   - `secondary` is for standard secondary actions such as search, edit, modify, retry, or refresh. It uses a bordered surface style and supports expanded trigger states.
   - `ghost` is for low-emphasis actions such as cancel, back, clear, duplicate, or inline utility actions. It uses hover and active surface feedback without a border by default.
   - `ghost-danger` is for low-emphasis destructive actions such as cancel invitation, remove filter, or delete row icon. It keeps destructive color without the weight of a filled danger button.

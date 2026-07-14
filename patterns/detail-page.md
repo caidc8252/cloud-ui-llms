@@ -10,15 +10,15 @@ Everything known about a single resource, on one page, with tabs when there is m
 
 The default detail page uses same-page `Tabs`. The `Tabs` root wraps the **whole page**, including the header band, because the band's bottom edge is where the `TabsList` docks. Turning each tab into a separate destination is the exception, not the shape.
 
-Because `Tabs` wraps the whole page, it is also the flex column that fills `<main>`, and the page's scroll root lives inside a panel: `Tabs` root is `flex min-h-0 flex-1 flex-col`, each `TabsContent` is `flex min-h-0 flex-col`, and **each panel hosts its own `PageBody`**. Only the active panel is mounted, so the page still has exactly one scroll root at any moment. `min-h-0` is load-bearing in both places — without it the flex item sizes to its content and nothing scrolls.
+Because `Tabs` wraps the whole page, it is also the flex column that fills `<main>`: use `flex min-h-0 flex-1 flex-col` on the root, `flex min-h-0 flex-col` on every `TabsContent`, and put a **`PageBody` inside each panel**. Only the active panel is mounted, so there is still exactly one page scroll root. The two `min-h-0` values are load-bearing; without them the flex items size to their content and nothing scrolls.
 
 Move a block to its own page only when it is heavy enough to need its own list or pagination, or when users need to access it independently.
 
 ### The band is prop-driven, and it is a different header from a page header
 
-A detail page is level-2, so it takes `PageHeaderBand` with `variant="detail"` — never `PageHeader`, and never a bare `ContentHeader`. The band is configured entirely through props, not children: `title`, `titleAdornment`, `avatar`, `meta`, `backTo` / `onBack`, `actions`, `tabs`, `variant`. There is no children slot to fill. There is no `sticky` prop — the band does not need one.
+A detail page is level-2, so it takes `PageHeaderBand` with `variant="detail"` — never `PageHeader`, and never a bare `ContentHeader`. The band is configured entirely through props, not children: `title`, `titleAdornment`, `avatar`, `meta`, `backTo` / `onBack`, `actions`, `tabs`, `variant`. There is no children slot and no `sticky` prop.
 
-`variant="detail"` is not a restyled page header — it is a purpose-built identity band. It does not compose `ContentHeader` at all: instead of title-plus-description it gives you a leading `avatar` tile, the status `Badge` inline beside the title through `titleAdornment`, and a `meta` facts row underneath. `meta` replaces `description` as the subline; passing both means only `meta` shows. The band never scrolls, because it is a **sibling** of the scroll root rather than content inside it: the identity, and the tab strip docked to its edge, stay put while the active panel scrolls beneath them. Nothing is pinned to achieve that; it falls out of the structure.
+`variant="detail"` is not a restyled page header — it is a purpose-built identity band. It does not compose `ContentHeader` at all: instead of title-plus-description it gives you a leading `avatar` tile, the status `Badge` inline beside the title through `titleAdornment`, and a `meta` facts row underneath. `meta` replaces `description` as the subline; passing both means only `meta` shows. The identity stays put because the band is a sibling of the panel's scroll root, not because anything is pinned.
 
 ### The band and the tabs are one object
 
@@ -42,7 +42,7 @@ An edit on a detail page opens a modal or moves to the edit form. After a succes
 
 #### A. Tabs root
 
-`Tabs` wrapping the entire page, with `defaultValue` set to the overview tab, and `flex min-h-0 flex-1 flex-col` so it is the flex column that fills `<main>`.
+`Tabs` wrapping the entire page, with `defaultValue` set to the overview tab and `flex min-h-0 flex-1 flex-col` so it fills `<main>`.
 
 #### B. Header band
 
@@ -62,9 +62,7 @@ A `TabsList` in the band's `tabs` slot, with a `TabsTrigger` per block. A count 
 
 #### F. Tab panels
 
-`TabsContent` with `flex min-h-0 flex-col`, holding that panel's **own `PageBody`**. `PageBody` is the scroll root, and only the mounted panel has one, so the page still scrolls in exactly one place.
-
-Do not hand the panel a bare `PAGE_BODY_PADDING_CLASS_NAME` instead. That constant is padding only — no `overflow-y` — so a page built that way has **no scroll container at all**: everything below the fold is clipped and the user cannot reach it. `<main>` clips and does not scroll, and neither does the document, so nothing upstream will rescue it.
+`TabsContent` with `flex min-h-0 flex-col`, holding that panel's own `PageBody`. A bare `PAGE_BODY_PADDING_CLASS_NAME` is not a substitute: it supplies padding but no scrolling, leaving everything below the fold clipped by `<main>`.
 
 #### G. Overview blocks
 
@@ -79,7 +77,7 @@ Page-level actions in the band's `actions` prop — `HeaderAction[]` descriptors
 ### Do
 
 - Wrap the whole page in `Tabs` so the strip can dock to the band's edge.
-- Give every tab panel its own `PageBody`. It is the panel's scroll root, and the band stays out of it on purpose.
+- Give every tab panel its own `PageBody`; it is the panel's scroll root.
 - Use `KvGrid` for the overview, and let the columns auto-fit the card.
 - Put the status where the title is — a resource's state is part of its identity, not a detail buried in the grid. `titleAdornment` is the slot that does it.
 - Give every band action an icon. `HeaderAction.icon` is required, and the compiler will say so.
@@ -89,7 +87,7 @@ Page-level actions in the band's `actions` prop — `HeaderAction[]` descriptors
 ### Don't
 
 - Don't turn every tab into a separate destination for code organization. The navigation model follows the user's task.
-- Don't give a `TabsContent` `PAGE_BODY_PADDING_CLASS_NAME` and stop there. Padding is not a scroll root, and the page ends up with none.
+- Don't give `TabsContent` only `PAGE_BODY_PADDING_CLASS_NAME`. Padding is not a scroll root.
 - Don't build the back button. It is part of the band, and there is no prop that removes it.
 - Don't use `ContentHeader` as the page header, and don't force a detail page into `variant="page"`. An identity band is richer than title-plus-description, and that is the point of the variant.
 - Don't hand-write the auto-fit grid. Use `KvGrid`.

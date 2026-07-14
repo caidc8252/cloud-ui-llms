@@ -7,7 +7,7 @@ The same shape as the create form, pre-filled and dirty-tracked, in one of two s
 | | Use it when |
 |---|---|
 | **Overlay** — `Modal`, or `Sheet` when it needs room | One section of fields, no sub-navigation, and the user does not need the page behind it. **This is the default: most edits are a handful of fields, and a whole page for them is too heavy.** |
-| **Dedicated page** | More than one section card, or a multi-step wizard; or the edit must be deep-linkable; or the form is long enough that the commit needs an `ActionFooter` — sitting below the page's scroll region, as a sibling of `PageBody` — to stay reachable. |
+| **Dedicated page** | More than one section card, or a multi-step wizard; or the edit must be deep-linkable; or the form is long enough that the commit needs an `ActionFooter` below the scrolling `PageBody` to stay reachable. |
 
 The rule is decidable from the field list alone, so create and edit land in the same container and two authors reading this page reach the same answer. Everything below applies to both containers unless it names one.
 

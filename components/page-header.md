@@ -43,7 +43,7 @@ Three headers, three jobs — don't mix them up:
 - Put `PageHeader` outside `PageBody`, as a direct child of `<main>`, so it doesn't scroll.
 - Use it only on a level-1 list or index page.
 - Pass `actions` as `HeaderAction` descriptors, each with an `icon`.
-- Put the page's primary action in `actions` with `variant: "primary"`, and keep it to one.
+- Put the base page surface's primary action in `actions` with `variant: "primary"`, and keep it to one.
 
 ### Don't
 

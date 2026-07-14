@@ -12,9 +12,11 @@ _Export_ is `secondary` in a `PageHeader` and `ghost` in a `ListSummaryBar`. Thi
 
 The summary bar is a low-chrome strip _inside_ the results card. An outlined button there draws a box inside a box, and it competes visually with the result count, which is the thing the bar exists to show. So the bar demotes everything.
 
-### One primary per screen
+### One primary per active surface
 
-A screen has at most one `variant="primary"` action. If a second action looks important enough to be primary, it isn't — it is the second most important action, and that is what `secondary` means. Secondary actions do not get to steal primary.
+An active surface has at most one `variant="primary"` action. The active surface is the interaction context currently accepting input: normally the base page, or the topmost `Modal`, `Sheet`, `Drawer`, or `AlertDialog` while one is open. This term describes interaction hierarchy; it is not the `surface-active` colour token.
+
+Opening an overlay does not require removing or restyling the base page's primary action. The overlay becomes active and the background becomes inert, so each surface may keep its own primary in the DOM without presenting two competing next actions. Within the active surface, a second important action is `secondary`.
 
 ### The summary bar's ladder
 
@@ -45,7 +47,7 @@ An icon-only action in a row or a toolbar is `ghost` or `ghost-danger`. It does 
 
 #### A. Page header actions
 
-`PageHeader`'s (or `PageHeaderBand`'s) `actions` prop — a `HeaderAction[]`, each with a required `icon` and no `size`. The screen's one `primary` CTA lives here, with `secondary` for the rest; `secondary` is also the default when a descriptor names no `variant`.
+`PageHeader`'s (or `PageHeaderBand`'s) `actions` prop — a `HeaderAction[]`, each with a required `icon` and no `size`. The base page surface's `primary` CTA lives here, with `secondary` for the rest; `secondary` is also the default when a descriptor names no `variant`.
 
 #### B. Summary bar actions
 
@@ -65,14 +67,14 @@ An icon-only action in a row or a toolbar is `ghost` or `ghost-danger`. It does 
 
 #### F. Dialog footer
 
-The destructive confirmation takes `variant="danger"`; the escape is `ghost`.
+The dialog is the active surface while it is open. A neutral commit takes `primary`; a destructive confirmation takes `danger`; the escape is `ghost`.
 
 ## General guidelines
 
 ### Do
 
 - Choose the variant by asking what slot the button is in, then what standing it has there.
-- Keep exactly one `primary` per screen.
+- Keep exactly one `primary` on the active surface.
 - Give every header action and every footer primary an icon, following the verb conventions.
 - Use the `Button` component. A bare `buttonVariants()` className skips `cn()` / tailwind-merge, so `secondary`'s transparent base border never resolves against the real one and the button ships with no border at all. When you need a link, keep the component and swap the element: `<Button render={<Link to={…} />}>`.
 - Demote everything in the summary bar to `ghost`, including the verbs that were `secondary` in the header.
@@ -84,7 +86,8 @@ The destructive confirmation takes `variant="danger"`; the escape is `ghost`.
 
 - Don't pick the variant from the verb. _Delete_ is not automatically `danger`; a `ghost-danger` row icon is often the right weight, and the filled `danger` belongs in the confirmation.
 - Don't put a `secondary` or `primary` button in the summary bar.
-- Don't run two primaries on one screen.
+- Don't run two competing primaries on the same active surface.
+- Don't demote or remove the background page's primary merely because an overlay has become active.
 - Don't try to size a header action. There is no `size` field, and that is deliberate: header buttons are `md`.
 - Don't colour a button by hand to make it look destructive.
 - Don't give an icon action a fill or a brand tint to make it "findable". If it needs to be findable, it needs a label.

@@ -14,11 +14,9 @@ A list is a level-1 page, and level-1 is the **only** tier that takes `PageHeade
 
 ### The sticky model
 
-This is the part most implementations get wrong. The page's one scroll root is `PageBody`; the `PageHeader` band is its non-scrolling sibling above it, so the band stays in view for free and takes no `sticky` of its own. Everything below it scrolls inside `PageBody`, and that is what the page's sticky children dock to.
+This is the part most implementations get wrong. `PageBody` is the page's one scroll root; `PageHeader` is its non-scrolling sibling and has no `sticky` prop. The condition band **scrolls away** — it is `sticky={false}` by default and it should stay that way. What stays docked to the top of `PageBody`, flush under the header band, is the summary bar plus the table's own column header. The table is told where to dock with `stickyHeaderTop={LIST_SUMMARY_BAR_HEIGHT}`, which is why that constant is exported rather than being an internal detail: the two numbers must agree or the header will overlap the bar.
 
-The condition band **scrolls away** — it is `sticky={false}` by default and it should stay that way. What stays docked at the top of `PageBody`, flush under the header band, is the summary bar plus the table's own column header. The table is told where to dock with `stickyHeaderTop={LIST_SUMMARY_BAR_HEIGHT}`, which is why that constant is exported rather than being an internal detail: the two numbers must agree or the header will overlap the bar.
-
-The results `Card` must run `overflow-clip` (or `overflow-visible`), not `overflow-hidden`, or the card is itself a scroll container: it traps the sticky children and nothing docks to `PageBody` at all.
+The results `Card` must run `overflow-clip` (or `overflow-visible`), not `overflow-hidden`, or the card becomes a scroll container, traps the sticky children, and prevents them from docking to `PageBody`.
 
 ### Draft state versus applied state
 
@@ -38,7 +36,7 @@ The table's `empty` slot has to distinguish two situations. No data at all is a 
 
 #### A. Page header
 
-`PageHeader` from `@cloud/ui/components/layout` — `title`, `description`, and `actions`. `actions` is not a node slot: it takes `HeaderAction[]` descriptors — `{label, icon, to?/onClick?, variant?, disabled?}`. `icon` is **required**, and there is no `size` field, so the header's md buttons are locked at compile time. The single `variant="primary"` CTA of the screen lives here, normally _Create <resource>_.
+`PageHeader` from `@cloud/ui/components/layout` — `title`, `description`, and `actions`. `actions` is not a node slot: it takes `HeaderAction[]` descriptors — `{label, icon, to?/onClick?, variant?, disabled?}`. `icon` is **required**, and there is no `size` field, so the header's md buttons are locked at compile time. The base page surface's single `variant="primary"` CTA lives here, normally _Create <resource>_.
 
 #### B. Condition band
 
@@ -100,7 +98,7 @@ The `Empty` component, passed to the table's `empty` prop.
 ### Don't
 
 - Don't make the condition band sticky. It is meant to scroll away; the summary bar and the column header are what dock.
-- Don't put `overflow-hidden` on the results card. It makes the card a scroll container, which traps the sticky header and the bar.
+- Don't put `overflow-hidden` on the results card. It makes the card a scroll container and traps the sticky header and the bar.
 - Don't filter, sort, or count only the visible page while presenting the result as the whole collection.
 - Don't put a `secondary` or `primary` button in the summary bar. It draws a box inside a box and competes with the count.
 - Don't apply search on every keystroke. Search commits on `apply()`.
