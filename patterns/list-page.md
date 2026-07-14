@@ -2,7 +2,7 @@
 
 A collection of resources in a tabular format, with a filter band above it and pagination below. The default view for any resource-management module.
 
-[Style template](../demos/list-page.md) | Binding rules (app repo: `.claude/team-rule/coding-rules/ui_ui-and-pages.md`)
+[Style template](../demos/list-page.md)
 
 ## Key UX concepts
 
@@ -22,13 +22,13 @@ The results `Card` must run `overflow-clip` (or `overflow-visible`), not `overfl
 
 ### Draft state versus applied state
 
-Filters are a two-phase state machine, owned by `useListFilters`. Typing in the search box mutates `draft`; pressing Search calls `apply()`, which promotes `draft` to `applied` and fires `onApply`. The chips row and the result count read `applied`, never `draft`. This is what makes the page feel deliberate rather than twitchy, and it is what lets the request fire once instead of on every keystroke.
+Filters are a two-phase state machine, owned by `useListFilters`. Typing in the search box mutates `draft`; pressing Search calls `apply()`, which promotes `draft` to `applied` and fires `onApply`. The chips row and the result count read `applied`, never `draft`. This is what makes the page feel deliberate rather than twitchy, and it applies the filter set once instead of on every keystroke.
 
 This interaction is mandatory, not a suggestion: a list page's retrieval is the list-filter family plus `useListFilters`. A hand-rolled flex row of bare `Select`s that filters on change is not a lighter version of this — it is a different, wrong page.
 
-### Completeness-dependent computation is server-side
+### Collection controls describe one result set
 
-Any result that is only correct when computed against the **whole** collection — search, filter, sort, pagination, total count, uniqueness — MUST execute on the server. Applied filters and the page number map to the list API's query parameters; the pager reads the server's total. Never filter or slice a fetched page on the client: it silently produces a wrong count and a wrong page 2.
+Search, filters, sort, pagination, and the displayed total must all describe the same complete result set. A page that filters only the rows currently visible will show a wrong count and inconsistent later pages. The design-system contract is the visible consistency of these controls; how an application retrieves or computes the result set is outside this pattern.
 
 ### Empty versus no match
 
@@ -54,7 +54,7 @@ Every quick `Select` needs an `items` map (value → label) on its **root**, or 
 
 #### C. Filter state
 
-`useListFilters({ initial, onApply })` supplies `draft`, `setDraft`, `apply`, `applied`, `clearField`, `clearAll`, `reset`, `countActive`, and `hasApplied`. The page provides only the field shape and the fetch; the hook owns the state machine. **Full signature and semantics: [useListFilters](../components/use-list-filters.md)** — read it before wiring the band. Two things it is easy to get wrong from the member list alone: `setDraft` is `(key, value)`, one field at a time, not a patch object; and `initial` is the unfiltered baseline that everything else is measured against, captured on the first render and never re-read.
+`useListFilters({ initial, onApply })` supplies `draft`, `setDraft`, `apply`, `applied`, `clearField`, `clearAll`, `reset`, `countActive`, and `hasApplied`. The page provides only the field shape and the `onApply` integration; the hook owns the state machine. **Full signature and semantics: [useListFilters](../components/use-list-filters.md)** — read it before wiring the band. Two things it is easy to get wrong from the member list alone: `setDraft` is `(key, value)`, one field at a time, not a patch object; and `initial` is the unfiltered baseline that everything else is measured against, captured on the first render and never re-read.
 
 #### D. Results container
 
@@ -78,7 +78,7 @@ Inline row verbs go through `rowActions={(row) => …}`. They **coexist** with t
 
 Hold `page` and `pageSize` as state, derive `pageCount = ceil(total / pageSize)`, reset to page 1 whenever a filter or the page size changes, and clamp with `safePage = min(page, pageCount)` so a shrinking result set cannot strand the user on an empty page.
 
-Scroll-loading (`LoadMore`, `VirtualTable`'s `onReachEnd`) is the exception. Reach for it only when one of these holds, and name which one in a comment: a feed-like stream with no _page N_ semantics; an unknown or unbounded total; data that appends at the tail in real time; a cursor-only backend where offset paging is too expensive; or a touch-first, narrow-container surface. An ordinary back-office collection is none of those.
+Scroll-loading (`LoadMore`, `VirtualTable`'s `onReachEnd`) is the exception. Reach for it only when one of these holds: a feed-like stream with no _page N_ semantics; an unknown or unbounded total; data that appends at the tail in real time; or a touch-first, narrow-container surface. An ordinary back-office collection is none of those.
 
 #### H. Empty state
 
@@ -89,7 +89,7 @@ The `Empty` component, passed to the table's `empty` prop.
 ### Do
 
 - Use the shared list-filter family. The page supplies fields and predicates; the family owns the band, the chip row, the deferred apply, and the three-state trigger.
-- Send every filter, sort, and page to the server, and read the total from the server's pager.
+- Keep filters, sort, pagination, and the displayed total consistent with the same result set.
 - Give every quick `Select` an `items` map on its root, and a width sized to its longest option when the options vary.
 - Set `numeric: true` on numeric, ID, and date columns and then write no classes — `Table` right-aligns the header and the body and applies `tabular-nums` for you.
 - Render an empty cell as `—`, not as blank.
@@ -101,9 +101,9 @@ The `Empty` component, passed to the table's `empty` prop.
 
 - Don't make the condition band sticky. It is meant to scroll away; the summary bar and the column header are what dock.
 - Don't put `overflow-hidden` on the results card. It makes the card a scroll container, which traps the sticky header and the bar.
-- Don't filter, sort, or count a fetched page on the client.
+- Don't filter, sort, or count only the visible page while presenting the result as the whole collection.
 - Don't put a `secondary` or `primary` button in the summary bar. It draws a box inside a box and competes with the count.
-- Don't fire the request on every keystroke. Search commits on `apply()`.
+- Don't apply search on every keystroke. Search commits on `apply()`.
 - Don't hand-write the trailing chevron column. `Table` appends it whenever `onRowClick` is set, and a hand-written one lands beside it.
 - Don't make row verbs and the chevron an either/or. They share one trailing cell — verbs first, chevron last.
 - Don't build a filter row out of a bare flex container and unwrapped `Select`s.

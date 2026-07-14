@@ -2,17 +2,17 @@
 
 Everything known about a single resource, on one page, with tabs when there is more than one sibling block of information.
 
-[Style template](../demos/detail-page.md) | Binding rules (app repo: `.claude/team-rule/coding-rules/ui_ui-and-pages.md`)
+[Style template](../demos/detail-page.md)
 
 ## Key UX concepts
 
-### One page, tabs — not sub-routes
+### One page, tabs — not separate destinations
 
-The default detail page is a single route with same-page `Tabs`. The `Tabs` root wraps the **whole page**, including the header band, because the band's bottom edge is where the `TabsList` docks. Per-tab sub-routes are the exception, not the shape.
+The default detail page uses same-page `Tabs`. The `Tabs` root wraps the **whole page**, including the header band, because the band's bottom edge is where the `TabsList` docks. Turning each tab into a separate destination is the exception, not the shape.
 
 Because `Tabs` wraps the whole page, it is also the flex column that fills `<main>`, and the page's scroll root lives inside a panel: `Tabs` root is `flex min-h-0 flex-1 flex-col`, each `TabsContent` is `flex min-h-0 flex-col`, and **each panel hosts its own `PageBody`**. Only the active panel is mounted, so the page still has exactly one scroll root at any moment. `min-h-0` is load-bearing in both places — without it the flex item sizes to its content and nothing scrolls.
 
-Split a block into its own sub-route only when it is heavy (its own list, its own pagination) or independently permissioned, and note the reason where you do it.
+Move a block to its own page only when it is heavy enough to need its own list or pagination, or when users need to access it independently.
 
 ### The band is prop-driven, and it is a different header from a page header
 
@@ -28,15 +28,15 @@ The band's own bottom border **is** the tab rail, and the band zeroes the underl
 
 - One or two core blocks: lay them out directly in the overview, no tabs.
 - Several sibling blocks: same-page tabs.
-- A heavy or separately-permissioned block: a sub-route.
+- A heavy or independently accessed block: a separate page.
 
 ### The overview is a key-value grid
 
 Use `KvGrid` (which applies the `grid-auto-fit-kv` class) with `KeyValue` children. Columns auto-fit to the **card's** width, not to viewport breakpoints — a detail card in a narrow column reflows on its own. Never hand-write `grid-cols-[repeat(auto-fit,minmax(...))]`; the arbitrary-value lint blocks it, and the hand-written version usually forgets the `min(…, 100%)` that keeps a column from overflowing a phone-width container.
 
-### Mutations leave the page
+### Editing leaves the read-only surface
 
-An edit on a detail page opens a modal (or navigates to the edit form) and commits through a route handler. The page then refetches. Detail pages don't hold inline form state for their own fields.
+An edit on a detail page opens a modal or moves to the edit form. After a successful edit, the detail view reflects the saved values. Detail pages do not turn their own read-only fields into inline form controls.
 
 ## Building blocks
 
@@ -85,16 +85,15 @@ Page-level actions in the band's `actions` prop — `HeaderAction[]` descriptors
 - Give every band action an icon. `HeaderAction.icon` is required, and the compiler will say so.
 - Render an unknown or absent value as `—`.
 - Give every modal and every tab panel body its own file. A tab strip with N panels is N components, not one page file.
-- Note the reason in a comment when a block becomes a sub-route.
 
 ### Don't
 
-- Don't split every tab into a route just to keep the page file small. Split the components instead.
+- Don't turn every tab into a separate destination for code organization. The navigation model follows the user's task.
 - Don't give a `TabsContent` `PAGE_BODY_PADDING_CLASS_NAME` and stop there. Padding is not a scroll root, and the page ends up with none.
 - Don't build the back button. It is part of the band, and there is no prop that removes it.
 - Don't use `ContentHeader` as the page header, and don't force a detail page into `variant="page"`. An identity band is richer than title-plus-description, and that is the point of the variant.
 - Don't hand-write the auto-fit grid. Use `KvGrid`.
-- Don't edit fields inline on the detail page. Mutations go through a modal or the edit page, then a route handler.
+- Don't edit fields inline on the detail page. Use a modal or the edit page.
 - Don't stack more than one `variant="primary"` action in the band.
 
 ## Writing guidelines
@@ -142,6 +141,6 @@ Page-level actions in the band's `actions` prop — `HeaderAction[]` descriptors
 - [Create form](create-form.md) — where a create lands after success.
 - [Edit resource](edit-resource.md) — where the page's _Edit_ action goes, and where a save returns.
 - [Delete patterns](delete-patterns.md) — the tier the page's delete action takes, computed from the record.
-- [Timestamps](timestamps.md) — how the created/updated values in the meta line are stored and rendered.
-- [Permission gating](permission-gating.md) — hiding a block or an action the session can't use.
+- [Timestamps](timestamps.md) — how created and updated values appear in the meta line.
+- [Permission gating](permission-gating.md) — hiding a block or an action the user can't use.
 - Components: `PageHeaderBand`, `Tabs`, `PageBody`, `KvGrid`, `KeyValue`, `StatCard`, `Card`, `Badge`, `Modal`.

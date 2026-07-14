@@ -2,7 +2,7 @@
 
 How to choose a button variant. The rule is one sentence: **the variant follows the slot, not the verb.**
 
-Binding rules (app repo: `.claude/team-rule/coding-rules/ui_ui-and-pages.md`) | [Button](../components/button.md)
+[Button](../components/button.md)
 
 ## Key UX concepts
 
@@ -118,5 +118,5 @@ The destructive confirmation takes `variant="danger"`; the escape is `ghost`.
 
 - [List page](list-page.md) — the header/summary-bar split that makes this rule visible.
 - [Interactive surfaces](interactive-surfaces.md) — why row hover and inline-action hover must differ.
-- [Permission gating](permission-gating.md) — hiding an action the session can't perform, which happens _after_ you have chosen its weight.
+- [Permission gating](permission-gating.md) — hiding an action the user can't perform, which happens _after_ you have chosen its weight.
 - Components: `Button`, `PageHeader`, `PageHeaderBand`, `HeaderAction`, `ListSummaryBar`, `ActionFooter`, `CardAction`, `AlertDialog`.

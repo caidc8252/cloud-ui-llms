@@ -1,8 +1,8 @@
 # One-click delete
 
-Delete without a dialog, and offer _Undo_ in the toast. **Use it only when the record is low-risk and the server soft-deletes.**
+Delete without a dialog, and offer _Undo_ in the toast. **Use it only when the record is low-risk and the action can be reliably reversed.**
 
-[Delete patterns](delete-patterns.md) | Binding rules (app repo: `.claude/team-rule/coding-rules/ui_ui-and-pages.md`)
+[Delete patterns](delete-patterns.md)
 
 ## Key UX concepts
 
@@ -10,19 +10,19 @@ Delete without a dialog, and offer _Undo_ in the toast. **Use it only when the r
 
 Tier 1 applies when **the blast radius is this record alone** and **the delete is reversible**. Dismissing a notification qualifies. Deleting a saved filter set qualifies. Deleting a role does not, however trivial the role looks, because a role's reach is its holders and you cannot see them from the row.
 
-If the record is low-risk but the server hard-deletes, you do not have tier 1 — you have tier 2 with the confirmation skipped, which is just a bug that has not fired yet. Take the confirmation. See [Delete with confirmation](delete-with-confirmation.md).
+If the record is low-risk but the action cannot be reversed, you do not have tier 1 — you have tier 2 with the confirmation skipped. Take the confirmation. See [Delete with confirmation](delete-with-confirmation.md).
 
 ### Undo is the confirmation, moved after the act
 
-The dialog asks _are you sure_ before the fact and costs every user a click. Undo asks nothing and costs only the user who was wrong. That trade is correct **only** when being wrong is cheap to reverse — which is exactly the soft-delete condition. Undo is not a UI flourish you can add to a hard delete to make it feel safer.
+The dialog asks _are you sure_ before the fact and costs every user an extra action. Undo asks nothing and costs only the user who was wrong. That trade is correct **only** when being wrong is cheap to reverse. Undo is not a UI flourish you can add to an irreversible action to make it feel safer.
 
 ### The toast must outlive the reading of it
 
-The default toast is 1500ms. That is not long enough to notice a mistake, read the message, and act. An undo toast sets `duration` explicitly — 5000ms is the floor — and the countdown bar follows it. When the toast expires, the undo window expires with it; do not leave an _Undo_ the server will refuse.
+The default toast is 1500ms. That is not long enough to notice a mistake, read the message, and act. An undo toast sets `duration` explicitly — 5000ms is the floor — and the countdown bar follows it. When the toast expires, the undo window expires with it; do not present an action that is no longer available.
 
 ### Optimistic, but reconciled
 
-Remove the row from local state immediately — the point of tier 1 is that it feels free. If the request fails, put the row back and surface the error. A row that vanishes and silently returns on the next fetch is worse than one that never left.
+Remove the row from the visible list immediately — the point of tier 1 is that it feels free. If the operation fails, put the row back and surface the error. A row that vanishes and silently returns later is worse than one that never left.
 
 ## Building blocks
 
@@ -32,32 +32,31 @@ Remove the row from local state immediately — the point of tier 1 is that it f
 
 #### B. Optimistic removal
 
-Filter the record out of local state on click, before the request settles.
+Remove the record from the visible list as soon as the action begins.
 
 #### C. Undo toast
 
-`toast.success` with an action that calls the restore endpoint, and an explicit `duration` of at least 5000ms.
+`toast.success` with an _Undo_ action and an explicit `duration` of at least 5000ms.
 
 #### D. Reconciliation
 
-On failure, restore the row and surface the error code.
+On failure, restore the row and surface the error where the user can act on it.
 
 ## General guidelines
 
 ### Do
 
-- Confirm both conditions before choosing this tier: single-record blast radius **and** a soft delete.
+- Confirm both conditions before choosing this tier: single-record blast radius **and** a reliably reversible action.
 - Set `duration` to at least 5000ms on the undo toast.
-- Remove the row optimistically, and put it back if the request fails.
+- Remove the row optimistically, and put it back if the operation fails.
 - Name what went away in the toast: _Notification dismissed_, not _Deleted_.
 - Keep the undo window and the toast duration the same. The bar is the clock.
 
 ### Don't
 
-- Don't use this tier for anything whose reach extends past the row — a role, a permission grant, a party-scoped object.
-- Don't offer _Undo_ on a hard delete. Drop to [Delete with confirmation](delete-with-confirmation.md).
+- Don't use this tier for anything whose reach extends past the row — a role, a permission grant, or an object with dependent records.
+- Don't offer _Undo_ for an irreversible action. Drop to [Delete with confirmation](delete-with-confirmation.md).
 - Don't leave the toast at the 1500ms default. The user cannot read and act in 1.5 seconds.
-- Don't skip the server-side permission and party checks because there is no dialog. The dialog was never the guard.
 - Don't batch this tier behind a "Delete all" without a confirmation — a bulk verb crosses records, which is tier 2 at minimum.
 
 ## Writing guidelines
@@ -93,6 +92,6 @@ On failure, restore the row and surface the error code.
 ## Related patterns and components
 
 - [Delete patterns](delete-patterns.md) — the tier test.
-- [Delete with confirmation](delete-with-confirmation.md) — the tier to fall back to when the delete is hard.
+- [Delete with confirmation](delete-with-confirmation.md) — the tier to fall back to when the delete cannot be undone.
 - [Action weight](action-weight.md) — `ghost-danger` in a row, and why.
 - Components: `Button`, `Toaster`.

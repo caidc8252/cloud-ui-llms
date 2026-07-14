@@ -1,95 +1,78 @@
 # Errors and validation
 
-Where an error is thrown, how it becomes a response, and where the user finally sees it. One schema, one code, one place per failure.
-
-Binding rules (app repo: `.claude/team-rule/coding-rules/server_error-handling.md`)
+How validation and operation failures appear in the interface. The rule is simple: put each message where the user can understand it and act on it.
 
 ## Key UX concepts
 
-### The code is the protocol, not the message
+### One failure, one useful surface
 
-Every expected failure carries a stable error **code**. The message is a localized rendering of that code and can change; the code cannot. Clients, tests, and monitoring branch on the code. Branching on the message means a copy edit breaks the client.
+Choose the surface from the user's next step:
 
-Codes are 5 hex digits — a 2-hex module id plus a 3-hex per-module sequence — and they are **add-only**. Reuse the shared codes (`@cloud/request/error-codes`) before minting a module-specific one.
+- **Field-level** — one value needs correction. Use `Field`'s `error` prop next to the control.
+- **Form-level** — the submission failed as a whole or several fields are affected. Use an `Alert` at the top of the form.
+- **Action-level** — a local asynchronous action failed. Keep the error in the dialog, panel, or row where the action started.
+- **Transient** — the outcome needs no follow-up. Use `toast()`.
+- **Page-level** — the requested content is unavailable. Show a dedicated not-found or access-denied surface.
 
-### Nobody writes try/catch
+Do not repeat the same message in a field, an alert, and a toast. Duplication makes the interface feel less certain, not more informative.
 
-`withApiHandler` catches every throw in a route handler and runs it through a mapper chain in priority order: authorization errors, then business and middleware errors, then a caller-supplied mapper, then Prisma, then unknown → a generic 500. Hand-writing `try { … } catch (e) { return handleApiError(e) }` in a route file duplicates that chain and is a rule violation.
+### Actionable errors persist
 
-The corollary is how you fail: `throw new BusinessError(code, status?, params?)` from the controller, the service, or the policy. Never `throw new Error("some text")` for a business failure — it has no code, so it maps to a generic 500 and the client cannot tell it apart from a crash.
+An error that asks the user to fix something must remain visible until it is fixed or dismissed deliberately. Toasts disappear, so they are unsuitable for validation errors, conflicts, or failures with recovery steps.
 
-### Validate at the boundary, once
+### Validation starts after interaction
 
-Zod parses the request at the route handler, from a schema shared with the client form. That schema is the single source of what a valid payload is. A form that enforces rules the server doesn't have will let bad data through the API; a server that enforces rules the form doesn't show will reject a form the user thought was complete.
+A form should not open already covered in errors. Show a field error after the field has been touched or after a submit attempt. On submit, reveal all relevant errors together and move focus to the first invalid field.
 
-### Infrastructure failures are masked
+### Preserve the user's work
 
-A database, cache, or mail failure throws `MiddlewareError` and is masked to a generic 503. The user does not learn that Redis is down, and they should not — but you still log the diagnostic yourself, through the logger, because `BusinessError` carries no developer message. The log line shares the request's trace id, so the diagnostic correlates to the error the user actually saw.
+A failed submission leaves the entered values intact. Keep the user in the same form or dialog, show the failure in context, and leave the commit action available once the problem is corrected.
 
-### Where the user sees it
+### Loading, empty, and unavailable are not errors
 
-- **Field-level** — the value is wrong. `Field`'s `error` prop, next to the control, tied to it programmatically.
-- **Form-level** — the submit failed as a whole (a conflict, a permission failure). An `Alert` at the top of the form, or a `toast` if the form is not the focus.
-- **Transient** — the action succeeded or failed and the user does not need to act on it. `toast()`.
-- **Page-level** — the resource is gone or forbidden. Not an error message: `notFound()` or a redirect to `/403`.
-
-An error that requires the user to fix something must never be a toast. Toasts vanish.
-
-### 401 is centralized
-
-The client's unauthorized handler turns a 401 into a logout, once, in one place (`setUnauthorizedHandler`). Individual call sites don't check for it.
+Use `Skeleton` or `Spinner` while the state is unknown, `Empty` when there is genuinely no content, and a dedicated unavailable surface when content cannot be shown. Do not use an error alert as a generic placeholder for every non-success state.
 
 ## Building blocks
 
-#### A. Shared schema
+#### A. Field error
 
-A zod schema in the domain's `schemas/`, imported by both the route handler and the form.
+`Field`'s `error` prop renders the message and associates it with the control.
 
-#### B. Route parse
+#### B. Form alert
 
-The handler parses the request against the schema before doing anything else — after the auth guard, before the service call.
+`Alert tone="error"` at the top of the form for a failure affecting the submission as a whole.
 
-#### C. Business throw
+#### C. Local action error
 
-`BusinessError(code, status, params)` from the controller, service, or policy. Status is one of the expected set (400/401/403/404/409/422/423/429), defaulting to 400.
+An `Alert` or inline error inside the dialog, sheet, card, or row where the action began. Keep the surrounding surface open when the operation fails.
 
-#### D. Handler chain
+#### D. Transient feedback
 
-`withApiHandler` — catches, maps, and responds. No per-file try/catch.
+`toast()` from `@cloud/ui` for success and for non-actionable failures.
 
-#### E. Client throw
+#### E. Page-level state
 
-`@cloud/request/client` throws a typed `RequestError` carrying the code. The call site branches on the code.
-
-#### F. Field error
-
-`Field`'s `error` prop renders the message and ties it to the control.
-
-#### G. Transient feedback
-
-`toast()` from `@cloud/ui` for success and for failures that need no action.
+A dedicated page or panel that names what is unavailable and gives the next useful destination.
 
 ## General guidelines
 
 ### Do
 
-- Give every expected failure a stable code, and branch on the code.
-- Reuse the shared codes before minting new ones.
-- Parse with zod at the route handler, using the same schema the form validates against.
-- Throw `BusinessError` for expected failures and `MiddlewareError` for infrastructure faults.
-- Log the diagnostic yourself, with the logger, when you throw.
-- Put a field's error next to the field, and a whole-form failure at the top of the form.
-- Re-throw Next's control-flow throws (`redirect`, `notFound`) — never swallow them in a local catch.
+- Put a field's error next to the field and a whole-form failure at the top of the form.
+- Keep user-entered values after a failed submission.
+- Keep a dialog or sheet open when its action fails.
+- Move focus to the first invalid field after a failed submit.
+- Give an actionable failure a visible recovery step.
+- Distinguish loading, empty, unavailable, and error states.
 
 ### Don't
 
-- Don't hand-write try/catch in a route handler.
-- Don't `throw new Error("...")` for a business failure.
-- Don't branch on an error message.
-- Don't rename or renumber a shipped code.
 - Don't put an actionable error in a toast.
-- Don't tell the user which infrastructure component failed.
-- Don't let the form and the server disagree about what is valid.
+- Don't show errors before the user has interacted or tried to submit.
+- Don't clear the form after a failure.
+- Don't close an action surface before its operation succeeds.
+- Don't expose implementation details, stack traces, or service names.
+- Don't use colour as the only indication of an error.
 
 ## Writing guidelines
 
@@ -97,44 +80,47 @@ The handler parses the request against the schema before doing anything else —
 
 - Use sentence case, present tense, and active voice.
 - Don't use _please_, exclamation points, or _etc._
+- State the problem before the recovery.
 
 ### Component-specific guidelines
 
 #### Field errors
 
 - Say what is wrong and what would be right. _Must be 8 characters or more._ beats _Invalid._
-- Don't repeat the field's name in its own error. The error sits under the label already.
+- Don't repeat the field's name in its own error. The error already sits under the label.
 
 #### Form-level errors
 
 - Name the cause and the next step. _That login name is taken. Choose another._
-- Don't leak internals — no stack, no SQL, no service name.
+- Keep the message specific to this attempt, not a generic _Something went wrong_ when a useful explanation is available.
 
 #### Toasts
 
 - Confirm what happened, in the past tense: _Role created._
 - Keep it to one line. A toast with two sentences is an alert wearing a disguise.
 
-#### 403 and 404 pages
+#### Unavailable pages
 
-- Say what is missing and who can grant it, rather than _Forbidden_.
+- Explain what is unavailable and offer a useful way forward. Avoid bare status words such as _Forbidden_ or _Error_.
 
 ## Accessibility guidelines
 
 ### General accessibility guidelines
 
-- An error is announced, not only painted. Field errors are associated with their control so focus reads them.
+- An error is announced, not only painted.
 - Colour is never the only signal of an invalid field.
-- On a failed submit, move focus to the first invalid field.
+- Preserve focus context when an operation fails.
 
 ### Component-specific guidelines
 
-- Toasts must be in a live region, but nothing that requires action may live only there — a toast can be missed entirely.
-- A form-level `Alert` must be reachable by keyboard and, on submit failure, should receive focus.
+- Field errors are associated with their controls so focus reads them.
+- A form-level `Alert` receives focus after a failed submit when there is no more specific invalid field.
+- Toasts live in a polite live region, but nothing requiring action lives only there.
+- When an async dialog action fails, focus remains within the dialog and the error is reachable in reading order.
 
 ## Related patterns and components
 
 - [Create form](create-form.md) and [Create wizard](create-wizard.md) — where validation surfaces.
-- [Permission gating](permission-gating.md) — the source of the 401 and 403 errors this handles.
-- [Empty states](empty-states.md) — the not-an-error case that is often mistaken for one.
-- Components: `Field`, `Alert`, `Toaster` / `toast`, `Empty`.
+- [Permission gating](permission-gating.md) — unavailable actions and access-denied surfaces.
+- [Empty states](empty-states.md) — the not-an-error case often mistaken for one.
+- Components: `Field`, `Alert`, `Toaster` / `toast`, `Empty`, `Skeleton`, `Spinner`.

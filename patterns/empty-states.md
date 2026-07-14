@@ -10,7 +10,7 @@ A surface with nothing in it. There are three different nothings, they mean diff
 
 - **No data** — the resource has never been created. This is a first-run state, and it is an **invitation**: offer the create action.
 - **No match** — data exists, but the applied filters exclude all of it. This is a **dead end the user made**, and the way out is to clear the filters, not to create a record.
-- **No access** — the user may not see this. That is not an empty state at all; it is a redirect to `/403`. Never render an empty table to someone who lacks the permission — it tells them the resource doesn't exist, which is both wrong and confusing.
+- **No access** — the user may not see this. That is not an empty state at all; show the product's access-denied surface instead. An empty table would falsely say that the collection exists but contains no records.
 
 Collapsing the first two into one message ("No data") is the common failure. A user who has just filtered and sees "No users yet. Invite a user." will reasonably conclude their company has no users.
 
@@ -24,9 +24,9 @@ An empty state that only says "nothing here" wastes the one moment the user is g
 
 ### Loading is not empty
 
-While the request is in flight, the surface is _unknown_, not _empty_. Render `Skeleton` rows. Flashing an empty state before the data arrives reads as "you have no users" and then corrects itself, which is worse than showing nothing.
+While content is loading, the surface is _unknown_, not _empty_. Render `Skeleton` rows. Flashing an empty state before the data arrives reads as "you have no users" and then corrects itself, which is worse than showing nothing.
 
-Note: `Table` has no `loading` prop — the loading skeleton is the page's job, rendered in place of (or above) the table while the fetch is pending.
+Note: `Table` has no `loading` prop — the loading skeleton is the page's job, rendered in place of or above the table while content is pending.
 
 ## Building blocks
 
@@ -65,7 +65,7 @@ The page picks the copy: if any filter is applied, render the no-match variant w
 
 - Don't use one message for both the no-data and the no-match cases.
 - Don't offer _Create_ as the way out of a zero-results filter. The user's problem is the filter.
-- Don't render an empty list to a user who lacks permission. Redirect to `/403`.
+- Don't render an empty list when the actual state is no access. Use the access-denied surface.
 - Don't leave the default _No data_ string in a shipped table.
 - Don't fill an empty state with a large illustration in a backoffice list. It is a working surface, not a marketing page.
 
@@ -113,5 +113,5 @@ The page picks the copy: if any filter is applied, render the no-match variant w
 
 - [List page](list-page.md) — where both empty states live.
 - [Advanced filtering](advanced-filtering.md) — what produces the no-match state.
-- [Permission gating](permission-gating.md) — why the no-access case is a redirect, not an empty state.
+- [Permission gating](permission-gating.md) — why no access uses its own surface rather than an empty state.
 - Components: `Empty`, `Table`, `Skeleton`, `ChartEmpty`, `ChartSkeleton`.

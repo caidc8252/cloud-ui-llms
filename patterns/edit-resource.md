@@ -11,7 +11,7 @@ The same shape as the create form, pre-filled and dirty-tracked, in one of two s
 
 The rule is decidable from the field list alone, so create and edit land in the same container and two authors reading this page reach the same answer. Everything below applies to both containers unless it names one.
 
-[Create form](create-form.md) | [Style template](../demos/create-form.md) | Binding rules (app repo: `.claude/team-rule/coding-rules/ui_ui-and-pages.md`)
+[Create form](create-form.md) | [Style template](../demos/create-form.md)
 
 ## Key UX concepts
 
@@ -31,7 +31,7 @@ Disable it on **equality**, not on "the user has typed". A user who types a char
 
 ### State transitions are actions, not fields
 
-Locking a user, resetting their password, resending an invitation, deleting a role — none of these are properties of a form. They do not participate in the draft, they do not wait for _Save changes_, and they must not appear as a `Switch` or a `Checkbox` among the fields. Each is its own action with its own confirmation and its own permission code, and each takes effect the moment it is confirmed.
+Locking a user, resetting their password, resending an invitation, deleting a role — none of these are properties of a form. They do not participate in the draft, they do not wait for _Save changes_, and they must not appear as a `Switch` or a `Checkbox` among the fields. Each is its own action with its own visibility, confirmation, and feedback, and each takes effect the moment it is confirmed.
 
 The test is reversibility of intent: a **field** is a value the user is proposing and may still abandon by cancelling. An **action** is a thing that happens. A lock toggle that only takes effect on _Save changes_ is a trap — the user believes the account is locked and walks away.
 
@@ -39,7 +39,7 @@ Put these on the detail page, or in the edit page's header as secondary actions 
 
 ### It returns to where it came from
 
-Create routes to the new record's detail page — there is nowhere else to go. An edit page returns to the record's detail page, which is almost always where the user started; do not dump them back on the list, because they came to look at one record and they still want to. An edit overlay simply closes onto the record it was opened from, which is the same promise kept for free — and is the main reason the overlay is the lighter choice.
+A successful create shows the new record's detail view — there is nowhere else to go. A successful edit returns to the record's detail view, which is almost always where the user started; do not dump them back on the list, because they came to look at one record and they still want to. An edit overlay simply closes onto the record it was opened from, which is the same promise kept for free — and is the main reason the overlay is the lighter choice.
 
 ### Leaving with unsaved changes is caught
 
@@ -63,7 +63,7 @@ The create form's blocks, unchanged — see [Create form](create-form.md) for A 
 
 #### B. Loaded draft
 
-The record, fetched and copied into a draft. The pristine copy stays around so the dirty check has something to compare against.
+The record's initial displayed values become the pristine baseline. The editable draft is compared against that baseline to determine whether anything has changed.
 
 #### C. Dirty gate
 
@@ -82,7 +82,7 @@ The record's state transitions — _Lock_, _Reset password_, _Delete_ — as `se
 - Share the field components with the create page. One form, two entry points.
 - Disable the commit while the draft equals the loaded record.
 - Recompute `dirty` by comparing values, so an edit that is typed and untyped goes back to clean.
-- Reset the dirty flag from the **response**, not from the submitted draft, or a successful save leaves the form permanently "dirty".
+- After a successful save, replace the pristine baseline with the values the form now displays, so the form becomes clean.
 - Keep state transitions out of the form and give each its own confirmation.
 - Return to the record's detail page on success.
 - Guard navigation away from a dirty form. See [Unsaved changes](unsaved-changes.md).
@@ -97,8 +97,7 @@ The record's state transitions — _Lock_, _Reset password_, _Delete_ — as `se
 - Don't copy the legacy split-board edit into a new module.
 - Don't put a lock, a reset, or a delete among the fields. They are not values the user is proposing.
 - Don't leave the commit enabled on an untouched form.
-- Don't route back to the list on success.
-- Don't validate with rules the server does not have. One schema, both sides.
+- Don't send the user back to the list on success.
 
 ## Writing guidelines
 

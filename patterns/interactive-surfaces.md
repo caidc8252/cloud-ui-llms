@@ -2,7 +2,6 @@
 
 How a clickable thing tells the user it is clickable, and how it tells them what it did. Rows, cards, tiles, toggles — the rules are the same and there is one hard rule among them.
 
-Binding rules (app repo: `.claude/team-rule/coding-rules/ui_ui-and-pages.md`)
 
 ## Key UX concepts
 

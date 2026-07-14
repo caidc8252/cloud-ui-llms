@@ -2,7 +2,7 @@
 
 The user types the record's name to unlock the confirm. **Use it when the delete reaches past the record — other rows change, or other people lose something.**
 
-[Delete patterns](delete-patterns.md) | Binding rules (app repo: `.claude/team-rule/coding-rules/ui_ui-and-pages.md`)
+[Delete patterns](delete-patterns.md)
 
 ## Key UX concepts
 
@@ -11,14 +11,14 @@ The user types the record's name to unlock the confirm. **Use it when the delete
 Tier 3 is not "for important things". It is for deletes whose damage **leaves the record**:
 
 - A role **eleven people hold**. Deleting it strips permissions from eleven sessions, and none of those people are in the room.
-- A party-scoped object with live children, where the cascade takes rows the user cannot see.
+- An object with dependent records, where the cascade affects items the user cannot see.
 - The last account that can administer a party — the delete locks everyone out, including the person doing it.
 
 The same button on the same table is tier 2 when the role has no holders. Compute the tier from the record. See [Delete patterns](delete-patterns.md).
 
 ### Typing the name is a brake on autopilot
 
-A user deleting the ninth role today will confirm the tenth without reading. Making them type `Regional Admin` forces a look at what is actually selected — it defeats muscle memory, misclicks, and the wrong row. That is the entire mechanism, and it is a UX brake, **not** an authorisation check. The server still asserts the permission and the party scope; a user who never opens the dialog can still issue the request. See [Permission gating](permission-gating.md).
+A user deleting the ninth role today will confirm the tenth without reading. Making them type `Regional Admin` forces a look at what is actually selected — it defeats muscle memory, misclicks, and the wrong row. That is the entire mechanism: a UX brake that adds deliberate friction.
 
 ### Show the blast radius, do not merely assert it
 
@@ -28,7 +28,7 @@ _This cannot be undone_ is not the warning. The warning is **who or what is affe
 
 Tier 2 and tier 3 are the same `AlertDialog`: no close affordance, no backdrop dismiss, the user leaving through _Cancel_, Escape, or the act. What tier 3 adds is **a confirm that stays `disabled` until the record's name is typed exactly**. That gate is the whole of the tier — do not go looking for a different dialog to express it.
 
-The gate is a `disabled` prop on the confirm, never a hand-rolled button. `AlertDialogAction` accepts it and it lands on the real `<button>` — but that part closes the dialog on click, so it only serves a confirm that does not wait on the server. A real delete does wait, so the confirm here is a plain `Button` carrying **both** `disabled` (the gate) and `loading` (the in-flight state), with `open` driven from state exactly as at tier 2. See [AlertDialog → Gated confirm and Async confirm](../components/alert-dialog.md).
+The gate is a `disabled` prop on the confirm, never a hand-rolled button. `AlertDialogAction` accepts it and it lands on the real `<button>` — but that part closes the dialog on activation, so it only serves a synchronous confirm. An asynchronous delete uses a plain `Button` carrying **both** `disabled` (the gate) and `loading` (the pending state), with `open` driven from state exactly as at tier 2. See [AlertDialog → Gated confirm and Async confirm](../components/alert-dialog.md).
 
 ### The match is exact, and the confirm stays disabled until it is
 
@@ -64,12 +64,10 @@ A `Field` whose label states exactly what to type — _Type **Regional Admin** t
 - State the blast radius as a count: _Eleven users will lose the permissions this role grants._
 - Require an exact match, trimmed. Keep the confirm disabled until it matches.
 - Use `AlertDialog`, and put the gate on the confirm — that is what separates this tier from tier 2.
-- Assert the permission and the party scope on the server, independently of the dialog.
 - Fall back to tier 2 when the same record has no reach — an unassigned role does not deserve this friction.
 
 ### Don't
 
-- Don't use type-to-confirm as an authorisation check. It stops autopilot, not attackers.
 - Don't case-fold or fuzzy-match the name. The difficulty is the feature.
 - Don't let the user press a confirm that will reject the typed name. Disable it instead.
 - Don't apply this tier to every delete in a module. Friction everywhere is friction nowhere — the user learns to type the name without reading it, and you are back to tier 2 with extra steps.
@@ -123,6 +121,5 @@ A `Field` whose label states exactly what to type — _Type **Regional Admin** t
 
 - [Delete patterns](delete-patterns.md) — the tier test.
 - [Delete with confirmation](delete-with-confirmation.md) — the tier for the same record with no reach.
-- [Permission gating](permission-gating.md) — the guard this dialog is not.
 - [Errors and validation](errors-and-validation.md) — where a rejected delete surfaces.
 - Components: `AlertDialog`, `Field`, `Input`, `Alert`, `Button`.

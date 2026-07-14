@@ -2,7 +2,7 @@
 
 A right-side sheet holding the filters that don't fit in the quick bar, with a deferred apply and a chip row that reflects what is actually in effect.
 
-[Style template](../demos/advanced-filter-list.md) | Binding rules (app repo: `.claude/team-rule/coding-rules/ui_ui-and-pages.md`)
+[Style template](../demos/advanced-filter-list.md)
 
 ## Key UX concepts
 
@@ -12,7 +12,7 @@ The quick bar holds search plus one or two high-traffic selects. Once a resource
 
 ### Deferred apply
 
-The sheet edits `draft`. Nothing happens to the list while the sheet is open. Applying promotes `draft` to `applied` in one move, fires the fetch once, and closes the sheet. This is the same state machine the quick bar uses (`useListFilters`), which is why a search term typed in the bar and a category picked in the sheet commit together rather than racing each other.
+The sheet edits `draft`. Nothing happens to the list while the sheet is open. Applying promotes `draft` to `applied` in one move, updates the list once, and closes the sheet. This is the same state machine the quick bar uses (`useListFilters`), which is why a search term typed in the bar and a category picked in the sheet commit together rather than racing each other.
 
 ### The trigger carries the state
 
@@ -62,7 +62,7 @@ The same `useListFilters` instance that drives the quick bar. The sheet writes t
 
 ### Don't
 
-- Don't fetch on change while the sheet is open. The sheet is a draft surface.
+- Don't apply changes while the sheet is open. The sheet is a draft surface.
 - Don't keep a second copy of the filter state inside the sheet. There is one `draft`.
 - Don't hide an applied filter from the chip row because it was set in the sheet.
 - Don't put the primary search field in the sheet. Search stays in the bar.

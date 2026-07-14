@@ -2,7 +2,7 @@
 
 How to choose a delete tier. The rule is one sentence: **the tier follows the blast radius, not the resource.**
 
-Binding rules (app repo: `.claude/team-rule/coding-rules/ui_ui-and-pages.md`) | [Errors and validation](errors-and-validation.md)
+[Errors and validation](errors-and-validation.md)
 
 ## Key UX concepts
 
@@ -16,21 +16,17 @@ Friction is not a compliment you pay to an important resource. It is a brake you
 
 A role is the worked example. Deleting a role that nobody holds destroys one row and one row only — that is tier 2. Deleting a role that eleven people hold silently strips permissions from eleven sessions — same table, same button, and a completely different blast radius. That is tier 3. **The tier is a property of the instance, not of the type**, so it is computed at render time from the record, not hardcoded per module.
 
-### The third tier is a speed bump, not a lock
+### The third tier is a speed bump
 
-Type-to-confirm exists to break autopilot. A user who has clicked _Delete_ nine times today will click it a tenth without reading; being made to type `Regional Admin` forces them to look at what they are about to destroy. It does not make the act more authorised — that is what [permission gating](permission-gating.md) and the server-side guard are for. Never use type-to-confirm as a substitute for an `assertPermissions` call.
+Type-to-confirm exists to break autopilot. A user who has chosen _Delete_ nine times today will confirm it a tenth without reading; being made to type `Regional Admin` forces them to look at what they are about to destroy. The mechanism adds deliberate friction; it does not change who is allowed to perform the action.
 
 ### Un-deletable is a state, not a missing button
 
-Some records must never be deleted — a built-in role, the last remaining administrator, a party-scoped object with live children. Do not hide the action; **show it disabled and say why**. A hidden button reads as a bug and sends the user hunting; a disabled button with _Built-in roles cannot be deleted_ ends the question. The server still refuses independently — the UI state is a courtesy, never the guard.
+Some records must never be deleted — a built-in role, the last remaining administrator, or an object with live children. Do not hide the action; **show it disabled and say why**. A hidden button reads as a bug and sends the user hunting; a disabled button with _Built-in roles cannot be deleted_ ends the question.
 
-### The undo toast is a promise about the server
+### The undo toast is a promise to the user
 
-Tier 1 offers _Undo_ in the toast. That promise is only honest if the delete is **soft** on the server — a `deletedAt` stamp the undo clears. If the row is gone from the table, do not offer undo, and do not use tier 1: drop to tier 2 and take the confirmation instead. An _Undo_ that fails is worse than no undo at all.
-
-### The party scope is the server's job
-
-Every delete route asserts the permission and scopes the row to the current party before it touches anything. The dialog is not a security boundary — a user who never opens it can still issue the request. See [Permission gating](permission-gating.md).
+Tier 1 offers _Undo_ in the toast. That promise is honest only when the completed action can be reliably reversed during the stated window. If it cannot, do not offer undo and do not use tier 1: use tier 2 and ask for confirmation instead. An _Undo_ that fails is worse than no undo at all.
 
 ## Building blocks
 
@@ -50,7 +46,7 @@ The two tiers differ in **the gate on the confirm**, not in the dialog: at tier 
 
 #### D. The feedback
 
-`toast.success` naming what went away — _Role deleted_ — with an _Undo_ action on tier 1 only. A failure surfaces through the error code, not through `toast.error` alone when the user must act on it. See [Errors and validation](errors-and-validation.md).
+`toast.success` naming what went away — _Role deleted_ — with an _Undo_ action on tier 1 only. A failure that requires action uses persistent, contextual feedback rather than `toast.error` alone. See [Errors and validation](errors-and-validation.md).
 
 ## General guidelines
 
@@ -60,14 +56,12 @@ The two tiers differ in **the gate on the confirm**, not in the dialog: at tier 
 - Name the resource in the dialog body, in bold, so the user sees what they chose.
 - State the consequence when other records or people are affected: _Eleven users will lose the permissions this role grants._
 - Disable an un-deletable record's trigger and say why in a tooltip or hint.
-- Assert the permission and the party scope on the server, in every tier, including tier 1.
 - Put the destructive verb on the confirm button — _Delete role_, never _OK_.
 
 ### Don't
 
 - Don't tier by resource type. A role with no holders and a role with eleven holders are different tiers.
-- Don't offer _Undo_ unless the server soft-deletes. Drop to tier 2 instead.
-- Don't use type-to-confirm as an authorisation check. It stops autopilot, not attackers.
+- Don't offer _Undo_ unless the action can be reliably reversed during the undo window. Drop to tier 2 instead.
 - Don't hide the action on an un-deletable record. Disable it and explain.
 - Don't paint a neutral button red. Use `variant="danger"` or `variant="ghost-danger"`.
 - Don't put a bare `Modal` around a confirmation. It can be dismissed by an outside click; use `AlertDialog`.
@@ -116,6 +110,5 @@ The two tiers differ in **the gate on the confirm**, not in the dialog: at tier 
 - [Delete with confirmation](delete-with-confirmation.md) — tier 2: the default.
 - [Delete with additional confirmation](delete-with-additional-confirmation.md) — tier 3: blast radius crosses records or people.
 - [Action weight](action-weight.md) — which button variant the trigger takes in each slot.
-- [Permission gating](permission-gating.md) — the guard the dialog is not.
 - [Errors and validation](errors-and-validation.md) — where a failed delete surfaces.
 - Components: [`AlertDialog`](../components/alert-dialog.md), `Button`, `Toaster`.

@@ -1,91 +1,79 @@
 # Timestamps
 
-Every time value in the system is an integer count of **seconds**. It stays that way from the database column to the client state, and becomes a human-readable string only at the moment it is painted.
-
-Binding rules (app repo: `.claude/team-rule/coding-rules/cross-cutting_time.md`)
+How dates and times are entered, formatted, aligned, and explained in the interface.
 
 ## Key UX concepts
 
-### Integer seconds, everywhere
+### Format for the viewer
 
-A `BigInt` column in the database, a `number` in TypeScript (seconds fit comfortably in the safe-integer range), carried unchanged through the DTO, the API payload, and the client state. This governs every `*_at` column and every time value downstream of one.
+Render dates and times with the viewer's locale and an explicit relevant timezone. The interface should not expose raw timestamp formats or make users infer which timezone a value represents.
 
-There is no `Date` in a payload, no ISO string in a DTO, and no millisecond value anywhere. A value that arrives as milliseconds and is treated as seconds is off by a factor of a thousand, and it renders as 1970 — a bug that survives review because it _looks_ like a date.
+When the timezone is not obvious from context, include it in the label or displayed value. A scheduled time without a timezone is incomplete.
 
-### The render edge
+### Classify the user's task before choosing a control
 
-Convert to a `Date` or a locale string **only where it is displayed**. That is the last possible moment, and it is deliberately late: the conversion needs a locale and a timezone, and those belong to the viewer, not to the data.
+- **Calendar date** — a day without a time, such as a billing date. Use `DatePicker`.
+- **Time of day** — a recurring or contextual time without a date. Use `TimePicker`.
+- **Date and time** — a specific scheduled moment. Use `DateTimePicker`.
+- **Date interval** — a bounded period. Use `DateRangePicker`.
 
-### The input edge, and the question you must answer first
-
-The mirror of the render edge: a wall-clock value the user picked becomes seconds at the **controller**, right beside the zod parse. Before you convert it, you have to classify it, and the classification picks the timezone. Getting this wrong is not a rounding error — it is an off-by-a-day or off-by-hours defect.
-
-- **Instant** — a definite point on the timeline: a payment time, a scheduled send. Parse the user's wall-clock pick in the **actor's browser timezone**, which the client supplies, then store epoch seconds. A server-stamped instant (`createdAt`, `lastLoginAt`) has no ambiguity at all — take `now()`.
-
-- **Business date** — a calendar day owned by a party, not by the viewer: contract validity, a billing date, a settlement date. Resolve the day boundary in the **owning object's timezone** (`party.timezone`, UTC when null), then store epoch seconds. A contract that starts on the 1st starts on the party's 1st, not on the 1st in whatever timezone the admin happens to be sitting in.
-
-The trap is that both look like a date picker to the user. Only the domain tells you which one you have.
+Do not ask for more precision than the task needs. A date-only value should not force the user through a time picker.
 
 ### Relative or absolute
 
-- **Relative** (_2 days ago_) for recency, where the distance is the point: a last-activity line, an audit feed.
-- **Absolute** (_Mar 12, 2024_) for the record, where the exact day is the point: created dates, validity windows, anything a user might quote in a support ticket.
+- **Relative** (_2 days ago_) for recency, where distance from now is the point: last activity or an event feed.
+- **Absolute** (_Mar 12, 2024_) for the record, where the exact date is the point: created dates, validity windows, or anything a user may quote later.
 
-When both matter, show the absolute value and put the relative one in a tooltip — or the other way around. Never show only a relative timestamp for a value that has legal or billing meaning.
+When both matter, show the more important value in the flow and expose the other as supporting text or a tooltip. Never show only a relative timestamp for a contractual, billing, or audit value.
+
+### Precision follows the decision
+
+Show time only when it helps distinguish events or schedule an action. Show seconds only for tasks where second-level order matters. Unnecessary precision creates noise and makes columns harder to scan.
 
 ### Digits align
 
-Timestamps in a column are numbers, so they take `tabular-nums` and the column takes `numeric: true` on the `TableColumn` config, which right-aligns it and applies the figures for you. Don't reach for a monospace face to line them up — digit alignment is a font _feature_, not a font _family_, and `font-mono` is banned in components anyway.
+Timestamp columns take `numeric: true` on the `TableColumn` config, which right-aligns them and applies tabular figures. Do not reach for a monospace face; digit alignment is a font feature, not a font family.
 
 ## Building blocks
 
-#### A. The column
+#### A. Date input
 
-A `BigInt` `*_at` column in `schema.prisma`.
+`DatePicker` for one calendar date and `DateRangePicker` for a bounded period.
 
-#### B. The DTO
+#### B. Time input
 
-A plain `number` — epoch seconds. Unchanged from the column.
+`TimePicker` for a time of day and `DateTimePicker` for a date and time together.
 
-#### C. The input conversion
+#### C. Table column
 
-At the controller, beside the zod parse: classify as instant or business date, resolve the timezone accordingly, convert to seconds.
+`numeric: true`, which handles alignment and tabular figures.
 
-#### D. The party timezone
+#### D. Detail metadata
 
-`party.timezone` — nullable, UTC when null. Resolve business-date boundaries with an explicit `Intl.DateTimeFormat(…, { timeZone })`, never with the server's ambient zone.
+On a [detail page](detail-page.md), created and updated values sit in the header band's meta line as short icon-plus-text pairs.
 
-#### E. The render conversion
+#### E. Timeline value
 
-At the component, using the viewer's locale and timezone.
-
-#### F. The table column
-
-`numeric: true`, which handles the alignment and the figures.
-
-#### G. The meta line
-
-On a [detail page](detail-page.md), the created/updated values sit in the header band's meta line as small icon-plus-text pairs.
+`Timeline` presents chronological events with a consistent absolute or relative format across the sequence.
 
 ## General guidelines
 
 ### Do
 
-- Keep seconds all the way from the column to the component.
-- Classify every user-supplied time as an instant or a business date before converting it.
-- Pass an explicit timezone to every `Intl.DateTimeFormat` that resolves a business-date boundary.
-- Convert at the render edge, using the viewer's locale.
-- Use `numeric: true` on a timestamp column and write no alignment classes.
+- Format for the viewer's locale.
+- Make the relevant timezone explicit when context does not already establish it.
+- Choose the input control from the precision the task requires.
+- Use `numeric: true` on timestamp columns and write no alignment classes.
 - Show an absolute date for anything with billing, legal, or audit meaning.
+- Keep one date and time format consistent within a surface.
 
 ### Don't
 
-- Don't put a `Date` or an ISO string in a DTO or a payload.
-- Don't use milliseconds. `Date.now()` is milliseconds; it needs dividing.
-- Don't resolve a business date in the actor's timezone. It belongs to the party.
-- Don't resolve an instant in the party's timezone. It belongs to the actor.
-- Don't rely on the server's ambient timezone for either.
-- Don't reach for `font-mono` to align digits. Use `tabular-nums`.
+- Don't expose raw timestamp strings in the interface.
+- Don't use an all-numeric date format when the audience may interpret day and month differently.
+- Don't ask for a time when only a date matters.
+- Don't show seconds unless the task depends on them.
+- Don't reach for `font-mono` to align digits. Use tabular figures.
 - Don't show only a relative timestamp for a contractual date.
 
 ## Writing guidelines
@@ -99,6 +87,7 @@ On a [detail page](detail-page.md), the created/updated values sit in the header
 #### Absolute dates
 
 - Spell the month rather than using an all-numeric format: _Mar 12, 2024_. `03/12/2024` means two different days on two continents.
+- Add the year unless the surrounding context makes it unambiguous and the value is short-lived.
 
 #### Relative times
 
@@ -107,27 +96,29 @@ On a [detail page](detail-page.md), the created/updated values sit in the header
 
 #### Ranges
 
-- Show both bounds. _Mar 12 – Apr 30, 2024_.
+- Show both bounds: _Mar 12 – Apr 30, 2024_.
 - An open-ended range says so: _From Mar 12, 2024_ or _Until Apr 30, 2024_.
 
 #### Empty values
 
-- A missing timestamp renders as `—`, never as a blank cell and never as the epoch.
+- A missing timestamp renders as `—`, never as a blank cell and never as an epoch value.
 
 ## Accessibility guidelines
 
 ### General accessibility guidelines
 
-- A relative timestamp shown alone is ambiguous to a user returning to a cached page. Where the exact value matters, expose it — a `title`, a tooltip, or a `<time>` element carrying the machine-readable value.
+- Where the exact value matters, expose it in the reading flow or through a semantic `<time>` element.
+- Time is text; do not encode it only as an icon or colour.
 
 ### Component-specific guidelines
 
-- Don't abbreviate a date into an icon or a colour. Time is text.
-- A timestamp in a tooltip is a mouse affordance; if the absolute value is the one that matters, put it in the flow rather than behind a hover.
+- A timestamp in a tooltip is supporting information. If the absolute value is essential, put it in the flow rather than behind hover.
+- Date and time controls have visible labels that name the expected value and timezone where relevant.
+- Do not use placeholder text as the only format instruction.
 
 ## Related patterns and components
 
-- [Detail page](detail-page.md) — the meta line where created and updated appear.
+- [Detail page](detail-page.md) — the meta line where created and updated values appear.
 - [List page](list-page.md) — numeric columns and their alignment.
-- [Advanced filtering](advanced-filtering.md) — date-range filters, which are the most common source of an instant-versus-business-date mistake.
+- [Advanced filtering](advanced-filtering.md) — date-range filters.
 - Components: `DatePicker`, `DateRangePicker`, `DateTimePicker`, `TimePicker`, `Table`, `Timeline`.

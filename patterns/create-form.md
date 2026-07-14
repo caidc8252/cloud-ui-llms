@@ -4,7 +4,7 @@ A single-step form for creating or editing a resource. The default create shape 
 
 **Container:** a one-section form goes in an overlay (`Modal`, or `Sheet` when it needs room) — a whole page for a handful of fields is too heavy. A form of more than one section card, or one that must be deep-linkable, gets its own page. Create and edit share the container; see [Edit resource](edit-resource.md), which owns this rule. The blocks below describe the page shape — in an overlay, the `Modal`'s own title and footer stand in for the header band and the `ActionFooter`.
 
-[Style template](../demos/create-form.md) | Binding rules (app repo: `.claude/team-rule/coding-rules/ui_ui-and-pages.md`)
+[Style template](../demos/create-form.md)
 
 ## Key UX concepts
 
@@ -24,13 +24,9 @@ The body is a single column of `Card`s, one per coherent group of fields, fillin
 
 Inside a `Field`, a control fills the field. That is automatic for `Input`, `Textarea`, `Combobox`, and `DatePicker`, and it is automatic for `Select` too once it is inside a `Field` — but a `Select` still needs an `items` map (value → label) on its root, or its trigger prints the raw value instead of the label. Nothing type-checks that.
 
-### Validation has one source
+### Validation appears where the user can act on it
 
-The zod schema that the route handler parses with is the same shape the form validates against. Field-level errors surface through `Field`'s `error` prop; a failed submit surfaces through the response's error code. Don't write a second, hand-rolled set of client rules that can drift from the server's. See [Errors and validation](errors-and-validation.md).
-
-### Submission is a route handler
-
-Server actions are banned. The form POSTs through `@cloud/request/client` to a route handler under `app/api/*`, then routes to the new record's detail page on success.
+Field-level errors surface through `Field`'s `error` prop. A failure affecting the whole form appears in an `Alert` at the top of the form. Do not duplicate the same message in a field, an alert, and a toast; give each failure one useful location. See [Errors and validation](errors-and-validation.md).
 
 ## Building blocks
 
@@ -64,7 +60,7 @@ Server actions are banned. The form POSTs through `@cloud/request/client` to a r
 - Give the footer's buttons icons — the primary always, the escape by the same convention (Cancel → `X`, Back → `ChevronLeft`).
 - Put the commit in the `ActionFooter`, as a sibling of `PageBody`, so it stays reachable on a long form.
 - Set `loading` on the commit button while the request is in flight. It also disables the button, so you don't need a separate guard for double submits.
-- Route to the new record's detail page on success.
+- After success, show the created record in the context the user expects, normally its detail view.
 - Keep the field components shared with the edit page — the same form usually serves create and edit.
 
 ### Don't
@@ -73,8 +69,7 @@ Server actions are banned. The form POSTs through `@cloud/request/client` to a r
 - Don't put actions in the reduced header. The header's job is to let the user leave.
 - Don't hand-build the header's back button, and don't use `ContentHeader` as the page header.
 - Don't cap the form's width with a `max-w-*`. Width belongs to the field, not to the page.
-- Don't use a server action. Mutations go through a route handler.
-- Don't validate with rules the server doesn't have. One schema, both sides.
+- Don't repeat one failure across several feedback surfaces.
 - Don't disable the submit button until every field is touched. Let the user submit and show them what's wrong.
 - Don't scatter unrelated fields across two cards for visual balance.
 
@@ -127,7 +122,7 @@ Server actions are banned. The form POSTs through `@cloud/request/client` to a r
 
 - [Create wizard](create-wizard.md) — the staged alternative, and the test for when to use it.
 - [Edit resource](edit-resource.md) — this same shape, pre-filled, and the three things that differ.
-- [Unsaved changes](unsaved-changes.md) — the exit guard this page needs, and the exits it does not cover.
+- [Unsaved changes](unsaved-changes.md) — the exit behaviour this form needs.
 - [Detail page](detail-page.md) — where a successful create lands.
-- [Errors and validation](errors-and-validation.md) — the schema, the codes, and where each error surfaces.
+- [Errors and validation](errors-and-validation.md) — which feedback surface each error uses.
 - Components: `Field`, `Input`, `Textarea`, `Select`, `Combobox`, `DatePicker`, `Card`, `PageHeaderBand`, `ActionFooter`, `PageBody`, `Button`.

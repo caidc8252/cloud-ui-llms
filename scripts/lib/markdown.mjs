@@ -22,11 +22,7 @@ const renderer = {
   link({ href, title, tokens }) {
     const text = this.parser.parseInline(tokens);
     const internal = !/^(https?:|mailto:|#)/.test(href);
-    // Links that escape the site root (the .claude/team-rule ones) are already a
-    // 404 for every reader. Don't also mangle their extension — leave them exactly
-    // as the markdown wrote them, so the pending decision about them stays visible.
-    const offSite = href.includes("/.claude/");
-    const to = internal && !offSite ? href.replace(/\.md(?=$|#)/, ".html") : href;
+    const to = internal ? href.replace(/\.md(?=$|#)/, ".html") : href;
     const t = title ? ` title="${esc(title)}"` : "";
     return `<a href="${to}"${t}${internal ? "" : ' target="_blank" rel="noopener"'}>${text}</a>`;
   },

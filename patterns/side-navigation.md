@@ -1,90 +1,81 @@
 # Side navigation
 
-The left menu. It is not written by hand anywhere — it is **projected** from what the current session is actually allowed to see, out of declarations each module makes about itself.
-
-Binding rules (app repo: `.claude/team-rule/coding-rules/ui_ui-and-pages.md`) | CoC declaration (app repo: `.claude/team-rule/coding-rules/coc_coc-declaration.md`)
+The persistent navigation rail for moving between the product's primary areas.
 
 ## Key UX concepts
 
-### The menu is a projection, not a list
-
-There is no file holding "the menu". A module declares itself in its `manifest.ts` — a `menuCode`, a `parentMenuCode`, an `icon`, an `order`, an entry URL, and its permission codes. The session's effective permissions (roles intersected with the party's contract scope — see [Permission gating](permission-gating.md)) are then projected against those declarations to produce the tree this user gets.
-
-Two users in the same company can therefore see different menus, and the same user can see a different menu after switching company. That is the design, not a bug to normalize away.
-
-### Adding a page means editing a manifest, not a menu
-
-To make a page appear, declare it in the module's `manifest.ts` and run `pnpm gen:coc`. The generated files under `manifest/_generated/` are never edited by hand — they are outputs, and hand-editing them is a rule violation that the gate catches. The directory nodes (the L1 groups) live in `manifest/catalog/menu-tree.ts`.
-
 ### Three levels, and only three
 
-- **L1** — group heading. No icon. A section of the product.
-- **L2** — the menu item. **Has an icon.** This is what a module's manifest declares.
-- **L3** — a nested child under an L2. No icon.
+- **L1** — group heading. No icon. A broad area of the product.
+- **L2** — primary navigation item. Has an icon.
+- **L3** — nested child under an L2 item. No icon.
 
-Icons are the visual anchor for scanning the rail, and they belong to exactly one level. An icon on an L1 heading or an L3 child breaks the scan.
+Icons are the visual anchors for scanning the rail, and they belong to exactly one level. An icon on an L1 heading or an L3 child breaks that rhythm.
 
-### Every L2 icon must have a case
+### The current location is explicit
 
-A module's `manifest.ts` declares `icon: "users"` as a **string**. That string has to have a matching `case` in `getMenuIcon`. If it doesn't, it falls through to the `LayoutDashboard` default — which renders, looks plausible, and is wrong. Nothing fails; the module just quietly gets the generic icon.
+Highlight the active destination and mark it as current for assistive technology. When an L3 child is current, its L2 parent stays expanded and carries a parent-active state without competing with the child's stronger selected state.
 
-So adding a module is two edits, not one: the manifest's `icon`, and the corresponding case in `menu-icon.tsx`. Icons come from `lucide-react`.
+### Expanded and collapsed modes preserve meaning
 
-### Permission codes are add-only
+The expanded rail shows icons and labels. The collapsed rail keeps the L2 icons and exposes each label on focus and hover. L1 headings and L3 children do not become anonymous icons; use the component's collapsed navigation behaviour rather than squeezing the expanded hierarchy into the narrow rail.
 
-A code that has shipped is never renamed or deleted — it is marked `@deprecated`. A renamed code silently revokes access for everyone whose role still refers to the old name.
+### Mobile navigation is the same tree
+
+On narrow screens, `Layout` presents the sidebar in its mobile sheet. Keep the destinations, order, labels, and current state the same across desktop and mobile. A responsive shell changes the container, not the information architecture.
+
+### Visibility follows destination availability
+
+Show only destinations available in the current context. Remove an empty L1 group when none of its descendants remain, and do not leave separators around an empty section. See [Permission gating](permission-gating.md).
 
 ## Building blocks
 
-#### A. Module declaration
+#### A. Rail
 
-`modules/<cat>/<mod>/manifest.ts` — `menuCode`, `parentMenuCode`, `icon`, `order`, `entry.url`, and the module's 4-segment permission codes, each bound to a menu with `belongToMenuCode`.
+`Sidebar` from `@cloud/ui` — brand slot, sections, nav items, sub-items, and footer.
 
-#### B. Directory nodes
+#### B. Collapse control
 
-`manifest/catalog/menu-tree.ts` — the L1 groups that L2 items hang from.
+`SidebarTrigger` collapses and expands the desktop rail and opens the mobile navigation.
 
-#### C. Generated projection input
+#### C. State provider
 
-`manifest/_generated/*` — produced by `pnpm gen:coc`. Never hand-edited.
+`SidebarProvider` coordinates expanded, collapsed, and mobile states for the shell.
 
-#### D. Icon map
+#### D. Shell
 
-`app/(dashboard)/_components/menu-icon.tsx` — `getMenuIcon` maps the manifest's icon string to a `lucide-react` component. Every declared icon needs a case here.
+`Layout` places the sidebar beside the page, supplies the mobile presentation, and keeps the app header aligned with the content region.
 
-#### E. The rail
+#### E. Navigation items
 
-`Sidebar` from `@cloud/ui` — brand slot, sections, nav items, sub-items, footer. `SidebarTrigger` collapses and expands it; `SidebarProvider` and the `SIDEBAR_COOKIE` persist that state.
-
-#### F. The shell
-
-`app/(dashboard)/layout.tsx` — where the projected tree is handed to `Sidebar`.
+Typed sidebar sections and items carrying label, destination, icon at L2, optional children, and current state.
 
 ## General guidelines
 
 ### Do
 
-- Declare the menu in the module's `manifest.ts`, and re-run `pnpm gen:coc` after changing it.
-- Add a `case` to `getMenuIcon` for every new icon string you declare.
-- Keep the icon on L2 only.
-- Use `order` to place an item, rather than relying on file or declaration order.
-- Bind every permission code to the menu it belongs to with `belongToMenuCode`, so the projection can decide whether the menu is reachable.
-- Mark a retired code `@deprecated` and leave it in place.
+- Keep the hierarchy to L1 group, L2 item, and optional L3 child.
+- Put icons on L2 items only, using the shared Lucide icon set.
+- Keep labels and order stable across expanded, collapsed, and mobile presentations.
+- Mark the current destination and keep its parent expanded.
+- Remove empty groups and separators after visibility rules are applied.
+- Use `Sidebar`, `SidebarTrigger`, `SidebarProvider`, and `Layout` as one navigation system.
 
 ### Don't
 
-- Don't hand-write a menu array anywhere.
-- Don't edit anything under `manifest/_generated/`. It is regenerated, and the gate blocks it.
-- Don't rename or delete a shipped permission code.
-- Don't let a new icon fall through to the `LayoutDashboard` default — it will look intentional.
-- Don't give a `commons` module a menu. Commons is a leaf layer: no menu of its own, no contract gate, and it never calls back into a business module.
-- Don't assume the menu is the same for two users, or for the same user in two companies.
+- Don't add a fourth navigation level.
+- Don't give L1 headings or L3 children icons.
+- Don't use an icon without an accessible label in collapsed mode.
+- Don't create a separate mobile menu with different destinations or ordering.
+- Don't leave an empty group heading after all of its items are hidden.
+- Don't rely on colour alone for the current-page state.
 
 ## Writing guidelines
 
 ### General writing guidelines
 
-- Use sentence case. Menu labels come from the i18n catalog, never hardcoded strings.
+- Use sentence case.
+- Keep labels stable across the sidebar, page title, and breadcrumbs.
 
 ### Component-specific guidelines
 
@@ -99,22 +90,25 @@ A code that has shipped is never renamed or deleted — it is marked `@deprecate
 
 #### L3 children
 
-- Use a noun phrase that reads as a part of its parent, and don't repeat the parent's word.
+- Use a noun phrase that reads as part of its parent, and do not repeat the parent's word.
 
 ## Accessibility guidelines
 
 ### General accessibility guidelines
 
-- The rail is a navigation landmark, and the current page is marked as current — not merely highlighted.
+- The rail is a navigation landmark.
 - Every item is reachable by keyboard in visual order, including the collapse trigger.
+- The current destination is marked semantically, not merely highlighted.
 
 ### Component-specific guidelines
 
-- When the rail collapses to icons, each item still needs an accessible name. An icon with no label is not a menu item to a screen reader.
-- The collapse trigger needs an `aria-label` and an expanded state.
-- Don't rely on the icon alone to distinguish two items — if two modules share an icon, the labels must carry the distinction, which is another reason a fall-through to the default icon is harmful.
+- In collapsed mode, every icon item retains an accessible name and exposes its label on focus as well as hover.
+- The collapse trigger has an accessible label and communicates its expanded state.
+- When an L3 child is active, screen readers encounter the expanded parent before the current child.
+- Focus does not move simply because the rail is collapsed or expanded.
 
 ## Related patterns and components
 
-- [Permission gating](permission-gating.md) — the effective-permission model that the menu is projected from.
+- [Permission gating](permission-gating.md) — removing unavailable destinations and empty groups.
+- [Interactive surfaces](interactive-surfaces.md) — hover, pressed, selected, and current states.
 - Components: `Sidebar`, `SidebarTrigger`, `Layout`, `AppHeader`, `Breadcrumbs`.
