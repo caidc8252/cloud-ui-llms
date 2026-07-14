@@ -75,32 +75,110 @@ function build() {
     chunks[f] = { js, internalOf };
   }
 
-  /* the barrels — which .d.ts declares each name */
+  /* the barrels — which .d.ts declares each name
+   *
+   * Two shapes, and only handling the first one hid a third of the package.
+   *
+   *   components/ui      export { Button } from './primitives/button'   re-export
+   *   components/layout  export * from './sidebar'                      …and then
+   *                      sidebar.d.ts ends: export { Sidebar, … };      a LOCAL export
+   *
+   * The second has no `from` clause, because the names are declared in that very
+   * file. Requiring one meant every layout component — Sidebar, PageHeader,
+   * AppHeader, ActionFooter — resolved to nothing, and their doc pages silently got
+   * no tabs. `ui` worked only because its barrel happens to be written the other way.
+   */
   const dtsOf = new Map();
+  const seen = new Set();
+
   const readBarrel = (file) => {
+    if (seen.has(file)) return;
+    seen.add(file);
+
     const s = readFileSync(file, "utf8");
     const dir = dirname(file);
+
+    /* Only a *relative* specifier points into this package. The chart barrel does
+     *
+     *   export { …, Label, LabelList, Rectangle, … } from "recharts";
+     *
+     * and treating that bare specifier as a path built a local filename that does
+     * not exist — and then overwrote the real `Label`, which is a @cloud/ui
+     * component, with it. Label's doc page went blank the moment charts were
+     * reachable. Names that come from another package are not ours to document. */
     const at = (spec) => {
+      if (!spec.startsWith(".")) return null;
       const t = join(dir, spec);
       return existsSync(t + ".d.ts") ? t + ".d.ts" : join(t, "index.d.ts");
     };
-    for (const m of s.matchAll(
-      /export\s*\{([\s\S]*?)\}\s*from\s*["']([^"']+)["']/g,
-    )) {
-      const target = at(m[2]);
-      for (const raw of m[1].split(",")) {
+
+    const take = (list, target) => {
+      if (!target || !existsSync(target)) return;
+      for (const raw of list.split(",")) {
         const n = raw.trim().replace(/^type\s+/, "");
         if (n && /^[A-Z]/.test(n)) dtsOf.set(n, target);
       }
-    }
+    };
+
+    for (const m of s.matchAll(
+      /export\s*\{([\s\S]*?)\}\s*from\s*["']([^"']+)["']/g,
+    ))
+      take(m[1], at(m[2]));
+
+    /* a local export list: the names are declared in this very file */
+    for (const m of s.matchAll(/export\s*\{([^}]*)\}\s*;/g)) take(m[1], file);
+
+    /* …or declared and exported in one breath, with no list at all:
+     *   export declare function Sidebar({ … }: SidebarProps): JSX.Element
+     * Every layout component is written this way. Requiring an `export { … }`
+     * meant Sidebar, SidebarTrigger and Resizable resolved to nothing. */
+    for (const m of s.matchAll(
+      /export\s+declare\s+(?:function|const)\s+([A-Z]\w*)/g,
+    ))
+      dtsOf.set(m[1], file);
+
     for (const m of s.matchAll(/export\s*\*\s*from\s*["']([^"']+)["']/g)) {
       const next = at(m[1]);
-      if (existsSync(next)) readBarrel(next);
+      if (next && existsSync(next)) readBarrel(next);
     }
   };
-  readBarrel(join(DIST, "index.d.ts"));
+
+  /* Seed from every entry point the package publishes, not just the root. Charts
+   * are exported from "./components/chart" and are *not* re-exported by the root
+   * barrel — starting at index.d.ts alone, all seven of them do not exist. */
+  const pkg = JSON.parse(
+    readFileSync(join("node_modules", "@cloud", "ui", "package.json"), "utf8"),
+  );
+  for (const entry of Object.keys(pkg.exports ?? { ".": {} })) {
+    if (entry.includes("*") || /\.(css|json)$/.test(entry)) continue;
+    const file = join(DIST, entry.replace(/^\.\/?/, ""), "index.d.ts");
+    const flat = join(DIST, entry.replace(/^\.\/?/, "")) + ".d.ts";
+    if (existsSync(file)) readBarrel(file);
+    else if (existsSync(flat)) readBarrel(flat);
+  }
 
   return { publicOf, fromChunk, chunks, dtsOf };
+}
+
+/**
+ * The export a doc page is about.
+ *
+ * Most component docs are titled with the export name — `# Button`, `# StatCard` —
+ * and resolve directly. A few are titled in prose: `chart.md` says "Chart container",
+ * and the export is `ChartContainer`. So a title that does not resolve is tried again
+ * with its words joined. A title that resolves to nothing either way is not a
+ * component, and there are plenty of those: `layout.md`, `semantic-tone.md`.
+ */
+export function exportNamed(title) {
+  graph ??= build();
+  if (graph.dtsOf.has(title)) return title;
+
+  const joined = title
+    .trim()
+    .split(/[\s-]+/)
+    .map((w) => w[0].toUpperCase() + w.slice(1))
+    .join("");
+  return graph.dtsOf.has(joined) ? joined : null;
 }
 
 /** The path of the .d.ts that declares this component, or null. */
