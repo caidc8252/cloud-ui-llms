@@ -7,7 +7,8 @@
     "build": "node scripts/build.mjs",
     "serve": "npm run build && node scripts/serve.mjs",
     "preview": "npm run serve",
-    "preview:install": "npm i --no-save ./cloud-ui-0.0.1.tgz"
+    "preview:install": "npm i --no-save ./cloud-ui-0.0.1.tgz",
+    "audit:props": "node scripts/audit-props.mjs"
   },
   "dependencies": {
     "@fontsource-variable/geist": "^5.2.9",
