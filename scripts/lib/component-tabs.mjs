@@ -1,6 +1,7 @@
 import { esc } from "./read.mjs";
 import { exportNamed } from "./package-graph.mjs";
 import { loadProps } from "./props.mjs";
+import { inheritedProps } from "./inherited.mjs";
 import { styleTab } from "./style-tab.mjs";
 
 /**
@@ -71,11 +72,28 @@ function apiTable(props) {
   return `<div class="table-scroll"><table>
 <thead><tr><th>Prop</th><th>Type</th><th>Default</th><th>Description</th></tr></thead>
 <tbody>${rows}</tbody>
-</table></div>
-<p class="note-inline">Read out of the package's own type declarations, so this cannot
-drift from the component. Props inherited from the underlying Base UI element — every
-<code>onClick</code>, every <code>aria-*</code> — are not listed: fifty of them would
-bury the ones that are actually this component's.</p>`;
+</table></div>`;
+}
+
+/**
+ * The props the component does not declare, because the library it wraps does.
+ *
+ * The table used to end on a note saying these were deliberately left out — "fifty
+ * aria-* would bury the four that matter". That is true of Button. It is the exact
+ * opposite of true for Select, which declares *nothing*: @cloud/ui re-skins Base UI,
+ * and for a pass-through the inherited props are not noise around the API, they are
+ * the API. The rule silenced the pages that needed a table most.
+ *
+ * They are kept in their own section rather than merged, so a component that does
+ * have props of its own still leads with them.
+ */
+function inheritedTable(inherited) {
+  if (!inherited) return "";
+  return `<h3>Inherited</h3>
+<p class="note-inline">${esc(inherited.from)} declares these, and <code>@cloud/ui</code>
+passes them straight through. The styling props it does own — <code>className</code>,
+<code>render</code> — are not listed: those decisions are already made.</p>
+${apiTable(inherited.props)}`;
 }
 
 export function componentTabs({ title, usageHtml }) {
@@ -85,11 +103,11 @@ export function componentTabs({ title, usageHtml }) {
   if (!name) return null;
 
   const props = loadProps(name);
-  /* No props of its own means no table worth reading. Several components here are
-   * genuine pass-throughs — Select, Tooltip and Sheet add nothing to the Base UI
-   * primitive they re-export — and a page of empty tabs would say that badly. They
-   * are left exactly as they were. */
-  if (!props) return null;
+  const inherited = inheritedProps(name);
+  /* Nothing of its own AND nothing inherited: Skeleton is a div, Label is a label,
+   * and a table of `aria-*` would be the page saying nothing at length. Those are
+   * left exactly as they were. */
+  if (!props && !inherited) return null;
 
   const tabs = [];
 
@@ -103,12 +121,20 @@ export function componentTabs({ title, usageHtml }) {
       )}"></div>`,
     });
 
-  tabs.push({ id: "api", label: "API", body: apiTable(props) });
+  tabs.push({
+    id: "api",
+    label: "API",
+    body:
+      (props ? apiTable(props) : "") +
+      inheritedTable(inherited) +
+      `<p class="note-inline">Read out of the type declarations that ship in the
+package, so this cannot drift from the component.</p>`,
+  });
 
   /* Cloudscape's Style tab is a `style` prop — a typed escape hatch. There is none
    * here, and that is the design. So the tab answers the question the reader came
    * with — "what decides how this looks?" — with the system's real answer. */
-  const style = styleTab(name, props);
+  const style = props ? styleTab(name, props) : null;
   if (style) tabs.push({ id: "style", label: "Style", body: style });
 
   tabs.push({ id: "usage", label: "Usage", body: usageHtml });

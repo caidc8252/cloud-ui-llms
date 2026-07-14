@@ -97,17 +97,50 @@ function unionOf(type, dts, dir, seen = new Set()) {
   return unionOf(t, readFileSync(file, "utf8"), dirname(file), seen);
 }
 
-/** An interface or object-literal body → props, keeping the JSDoc above each one. */
-function members(body, dts, dir) {
+/**
+ * An interface or object-literal body → props, keeping the JSDoc above each one.
+ *
+ * Two comment styles, because two packages wrote them. @cloud/ui puts the whole
+ * sentence on one line; Base UI wraps it across a block:
+ *
+ *   /** Identifies the field when a form is submitted. *​/     ← @cloud/ui
+ *
+ *   /**                                                        ← Base UI
+ *    * Identifies the form that owns the hidden input.
+ *    * Useful when the select is rendered outside the form.
+ *    *​/
+ *
+ * Handling only the first meant every inherited prop arrived undocumented — and
+ * those are the ones where the doc is the entire value, because the type alone
+ * (`string | undefined`) says nothing at all.
+ */
+export function members(body, dts, dir) {
   const props = [];
   let doc = null;
   let deprecated = false;
+  let block = null; // accumulating lines of a /** … */ that spans several
 
   for (const line of body.split("\n")) {
-    const jsdoc = line.match(/\/\*\*\s*(.*?)\s*\*\//);
-    if (jsdoc) {
-      deprecated = /@deprecated/.test(jsdoc[1]);
-      doc = jsdoc[1].replace(/@deprecated\s*/, "").trim() || null;
+    if (block !== null) {
+      if (/\*\//.test(line)) {
+        const text = block.join(" ").replace(/\s+/g, " ").trim();
+        deprecated = /@deprecated/.test(text);
+        doc = text.replace(/@\w+\s*/g, "").trim() || null;
+        block = null;
+      } else {
+        block.push(line.replace(/^\s*\*\s?/, ""));
+      }
+      continue;
+    }
+
+    const oneLine = line.match(/\/\*\*\s*(.*?)\s*\*\//);
+    if (oneLine) {
+      deprecated = /@deprecated/.test(oneLine[1]);
+      doc = oneLine[1].replace(/@\w+\s*/g, "").trim() || null;
+      continue;
+    }
+    if (/\/\*\*/.test(line)) {
+      block = [];
       continue;
     }
 
@@ -174,11 +207,27 @@ export function loadProps(component) {
   );
   if (iface) props.push(...members(iface[1], dts, dir));
 
-  /* 3. no interface — an anonymous literal welded onto the base props */
+  /* 3. no interface — the props are an object literal in the signature itself.
+   *
+   * Two ways it is written, and handling only the first left eight components with
+   * an empty page:
+   *
+   *   Switch(…: SwitchPrimitive.Root.Props & { size?: "sm" | "default" })   welded on
+   *   FilterChip({ label, onRemove }: { label: string; onRemove: () => void })   bare
+   *
+   * The bare form is how every list-filter component is declared — AppliedFilters,
+   * SearchInput, ListSummaryBar. They are not thin wrappers over anything; those
+   * props are the whole component, hand-written, and the docs showed none of them. */
   if (!iface) {
-    const inline = dts.match(
+    const welded = dts.match(
       new RegExp(`declare function ${component}\\([^)]*&\\s*\\{([^}]*)\\}`),
     );
+    const bare = dts.match(
+      new RegExp(
+        `declare function ${component}\\([^)]*?\\}\\s*:\\s*\\{([^}]*)\\}`,
+      ),
+    );
+    const inline = welded ?? bare;
     if (inline) props.push(...members(inline[1], dts, dir));
   }
 
