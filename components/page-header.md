@@ -20,7 +20,13 @@ type HeaderAction = {
   icon: React.ReactNode; // REQUIRED — every header action carries an icon
   to?: string; // route → renders a Link
   onClick?: () => void; // handler → renders a <button>; ignored when `to` is set
-  variant?: "primary" | "secondary" | "ghost" | "ghost-danger" | "danger" | "link"; // default "secondary"
+  variant?:
+    | "primary"
+    | "secondary"
+    | "ghost"
+    | "ghost-danger"
+    | "danger"
+    | "link"; // default "secondary"
   disabled?: boolean;
   ariaLabel?: string;
 };
@@ -56,47 +62,51 @@ Three headers, three jobs — don't mix them up:
 
 - #### Title, description, and actions
 
+  `actions` is a **node**, not a list of descriptors — you pass the buttons you want, so the header never has to guess at a shape. Two of them sit side by side; wrap them in a fragment.
+
   ```tsx
-  import { PageHeader } from "@cloud/ui";
+  import { Button, PageHeader } from "@cloud/ui";
   import { FolderTree, PackagePlus } from "lucide-react";
 
   <PageHeader
     title={t("merchants.title")}
     description={t("merchants.description")}
-    actions={[
-      {
-        label: t("merchants.categories"),
-        to: "/merchants/categories",
-        variant: "secondary",
-        icon: <FolderTree size={16} />,
-      },
-      {
-        label: t("merchants.create"),
-        to: "/merchants/new",
-        variant: "primary",
-        icon: <PackagePlus size={16} />,
-      },
-    ]}
+    actions={
+      <>
+        <Button
+          variant="secondary"
+          iconLeft={<FolderTree className="size-4" />}
+        >
+          {t("merchants.categories")}
+        </Button>
+        <Button variant="primary" iconLeft={<PackagePlus className="size-4" />}>
+          {t("merchants.create")}
+        </Button>
+      </>
+    }
   />;
   ```
 
-- #### Action descriptors
+- #### Links and disabled actions
 
-  A descriptor with `to` renders a router `Link`; one with `onClick` renders a `<button>`. `to` wins when both are set. `variant` defaults to `secondary`, and the buttons are always `md`.
+  Because `actions` takes nodes, a link is a link and a button is a button — there is no descriptor to teach the header about routing. Use `render` for a router `Link`, and `disabled` where you would disable any other button.
 
   ```tsx
+  import { Button, PageHeader } from "@cloud/ui";
   import { Download } from "lucide-react";
 
   <PageHeader
     title={t("reports.title")}
-    actions={[
-      {
-        label: t("reports.export"),
-        onClick: exportCsv,
-        disabled: rows.length === 0,
-        icon: <Download size={16} />,
-      },
-    ]}
+    actions={
+      <Button
+        variant="secondary"
+        onClick={exportCsv}
+        disabled={rows.length === 0}
+        iconLeft={<Download className="size-4" />}
+      >
+        {t("reports.export")}
+      </Button>
+    }
   />;
   ```
 

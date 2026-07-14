@@ -30,14 +30,16 @@
   font-style: normal;
   font-display: swap;
   font-weight: 100 900;
-  src: url("./files/geist-mono-latin-wght-normal.woff2") format("woff2-variations");
+  src: url("./files/geist-mono-latin-wght-normal.woff2")
+    format("woff2-variations");
 }
 @font-face {
   font-family: "Geist Mono Variable";
   font-style: italic;
   font-display: swap;
   font-weight: 100 900;
-  src: url("./files/geist-mono-latin-wght-italic.woff2") format("woff2-variations");
+  src: url("./files/geist-mono-latin-wght-italic.woff2")
+    format("woff2-variations");
 }
 
 :root {
@@ -701,7 +703,8 @@ main > .lede {
 }
 .tile--specimen:hover {
   border-left-color: var(--line-strong);
-  box-shadow: 0 10px 30px color-mix(in oklch, var(--content-primary) 7%, transparent);
+  box-shadow: 0 10px 30px
+    color-mix(in oklch, var(--content-primary) 7%, transparent);
 }
 .tile--specimen .tile-copy {
   display: flex;
@@ -796,7 +799,8 @@ main > .lede {
   background: var(--surface-2);
   border: 1px solid var(--line-default);
   border-radius: var(--radius-sm);
-  box-shadow: 0 1px 2px color-mix(in oklch, var(--content-primary) 8%, transparent);
+  box-shadow: 0 1px 2px
+    color-mix(in oklch, var(--content-primary) 8%, transparent);
   font-size: 10px;
   font-weight: 600;
   align-items: center;
@@ -887,7 +891,9 @@ main > .lede {
   font-size: 9px;
 }
 .foundation-svg .f-shadow {
-  filter: drop-shadow(0 5px 5px color-mix(in oklch, var(--content-primary) 16%, transparent));
+  filter: drop-shadow(
+    0 5px 5px color-mix(in oklch, var(--content-primary) 16%, transparent)
+  );
 }
 .foundation-svg .f-dark-line {
   fill: var(--surface-3);
@@ -1041,7 +1047,8 @@ main > .lede {
 .mini-toast {
   width: 72%;
   margin-left: auto;
-  box-shadow: 0 5px 14px color-mix(in oklch, var(--content-primary) 10%, transparent);
+  box-shadow: 0 5px 14px
+    color-mix(in oklch, var(--content-primary) 10%, transparent);
 }
 .mini-toast i {
   width: 8px;
@@ -1259,7 +1266,8 @@ main > .lede {
   background: var(--surface-2);
   border: 1px solid var(--line-strong);
   border-radius: var(--radius-md);
-  box-shadow: 0 8px 20px color-mix(in oklch, var(--content-primary) 15%, transparent);
+  box-shadow: 0 8px 20px
+    color-mix(in oklch, var(--content-primary) 15%, transparent);
 }
 .mini-dialog i,
 .mini-dialog b {
@@ -1725,6 +1733,13 @@ main > .lede {
   grid-template-columns: minmax(240px, 300px) minmax(0, 1fr);
   gap: 16px;
   align-items: start;
+}
+
+/* No configuration panel — the component and the code that makes it, stacked. Most
+ * components land here: a props panel needs a hand-written recipe, but a preview and
+ * a snippet only need the example the doc already has. */
+.pg-flat {
+  grid-template-columns: minmax(0, 1fr);
 }
 .pg h3 {
   margin: 0 0 12px;
