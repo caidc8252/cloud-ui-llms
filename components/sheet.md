@@ -8,7 +8,9 @@ Side panel that slides in from an edge. It can be anchored to any of the four si
 
 `Sheet` is an edge-anchored panel built on the dialog primitive. Set `SheetContent`'s `side` to `top`, `right` (default), `bottom`, or `left`. A left or right sheet is the "drawer" form: it stays responsive (60% of the viewport on the right, 75% on the left) but caps at a 560px max width. Top and bottom sheets span the full width and size to their content.
 
-`SheetContent` renders a close button by default; set `showCloseButton={false}` to remove it. Compose the panel with `SheetHeader`, `SheetTitle`, `SheetDescription`, and `SheetFooter`.
+`SheetContent` itself renders no close control — `SheetHeader` owns it. Compose the panel with `SheetHeader`, `SheetTitle`, `SheetDescription`, and `SheetFooter`.
+
+`SheetHeader` takes an optional `icon` (rendered before the title/description column), `showCloseButton` (default `true`), and `closeLabel` (default `"Close"`, the close button's accessible name) — on top of the usual `children`/`className`.
 
 Use a sheet for secondary flows and detail views that keep the page context, such as a filter panel or an item preview. For a centered, focused task use `Modal`; for a mobile-first draggable panel use `Drawer`.
 
@@ -56,7 +58,16 @@ Use a sheet for secondary flows and detail views that keep the page context, suc
 
 - #### Close button
 
-  `SheetContent` shows a small ghost icon button in the top-right corner by default; set `showCloseButton={false}` to remove it and provide your own dismissal — for example a `SheetClose` in the footer.
+  `SheetHeader` renders the close control, not `SheetContent`. It lays out an optional leading `icon`, a title/description column that takes the remaining width, and a small ghost icon button at the row's trailing edge — in-flow, next to the title, not floated over the panel's content. Pass `showCloseButton={false}` to remove it and provide your own dismissal (for example a `SheetClose` in the footer), and `closeLabel` to override the accessible name (defaults to `"Close"`).
+
+  ```tsx
+  <SheetHeader icon={<FunnelIcon className="size-4 shrink-0 text-primary-700" />}>
+    <SheetTitle>Advanced filters</SheetTitle>
+    <SheetDescription>All conditions AND.</SheetDescription>
+  </SheetHeader>
+  ```
+
+  A `SheetHeader` with no `icon` still gets the close button, right of the title/description column — this is the default for every sheet, not something you opt into per panel.
 
 ## Writing guidelines
 
