@@ -18,7 +18,7 @@ import * as UI from "@cloud/ui";
  * resolved them to the stub, which renders nothing. */
 import * as Charts from "@cloud/ui/components/chart";
 import * as Icons from "lucide-react";
-import { Playground } from "./configurator.jsx";
+import { Example, Playground } from "./configurator.jsx";
 
 /* A value that survives being called, spread, mapped over, or read from.
  *
@@ -80,10 +80,39 @@ const SCOPE = {
   ...UI,
 };
 
+/**
+ * An identifier that reads as open-state resolves to `false`, not to the stub.
+ *
+ * The stub is an object, and **every object is truthy**. So `<Sheet open={sheetOpen}>`
+ * rendered the sheet *open* — and a Sheet's overlay is `fixed inset-0`, portalled to
+ * document.body. Five documentation pages shipped with a full-screen scrim over them:
+ * modal, command, advanced-filter-button, advanced-filter-sheet, use-list-filters. You
+ * could not click a tab, a link, or the theme toggle. It was found by a click timing
+ * out in a test, not by looking — the pages render, they just cannot be used.
+ *
+ * There is no way to make an object falsy in JavaScript (`document.all` is the one
+ * exception and it cannot be constructed), so the name is the only signal available.
+ * It is also the right answer: an example of an overlay should show you its trigger,
+ * not its contents.
+ *
+ * Handlers are excluded — `setOpen` must stay callable, or Base UI invokes `false`.
+ */
+const CLOSED = /open$/i;
+const HANDLER = /^(set|on|handle|toggle|use)[A-Z]/;
+const readsAsClosed = (k) =>
+  typeof k === "string" && CLOSED.test(k) && !HANDLER.test(k);
+
 /* Unknown identifiers resolve to the stub instead of throwing a ReferenceError. */
 const scopeProxy = new Proxy(SCOPE, {
   has: () => true, // claim every name, so `with` routes lookups here
-  get: (t, k) => (k in t ? t[k] : k === Symbol.unscopables ? undefined : stub),
+  get: (t, k) =>
+    k in t
+      ? t[k]
+      : k === Symbol.unscopables
+        ? undefined
+        : readsAsClosed(k)
+          ? false
+          : stub,
 });
 
 /**
@@ -108,28 +137,6 @@ function componentFor(code) {
   return make(scopeProxy);
 }
 
-/* The playground mounts where the build left a spec for it. */
-for (const host of document.querySelectorAll("[data-playground]")) {
-  /* `children` here is the recipe's, not React's — it says what a live example of
-   * this component should contain, and `false` means it takes none. Passing it
-   * through the JSX `children` prop would let React swallow it, so it is named. */
-  const { component, props, children, fixed } = JSON.parse(
-    decodeURIComponent(host.dataset.playground),
-  );
-  createRoot(host).render(
-    <UI.ThemeProvider>
-      <UI.TooltipProvider>
-        <Playground
-          component={component}
-          props={props}
-          slot={children}
-          fixed={fixed}
-        />
-      </UI.TooltipProvider>
-    </UI.ThemeProvider>,
-  );
-}
-
 /**
  * An example that throws while React is rendering it does not throw *here* — the
  * error surfaces asynchronously, escapes this try/catch, and leaves a console error
@@ -147,10 +154,50 @@ class Boundary extends React.Component {
   }
 }
 
+/* The playground mounts where the build left a spec for it.
+ *
+ * Two kinds. A component with a recipe gets the configurator — a control per prop.
+ * Everything else gets its own first example: preview and code, no panel. The second
+ * kind is most of them, and it is the difference between a component page that shows
+ * you the component and one that makes you go hunting for it. */
+for (const host of document.querySelectorAll("[data-playground]")) {
+  /* `children` here is the recipe's, not React's — it says what a live example of
+   * this component should contain, and `false` means it takes none. Passing it
+   * through the JSX `children` prop would let React swallow it, so it is named. */
+  const { component, props, children, fixed, example } = JSON.parse(
+    decodeURIComponent(host.dataset.playground),
+  );
+
+  const body = example ? (
+    <Example
+      source={example.source}
+      render={() => React.createElement(componentFor(example.code))}
+    />
+  ) : (
+    <Playground
+      component={component}
+      props={props}
+      slot={children}
+      fixed={fixed}
+    />
+  );
+
+  createRoot(host).render(
+    <UI.ThemeProvider>
+      <UI.TooltipProvider>
+        <Boundary onDead={() => host.remove()}>{body}</Boundary>
+      </UI.TooltipProvider>
+    </UI.ThemeProvider>,
+  );
+}
+
+/* The inline previews: every tsx example in the doc, rendered above its code block. */
 for (const host of document.querySelectorAll("[data-preview]")) {
   const code = decodeURIComponent(host.dataset.preview);
   try {
-    const Example = componentFor(code);
+    /* Not `Example` — that is the playground panel imported above, and shadowing it
+     * here would be a trap for whoever edits this next. */
+    const Rendered = componentFor(code);
     const onDead = (err) => {
       host.remove();
       console.debug("preview skipped:", err.message);
@@ -159,7 +206,7 @@ for (const host of document.querySelectorAll("[data-preview]")) {
       <UI.ThemeProvider>
         <UI.TooltipProvider>
           <Boundary onDead={onDead}>
-            <Example />
+            <Rendered />
           </Boundary>
         </UI.TooltipProvider>
       </UI.ThemeProvider>,

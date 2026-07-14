@@ -3,6 +3,8 @@ import { exportNamed } from "./package-graph.mjs";
 import { loadProps } from "./props.mjs";
 import { inheritedProps } from "./inherited.mjs";
 import { styleTab } from "./style-tab.mjs";
+import { compileExample, firstExample } from "./preview.mjs";
+import { previewsAvailable } from "./preview-available.mjs";
 
 /**
  * A component page as Cloudscape shapes one: Playground / API / Style / Usage.
@@ -38,6 +40,138 @@ const PLAYGROUND = {
   Switch: { children: false },
   Checkbox: { children: false },
   Spinner: { children: false },
+};
+
+/**
+ * Components whose honest state is *invisible*.
+ *
+ * A Modal is closed. A Toaster has no toast. A Command palette is shut. Render their
+ * doc example and you get a preview panel with nothing in it — which is not a
+ * preview, it is a blank box that looks like a bug.
+ *
+ * They need a trigger, and a trigger is a thing to write, not a thing to derive. So
+ * these are written: a snippet that opens the component, shown as the demo and as the
+ * code. Held as source so the reader can copy it, and compiled from that same source
+ * so the two can never disagree.
+ */
+const DEMOS = {
+  Modal: `import { useState } from "react";
+import { Button, Modal } from "@cloud/ui";
+
+const [open, setOpen] = useState(false);
+
+<>
+  <Button variant="primary" onClick={() => setOpen(true)}>Open modal</Button>
+  <Modal
+    open={open}
+    onClose={() => setOpen(false)}
+    title="Delete merchant?"
+    description="This removes the merchant and every contract on it. It cannot be undone."
+    footer={
+      <>
+        <Button variant="secondary" onClick={() => setOpen(false)}>Cancel</Button>
+        <Button variant="danger" onClick={() => setOpen(false)}>Delete</Button>
+      </>
+    }
+  />
+</>;`,
+
+  Toaster: `import { Button, Toaster, toast } from "@cloud/ui";
+
+<>
+  <Toaster />
+  <Button variant="secondary" onClick={() => toast.success("Merchant saved.")}>
+    Show a toast
+  </Button>
+</>;`,
+
+  Sheet: `import { Button, Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from "@cloud/ui";
+
+<Sheet>
+  <SheetTrigger render={<Button variant="secondary">Filters</Button>} />
+  <SheetContent side="right">
+    <SheetHeader>
+      <SheetTitle>Filters</SheetTitle>
+      <SheetDescription>Refine the results.</SheetDescription>
+    </SheetHeader>
+  </SheetContent>
+</Sheet>;`,
+
+  Command: `import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "@cloud/ui";
+
+<Command className="rounded-md border border-line-default">
+  <CommandInput placeholder="Search merchants, contracts, users…" />
+  <CommandList>
+    <CommandEmpty>No results.</CommandEmpty>
+    <CommandGroup heading="Merchants">
+      <CommandItem>Northwind Trading</CommandItem>
+      <CommandItem>Acme Retail</CommandItem>
+    </CommandGroup>
+  </CommandList>
+</Command>;`,
+
+  FilterChip: `import { AppliedFilters, FilterChip } from "@cloud/ui";
+
+<AppliedFilters onClearAll={() => {}}>
+  <FilterChip label="Status: Live" onRemove={() => {}} />
+  <FilterChip label="Search: northwind" onRemove={() => {}} />
+</AppliedFilters>;`,
+
+  AppliedFilters: `import { AppliedFilters, FilterChip } from "@cloud/ui";
+
+<AppliedFilters onClearAll={() => {}}>
+  <FilterChip label="Status: Live" onRemove={() => {}} />
+  <FilterChip label="Region: EU" onRemove={() => {}} />
+</AppliedFilters>;`,
+
+  /* Not invisible — empty. The doc's example builds its columns from a `rows` that
+   * only exists in the reader's app, so the preview drew a header and no table. A
+   * table with no rows is the one thing a table is not. */
+  Table: `import { Badge, Table, type TableColumn } from "@cloud/ui";
+
+type Merchant = { id: string; name: string; mid: string; volume: number; status: "live" | "pending" };
+
+const columns: TableColumn<Merchant>[] = [
+  { key: "name", title: "Name", field: "name", sortable: true },
+  { key: "mid", title: "MID", field: "mid" },
+  { key: "volume", title: "Volume", numeric: true, render: (row) => row.volume.toLocaleString() },
+  {
+    key: "status",
+    title: "Status",
+    render: (row) => (
+      <Badge tone={row.status === "live" ? "success" : "warning"}>{row.status}</Badge>
+    ),
+  },
+];
+
+const rows: Merchant[] = [
+  { id: "1", name: "Northwind Trading", mid: "MER-0001", volume: 128400, status: "live" },
+  { id: "2", name: "Acme Retail", mid: "MER-0002", volume: 94100, status: "live" },
+  { id: "3", name: "Blue Harbour Foods", mid: "MER-0003", volume: 12750, status: "pending" },
+];
+
+<Table columns={columns} rows={rows} rowKey={(row) => row.id} />;`,
+
+  AdvancedFilterSheet: `import { useState } from "react";
+import { AdvancedFilterField, AdvancedFilterGroup, AdvancedFilterSheet, Button, Input } from "@cloud/ui";
+
+const [open, setOpen] = useState(false);
+
+<>
+  <Button variant="secondary" onClick={() => setOpen(true)}>Advanced filters</Button>
+  <AdvancedFilterSheet
+    open={open}
+    onOpenChange={setOpen}
+    onApply={() => setOpen(false)}
+    onReset={() => {}}
+  >
+    <AdvancedFilterGroup label="Merchant">
+      <AdvancedFilterField label="Reference">
+        <Input placeholder="MER-0001" />
+      </AdvancedFilterField>
+    </AdvancedFilterGroup>
+  </AdvancedFilterSheet>
+</>;`,
 };
 
 function apiTable(props) {
@@ -96,40 +230,71 @@ passes them straight through. The styling props it does own — <code>className<
 ${apiTable(inherited.props)}`;
 }
 
-export function componentTabs({ title, usageHtml }) {
+export function componentTabs({ title, md, usageHtml }) {
   /* The doc's H1 is usually the export name, but not always — chart.md is titled
-   * "Chart container" and the export is ChartContainer. */
+   * "Chart container" and the export is ChartContainer.
+   *
+   * A title that resolves to nothing is not the end of it, though. Some pages are
+   * about a *family* rather than one export — chart-states is ChartSkeleton and
+   * ChartEmpty; resizable is ResizablePanelGroup, Panel and Handle. There is no props
+   * table to draw for a family, but there is very much a component to *show*, and
+   * bailing here meant three pages with a working example rendered nothing at all. */
   const name = exportNamed(title);
-  if (!name) return null;
 
-  const props = loadProps(name);
-  const inherited = inheritedProps(name);
-  /* Nothing of its own AND nothing inherited: Skeleton is a div, Label is a label,
-   * and a table of `aria-*` would be the page saying nothing at length. Those are
-   * left exactly as they were. */
-  if (!props && !inherited) return null;
+  const props = name ? loadProps(name) : null;
+  const inherited = name ? inheritedProps(name) : null;
+
+  /* A written demo wins: it exists precisely because the doc's own example renders
+   * nothing you can see. Compiled from the same source string that is shown, so the
+   * code and the thing above it cannot drift apart. */
+  const written = DEMOS[name];
+  const example = !previewsAvailable
+    ? null
+    : written
+      ? { source: written, code: compileExample(written) }
+      : firstExample(md);
+
+  /* A page earns tabs if it has anything to put in one. */
+  if (!props && !inherited && !example) return null;
 
   const tabs = [];
 
+  /* The playground.
+   *
+   * A recipe drives the props panel — change a variant, watch it change. Only nine
+   * components have one, because what a *configurable* demo of a Table looks like is
+   * a judgement no type can make.
+   *
+   * But that was being used as a reason to give the other sixty nothing at all, and
+   * it is not one. Their docs already carry an example that renders; it was just
+   * buried in Usage, three headings down. So a component with no recipe still opens
+   * on its example — preview and code, no panel. Fewer controls, same first question
+   * answered: what does this look like, and what do I type to get it?
+   */
   const recipe = PLAYGROUND[name];
-  if (recipe)
+  if (recipe || example)
     tabs.push({
       id: "playground",
       label: "Playground",
       body: `<div data-playground="${encodeURIComponent(
-        JSON.stringify({ component: name, props, ...recipe }),
+        JSON.stringify(
+          recipe
+            ? { component: name, props, ...recipe }
+            : { component: name, example },
+        ),
       )}"></div>`,
     });
 
-  tabs.push({
-    id: "api",
-    label: "API",
-    body:
-      (props ? apiTable(props) : "") +
-      inheritedTable(inherited) +
-      `<p class="note-inline">Read out of the type declarations that ship in the
+  if (props || inherited)
+    tabs.push({
+      id: "api",
+      label: "API",
+      body:
+        (props ? apiTable(props) : "") +
+        inheritedTable(inherited) +
+        `<p class="note-inline">Read out of the type declarations that ship in the
 package, so this cannot drift from the component.</p>`,
-  });
+    });
 
   /* Cloudscape's Style tab is a `style` prop — a typed escape hatch. There is none
    * here, and that is the design. So the tab answers the question the reader came

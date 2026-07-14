@@ -55,12 +55,48 @@ function stripImports(tsx) {
   return out.join("\n");
 }
 
+/**
+ * The example a Playground should open on.
+ *
+ * A playground only earns its tab if it *shows the component*. Nine components had a
+ * hand-written recipe and got one; the other sixty-odd had nothing, even though their
+ * docs already carried a working example that renders — it was just further down the
+ * Usage tab, under a heading, where you had to go looking for it.
+ *
+ * So the first example that compiles becomes the component's demo. It is the one the
+ * author wrote first, which is the one they thought you should see first.
+ */
+export function firstExample(md) {
+  for (const [, source] of md.matchAll(/```tsx\n([\s\S]*?)```/g)) {
+    /* a fence nested in a list arrives indented; the code is not */
+    const tsx = source.replace(/^ {2}/gm, "").trimEnd();
+    const code = compileExample(tsx);
+    if (code) return { source: tsx, code };
+  }
+  return null;
+}
+
 export function compileExample(tsx) {
   const body = stripImports(tsx).trim();
 
-  // The example has to end in JSX. A `const` or a type above it is fine; a bare
-  // statement with nothing to render is not something we can preview.
-  const start = body.search(/^\s*</m);
+  /* The example has to end in JSX. A `const` or a type above it is fine; a bare
+   * statement with nothing to render is not something we can preview.
+   *
+   * The `<` must be at **column zero**. Allowing an indented one — `/^\s*</m` — meant
+   * the split landed on the first JSX *nested inside* a preceding const:
+   *
+   *   const columns: TableColumn<Merchant>[] = [
+   *     { key: "status", render: (row) => (
+   *       <Badge tone="success">{row.status}</Badge>     ← taken as the start
+   *     ) },
+   *   ];
+   *
+   *   <Table columns={columns} rows={rows} />            ← the actual expression
+   *
+   * The head was then half an array literal, esbuild threw, and the preview came back
+   * empty with no error. A top-level expression is at column zero; anything indented
+   * belongs to something above it. */
+  const start = body.search(/^</m);
   if (start === -1) return null;
 
   const head = body.slice(0, start);

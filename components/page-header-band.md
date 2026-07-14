@@ -11,13 +11,13 @@ Full-bleed page-header band for level-2/3 pages — built-in back button, title,
 `variant` picks the title-block shape, and **the two are genuinely different headers**, not one with a size knob:
 
 - **`variant="page"`** (the default) — a non-detail level-2 page: new, edit, a sub-page. The title block is the shared `ContentHeader`: `title` + `description`, with `titleAdornment` and `actions` flush right. **Not sticky** by default.
-- **`variant="detail"`** — the entity **identity band**. Purpose-built, and deliberately *not* a `ContentHeader`: an optional leading `avatar` tile, the title with its status badge **inline** beside it via `titleAdornment`, a `meta` facts row beneath (created date, reference, category), `actions` on the right, and `tabs` docked on the bottom edge. **Sticky** by default.
+- **`variant="detail"`** — the entity **identity band**. Purpose-built, and deliberately _not_ a `ContentHeader`: an optional leading `avatar` tile, the title with its status badge **inline** beside it via `titleAdornment`, a `meta` facts row beneath (created date, reference, category), `actions` on the right, and `tabs` docked on the bottom edge. **Sticky** by default.
 
 `avatar` and `meta` are **detail-only** and are ignored on the page variant. On detail, `meta` **replaces** `description` as the subline: pass one or the other, and `meta` wins when both are set.
 
 `sticky` has **no fixed default** — it is `sticky ?? variant === "detail"`, so it is **`true` for detail and `false` for page** unless you pass it. It docks the band at the top of the scrollport, which is `Layout`'s `<main>`, so `top-0` lands under the `AppHeader`.
 
-**The band owns the tabs track line.** Its own `border-b` *is* the rail, and the band suppresses the docked `TabsList`'s underline for you (a `line` list would otherwise draw a second rule one pixel above the band's border, giving a 2px two-tone line under the tabs). So pass a plain `TabsList` — no `shadow-none`, no variant gymnastics. The active indicator still sits on the rule. A standalone `Tabs` outside a band keeps its own underline.
+**The band owns the tabs track line.** Its own `border-b` _is_ the rail, and the band suppresses the docked `TabsList`'s underline for you (a `line` list would otherwise draw a second rule one pixel above the band's border, giving a 2px two-tone line under the tabs). So pass a plain `TabsList` — no `shadow-none`, no variant gymnastics. The active indicator still sits on the rule. A standalone `Tabs` outside a band keeps its own underline.
 
 `actions` is **not JSX** — it is a `HeaderAction[]` of descriptors:
 
@@ -27,7 +27,13 @@ type HeaderAction = {
   icon: React.ReactNode; // REQUIRED — every header action carries an icon
   to?: string; // route → renders a Link
   onClick?: () => void; // handler → renders a <button>; ignored when `to` is set
-  variant?: "primary" | "secondary" | "ghost" | "ghost-danger" | "danger" | "link"; // default "secondary"
+  variant?:
+    | "primary"
+    | "secondary"
+    | "ghost"
+    | "ghost-danger"
+    | "danger"
+    | "link"; // default "secondary"
   disabled?: boolean;
   ariaLabel?: string;
 };
@@ -73,35 +79,45 @@ There is deliberately **no `size` field**: the slot renders `md` buttons and not
 
   <Tabs defaultValue="overview" className="gap-0">
     <PageHeaderBand
-      variant="detail"
-      title={merchant.name}
-      backTo="/merchants"
-      avatar={<ObjectTile name={merchant.name} tone="auto" colorSeed={merchant.id} size="lg" />}
-      titleAdornment={<Badge tone="success">{t("status.live")}</Badge>}
-      meta={
-        <>
-          <span className="inline-flex items-center gap-1">
-            <Tag className="size-3.5" /> {merchant.type}
-          </span>
-          <span>{merchant.reference}</span>
-        </>
-      }
-      actions={[
-        {
-          label: t("merchants.publish"),
-          onClick: publish,
-          variant: "primary",
-          disabled: blockers.length > 0,
-          icon: <CheckCircle2 size={16} />,
-        },
-      ]}
+      sticky
       tabs={
         <TabsList>
           <TabsTrigger value="overview">{t("tabs.overview")}</TabsTrigger>
           <TabsTrigger value="contracts">{t("tabs.contracts")}</TabsTrigger>
         </TabsList>
       }
-    />
+    >
+      <div className="flex items-center gap-3">
+        <ObjectTile
+          name={merchant.name}
+          tone="auto"
+          colorSeed={merchant.id}
+          size="lg"
+        />
+        <div className="min-w-0">
+          <div className="flex items-center gap-2">
+            <h1 className="text-lg font-semibold">{merchant.name}</h1>
+            <Badge tone="success">{t("status.live")}</Badge>
+          </div>
+          <div className="flex items-center gap-3 text-sm text-content-secondary">
+            <span className="inline-flex items-center gap-1">
+              <Tag className="size-3.5" /> {merchant.type}
+            </span>
+            <span>{merchant.reference}</span>
+          </div>
+        </div>
+        <Button
+          variant="primary"
+          className="ml-auto"
+          onClick={publish}
+          disabled={blockers.length > 0}
+          iconLeft={<CheckCircle2 className="size-4" />}
+        >
+          {t("merchants.publish")}
+        </Button>
+      </div>
+    </PageHeaderBand>
+
     <TabsContent value="overview">
       <PageBody>…</PageBody>
     </TabsContent>
